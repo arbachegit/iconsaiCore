@@ -1,0 +1,406 @@
+.page {
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+.shell {
+  width: min(1180px, calc(100vw - 32px));
+  margin: 0 auto;
+  padding: 40px 0 80px;
+}
+
+.hero,
+.section,
+.emptyState,
+.errorState {
+  background: linear-gradient(180deg, rgba(13, 17, 23, 0.92), rgba(13, 17, 23, 0.78));
+  border: 1px solid rgba(59, 130, 246, 0.16);
+  border-radius: 28px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(14px);
+}
+
+.hero {
+  padding: 40px;
+  background-image:
+    radial-gradient(circle at top right, rgba(34, 211, 238, 0.18), transparent 30%),
+    radial-gradient(circle at bottom left, rgba(59, 130, 246, 0.2), transparent 34%);
+}
+
+.eyebrow,
+.sectionEyebrow {
+  font-family: var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--cy);
+  font-size: 0.74rem;
+}
+
+.title {
+  margin-top: 16px;
+  font-size: clamp(2.5rem, 4vw, 4.4rem);
+  line-height: 0.98;
+}
+
+.description {
+  margin-top: 18px;
+  max-width: 780px;
+  color: var(--t2);
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.description code {
+  font-family: var(--mono);
+  color: var(--t1);
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 180px));
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.metric {
+  padding: 18px 20px;
+  border-radius: 20px;
+  background: rgba(6, 8, 15, 0.6);
+  border: 1px solid rgba(34, 211, 238, 0.12);
+}
+
+.metricValue {
+  display: block;
+  font-size: 1.8rem;
+  font-weight: 800;
+}
+
+.metricLabel {
+  display: block;
+  margin-top: 4px;
+  color: var(--t2);
+}
+
+.sections {
+  display: grid;
+  gap: 24px;
+  margin-top: 28px;
+}
+
+.section,
+.emptyState,
+.errorState {
+  padding: 28px;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.sectionTitle {
+  margin-top: 8px;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+}
+
+.sectionCount {
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(34, 211, 238, 0.1);
+  border: 1px solid rgba(34, 211, 238, 0.18);
+  color: var(--cy);
+  font-family: var(--mono);
+  font-size: 0.82rem;
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  align-items: stretch;
+  gap: 16px;
+  margin-top: 22px;
+}
+
+.card,
+.skeletonCard {
+  display: flex;
+  flex-direction: column;
+  min-height: 250px;
+  padding: 20px;
+  border-radius: 22px;
+  background: rgba(6, 8, 15, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: box-shadow 0.6s ease-out, border-color 0.6s ease-out;
+}
+
+.cardGlow {
+  border-color: rgba(34, 211, 238, 0.4);
+  box-shadow: 0 0 16px rgba(34, 211, 238, 0.35), 0 0 40px rgba(34, 211, 238, 0.12);
+  animation: cardGlowPulse 2s ease-in-out infinite;
+}
+
+@keyframes cardGlowPulse {
+  0%, 100% {
+    box-shadow: 0 0 16px rgba(34, 211, 238, 0.35), 0 0 40px rgba(34, 211, 238, 0.12);
+  }
+  50% {
+    box-shadow: 0 0 24px rgba(34, 211, 238, 0.5), 0 0 56px rgba(34, 211, 238, 0.18);
+  }
+}
+
+.cardHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* Reset browser/Tailwind default margins inside the card */
+.card h3,
+.card p {
+  margin: 0;
+}
+
+.cardTitle {
+  font-size: 1.2rem;
+  line-height: 1.3;
+}
+
+.cardName {
+  margin-top: 6px;
+  color: var(--t2);
+  font-family: var(--mono);
+  font-size: 0.88rem;
+}
+
+.cardDescription {
+  margin-top: 16px;
+  color: var(--t2);
+  line-height: 1.6;
+}
+
+.cardMeta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.phaseBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.triggerCode {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  color: var(--cy);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.statusBadge {
+  flex-shrink: 0;
+  white-space: nowrap;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  text-transform: uppercase;
+}
+
+.statusBadge[data-status='active'] {
+  color: #86efac;
+  border-color: rgba(134, 239, 172, 0.28);
+  background: rgba(34, 197, 94, 0.12);
+}
+
+.statusBadge[data-status='draft'] {
+  color: #fde68a;
+  border-color: rgba(253, 230, 138, 0.28);
+  background: rgba(234, 179, 8, 0.12);
+}
+
+.statusBadge:not([data-status='active']):not([data-status='draft']) {
+  color: #bfdbfe;
+  border-color: rgba(191, 219, 254, 0.28);
+  background: rgba(59, 130, 246, 0.12);
+}
+
+.cardActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.cardActionBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  color: var(--t3);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.cardActionBtn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--cy);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.tag,
+.tagMuted {
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: 0.76rem;
+}
+
+.tag {
+  background: rgba(59, 130, 246, 0.12);
+  color: #bfdbfe;
+}
+
+.tagMuted {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--t3);
+}
+
+.emptyState h2,
+.errorState h1 {
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+}
+
+.emptyState p,
+.errorState p {
+  margin-top: 14px;
+  color: var(--t2);
+  line-height: 1.7;
+}
+
+.retryButton {
+  margin-top: 20px;
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--cy), var(--bl));
+  color: #04111f;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.retryButton:hover {
+  transform: translateY(-1px);
+}
+
+.skeletonCard,
+.skeletonTitle,
+.skeletonBadge {
+  position: relative;
+  overflow: hidden;
+}
+
+.skeletonCard::after,
+.skeletonTitle::after,
+.skeletonBadge::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+  animation: shimmer 1.5s infinite;
+}
+
+.skeletonTitle {
+  width: 220px;
+  height: 28px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.skeletonBadge {
+  width: 120px;
+  height: 36px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+@keyframes shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@media (max-width: 720px) {
+  .shell {
+    width: min(100vw - 20px, 1180px);
+    padding: 24px 0 56px;
+  }
+
+  .hero,
+  .section,
+  .emptyState,
+  .errorState {
+    border-radius: 22px;
+  }
+
+  .hero {
+    padding: 28px 22px;
+  }
+
+  .section,
+  .emptyState,
+  .errorState {
+    padding: 22px 18px;
+  }
+
+  .metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .sectionHeader,
+  .cardHeader {
+    flex-direction: column;
+  }
+
+  .sectionCount,
+  .statusBadge {
+    align-self: flex-start;
+  }
+}
