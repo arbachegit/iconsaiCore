@@ -2,9 +2,9 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Catalogo de Skills | IconsAI',
+  title: 'Catálogo de Skills | IconsAI',
   description:
-    'Catalogo de skills renderizado no servidor a partir do repositorio iconsaiConfig.',
+    'Catálogo de skills renderizado no servidor a partir do repositório iconsaiConfig.',
   icons: {
     icon: [
       { url: '/skills/icon.svg', type: 'image/svg+xml' },

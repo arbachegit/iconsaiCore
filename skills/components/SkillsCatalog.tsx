@@ -41,7 +41,7 @@ export default function SkillsCatalog({ skills = [], dataSource = 'fallback' }: 
   const [showTable, setShowTable] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const sectionRefs = useRef<Map<string, HTMLDivElement>>(new Map())
-  const { hasNewSkills, remoteCount, dismiss, refresh } = useNewSkillsPolling(skills.length)
+  const polling = useNewSkillsPolling(skills.length)
 
   const allSections = groupByPhase(skills)
 
@@ -102,36 +102,6 @@ export default function SkillsCatalog({ skills = [], dataSource = 'fallback' }: 
   return (
     <>
       <main className={styles.page}>
-        {hasNewSkills && (
-          <div className="sticky top-0 z-50 flex items-center justify-center gap-3 px-4 py-2.5 text-sm font-mono bg-gradient-to-r from-[rgba(34,211,238,0.12)] to-[rgba(59,130,246,0.12)] border-b border-[rgba(34,211,238,0.25)] backdrop-blur-md">
-            <svg className="w-4 h-4 text-[var(--cy)] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="12" cy="12" r="10" />
-              <line x1="12" y1="8" x2="12" y2="12" />
-              <line x1="12" y1="16" x2="12.01" y2="16" />
-            </svg>
-            <span className="text-[var(--t2)]">
-              {remoteCount !== null
-                ? `${Math.abs(remoteCount - skills.length)} nova(s) skill(s) detectada(s) no GitHub (${remoteCount} total)`
-                : 'Novas skills detectadas no GitHub'}
-            </span>
-            <button
-              onClick={refresh}
-              className="px-3 py-1 rounded-full text-xs font-bold bg-[rgba(34,211,238,0.15)] border border-[rgba(34,211,238,0.3)] text-[var(--cy)] hover:bg-[rgba(34,211,238,0.25)] transition-colors cursor-pointer"
-            >
-              Atualizar
-            </button>
-            <button
-              onClick={dismiss}
-              className="ml-1 p-1 rounded-full text-[var(--t3)] hover:text-[var(--t1)] transition-colors cursor-pointer"
-              aria-label="Dispensar"
-            >
-              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
-            </button>
-          </div>
-        )}
         <div className={styles.shell}>
           <section className={styles.hero}>
             {/* Top row: logo */}
@@ -192,7 +162,7 @@ export default function SkillsCatalog({ skills = [], dataSource = 'fallback' }: 
                     className="w-40 h-9 pl-8 pr-3 rounded-full border border-[rgba(34,211,238,0.3)] bg-transparent text-xs font-mono text-[var(--t1)] placeholder:text-[var(--t3)] outline-none focus:border-[var(--cy)] transition-colors"
                   />
                 </div>
-                <WebhookCheckButton renderedCount={skills.length} />
+                <WebhookCheckButton renderedCount={skills.length} polling={polling} />
               </div>
 
               <PhaseNav
@@ -233,11 +203,25 @@ export default function SkillsCatalog({ skills = [], dataSource = 'fallback' }: 
 }
 
 /* ─── Webhook Check Button ─── */
-function WebhookCheckButton({ renderedCount }: { renderedCount: number }) {
+interface WebhookCheckButtonProps {
+  renderedCount: number
+  polling: { hasNewSkills: boolean; remoteCount: number | null; refresh: () => void }
+}
+
+function WebhookCheckButton({ renderedCount, polling }: WebhookCheckButtonProps) {
   const [status, setStatus] = useState<'idle' | 'loading' | 'ok' | 'warn' | 'error'>('idle')
   const [tooltip, setTooltip] = useState('Verificar webhook')
 
+  // When polling detects new skills, auto-activate the button to green
+  const isNewDetected = polling.hasNewSkills && status === 'idle'
+
   const handleCheck = async () => {
+    // If new skills detected by polling, reload the page
+    if (isNewDetected) {
+      polling.refresh()
+      return
+    }
+
     setStatus('loading')
     setTooltip('Verificando...')
     try {
@@ -254,7 +238,7 @@ function WebhookCheckButton({ renderedCount }: { renderedCount: number }) {
         const ghCount = Number(data.checks?.skillCount ?? 0)
         if (ghCount !== renderedCount) {
           setStatus('warn')
-          setTooltip(`Desync: GitHub ${ghCount} vs Pagina ${renderedCount}`)
+          setTooltip(`Desync: GitHub ${ghCount} vs Página ${renderedCount}`)
         } else {
           setStatus('ok')
           setTooltip(`OK — ${ghCount} skills sincronizadas`)
@@ -270,58 +254,77 @@ function WebhookCheckButton({ renderedCount }: { renderedCount: number }) {
     }, 4000)
   }
 
+  const effectiveStatus = isNewDetected ? 'new' : status
+
   const borderColor =
-    status === 'ok'
+    effectiveStatus === 'new' || effectiveStatus === 'ok'
       ? 'rgba(74,222,128,0.6)'
-      : status === 'warn'
+      : effectiveStatus === 'warn'
         ? 'rgba(250,204,21,0.6)'
-        : status === 'error'
+        : effectiveStatus === 'error'
           ? 'rgba(248,113,113,0.6)'
           : 'rgba(34,211,238,0.3)'
 
   const iconColor =
-    status === 'ok'
+    effectiveStatus === 'new' || effectiveStatus === 'ok'
       ? '#4ade80'
-      : status === 'warn'
+      : effectiveStatus === 'warn'
         ? '#facc15'
-        : status === 'error'
+        : effectiveStatus === 'error'
           ? '#f87171'
           : 'var(--cy)'
 
+  const glowStyle = isNewDetected
+    ? { borderColor, color: iconColor, backgroundColor: 'transparent', boxShadow: '0 0 12px rgba(74,222,128,0.5), 0 0 32px rgba(74,222,128,0.15)', animation: 'webhookGlow 2s ease-in-out infinite' }
+    : { borderColor, color: iconColor, backgroundColor: 'transparent' }
+
+  const newTooltip = isNewDetected
+    ? `${polling.remoteCount !== null ? `${Math.abs(polling.remoteCount - renderedCount)} nova(s) skill(s) — clique para atualizar` : 'Novas skills — clique para atualizar'}`
+    : tooltip
+
   return (
-    <button
-      onClick={handleCheck}
-      disabled={status === 'loading'}
-      className="group relative flex items-center justify-center w-9 h-9 rounded-full border text-xs font-bold transition-all duration-300 ease-out hover:scale-110 focus:outline-none cursor-pointer disabled:opacity-60"
-      style={{ borderColor, color: iconColor, backgroundColor: 'transparent' }}
-    >
-      {status === 'loading' ? (
-        <svg className="w-3.5 h-3.5 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-          <path d="M21 12a9 9 0 1 1-6.219-8.56" />
-        </svg>
-      ) : status === 'ok' ? (
-        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-          <polyline points="20 6 9 17 4 12" />
-        </svg>
-      ) : status === 'error' ? (
-        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-          <line x1="18" y1="6" x2="6" y2="18" />
-          <line x1="6" y1="6" x2="18" y2="18" />
-        </svg>
-      ) : status === 'warn' ? (
-        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
-          <line x1="12" y1="9" x2="12" y2="13" />
-          <line x1="12" y1="17" x2="12.01" y2="17" />
-        </svg>
-      ) : (
-        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-        </svg>
+    <>
+      {isNewDetected && (
+        <style>{`@keyframes webhookGlow { 0%,100% { box-shadow: 0 0 12px rgba(74,222,128,0.5), 0 0 32px rgba(74,222,128,0.15); } 50% { box-shadow: 0 0 20px rgba(74,222,128,0.7), 0 0 48px rgba(74,222,128,0.25); } }`}</style>
       )}
-      <span className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-[#1a1a1a] border border-[#333] px-2.5 py-1 text-[11px] font-normal text-[#ccc] opacity-0 group-hover:opacity-100 transition-opacity">
-        {tooltip}
-      </span>
-    </button>
+      <button
+        onClick={handleCheck}
+        disabled={status === 'loading'}
+        className="group relative flex items-center justify-center w-9 h-9 rounded-full border text-xs font-bold transition-all duration-300 ease-out hover:scale-110 focus:outline-none cursor-pointer disabled:opacity-60"
+        style={glowStyle}
+      >
+        {status === 'loading' ? (
+          <svg className="w-3.5 h-3.5 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+          </svg>
+        ) : isNewDetected ? (
+          <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        ) : status === 'ok' ? (
+          <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        ) : status === 'error' ? (
+          <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        ) : status === 'warn' ? (
+          <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+            <line x1="12" y1="9" x2="12" y2="13" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
+        ) : (
+          <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+          </svg>
+        )}
+        <span className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-[#1a1a1a] border border-[#333] px-2.5 py-1 text-[11px] font-normal text-[#ccc] opacity-0 group-hover:opacity-100 transition-opacity">
+          {newTooltip}
+        </span>
+      </button>
+    </>
   )
 }

@@ -6,9 +6,9 @@ export default function Loading() {
       <div className={styles.shell}>
         <section className={styles.hero}>
           <p className={styles.eyebrow}>Carregando</p>
-          <h1 className={styles.title}>Sincronizando catalogo</h1>
+          <h1 className={styles.title}>Sincronizando catálogo</h1>
           <p className={styles.description}>
-            Buscando as skills mais recentes no repositorio fonte.
+            Buscando as skills mais recentes no repositório fonte.
           </p>
         </section>
 
