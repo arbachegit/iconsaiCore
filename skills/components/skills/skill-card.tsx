@@ -28,14 +28,14 @@ export default function SkillCard({ skill, glowing, onOpenModal }: SkillCardProp
 
   return (
     <article className={`${styles.card} ${glowing ? styles.cardGlow : ''}`}>
+      <span className={styles.statusBadge} data-status={status}>
+        {status}
+      </span>
       <div className={styles.cardHeader}>
         <div>
           <h3 className={styles.cardTitle}>{skill.name}</h3>
           <p className={styles.cardName}>{skill.id}</p>
         </div>
-        <span className={styles.statusBadge} data-status={status}>
-          {status}
-        </span>
       </div>
 
       <p className={styles.cardDescription}>

@@ -5,7 +5,7 @@ import { X, Copy, Check, Search, ArrowUpDown, ArrowUp, ArrowDown, Table2 } from 
 import { PHASES, PHASE_COLOR_RAW } from '@/data/phases'
 import type { Skill } from '@/lib/github/types'
 
-type SortField = 'name' | 'trigger' | 'phase' | 'status'
+type SortField = 'name' | 'trigger' | 'phase' | 'version' | 'createdAt' | 'updatedAt' | 'status'
 type SortDir = 'asc' | 'desc'
 
 interface SkillsTableProps {
@@ -43,15 +43,13 @@ export default function SkillsTable({ skills, open, onClose, onOpenSkillModal }:
   }, [])
 
   const handleSort = useCallback((field: SortField) => {
-    setSortField((prev) => {
-      if (prev === field) {
-        setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'))
-        return prev
-      }
+    if (field === sortField) {
+      setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'))
+    } else {
+      setSortField(field)
       setSortDir('asc')
-      return field
-    })
-  }, [])
+    }
+  }, [sortField])
 
   const filtered = useMemo(() => {
     let result = [...skills]
@@ -84,6 +82,15 @@ export default function SkillsTable({ skills, open, onClose, onOpenSkillModal }:
         case 'phase':
           cmp = parseInt(a.phase) - parseInt(b.phase)
           break
+        case 'version':
+          cmp = (a.version || '0').localeCompare(b.version || '0', undefined, { numeric: true })
+          break
+        case 'createdAt':
+          cmp = (a.createdAt || '').localeCompare(b.createdAt || '')
+          break
+        case 'updatedAt':
+          cmp = (a.updatedAt || '').localeCompare(b.updatedAt || '')
+          break
         case 'status': {
           const sa = a.isNew ? 0 : 1
           const sb = b.isNew ? 0 : 1
@@ -113,7 +120,7 @@ export default function SkillsTable({ skills, open, onClose, onOpenSkillModal }:
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
 
       <div
-        className="relative w-full max-w-[1100px] max-h-[88vh] flex flex-col rounded-2xl border border-[var(--brd)] bg-[var(--bg-card)] shadow-2xl"
+        className="relative w-full max-w-[1400px] max-h-[88vh] flex flex-col rounded-2xl border border-[var(--brd)] bg-[var(--bg-card)] shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -212,6 +219,30 @@ export default function SkillsTable({ skills, open, onClose, onOpenSkillModal }:
                     Phase <SortIcon field="phase" />
                   </button>
                 </th>
+                <th className="text-left px-4 py-4">
+                  <button
+                    onClick={() => handleSort('version')}
+                    className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[var(--t3)] hover:text-[var(--t2)] transition-colors cursor-pointer"
+                  >
+                    Version <SortIcon field="version" />
+                  </button>
+                </th>
+                <th className="text-left px-4 py-4">
+                  <button
+                    onClick={() => handleSort('createdAt')}
+                    className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[var(--t3)] hover:text-[var(--t2)] transition-colors cursor-pointer"
+                  >
+                    Created <SortIcon field="createdAt" />
+                  </button>
+                </th>
+                <th className="text-left px-4 py-4">
+                  <button
+                    onClick={() => handleSort('updatedAt')}
+                    className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[var(--t3)] hover:text-[var(--t2)] transition-colors cursor-pointer"
+                  >
+                    Updated <SortIcon field="updatedAt" />
+                  </button>
+                </th>
                 <th className="text-left px-6 py-4">
                   <span className="text-xs font-mono uppercase tracking-wider text-[var(--t3)]">
                     Techs
@@ -280,6 +311,27 @@ export default function SkillsTable({ skills, open, onClose, onOpenSkillModal }:
                       </span>
                     </td>
 
+                    {/* Version */}
+                    <td className="px-4 py-4">
+                      <code className="text-xs font-mono text-[var(--cy)]">
+                        {skill.version}
+                      </code>
+                    </td>
+
+                    {/* Created */}
+                    <td className="px-4 py-4">
+                      <span className="text-xs font-mono text-[var(--t3)] whitespace-nowrap">
+                        {skill.createdAt || '—'}
+                      </span>
+                    </td>
+
+                    {/* Updated */}
+                    <td className="px-4 py-4">
+                      <span className="text-xs font-mono text-[var(--t3)] whitespace-nowrap">
+                        {skill.updatedAt || '—'}
+                      </span>
+                    </td>
+
                     {/* Techs */}
                     <td className="px-6 py-4">
                       <div className="flex flex-wrap gap-2">
@@ -322,7 +374,7 @@ export default function SkillsTable({ skills, open, onClose, onOpenSkillModal }:
 
               {filtered.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="px-8 py-16 text-center text-sm text-[var(--t3)]">
+                  <td colSpan={8} className="px-8 py-16 text-center text-sm text-[var(--t3)]">
                     No skills found matching your filters.
                   </td>
                 </tr>
@@ -379,16 +431,20 @@ export default function SkillsTable({ skills, open, onClose, onOpenSkillModal }:
                     </button>
                   </div>
 
-                  <span
-                    className="inline-block px-3.5 py-1.5 rounded-lg text-xs font-mono"
-                    style={{
-                      backgroundColor: `${color}12`,
-                      color,
-                      border: `1px solid ${color}25`,
-                    }}
-                  >
-                    {phase ? `${phase.number}. ${phase.name.split('/')[0].trim()}` : skill.phaseName}
-                  </span>
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <span
+                      className="inline-block px-3.5 py-1.5 rounded-lg text-xs font-mono"
+                      style={{
+                        backgroundColor: `${color}12`,
+                        color,
+                        border: `1px solid ${color}25`,
+                      }}
+                    >
+                      {phase ? `${phase.number}. ${phase.name.split('/')[0].trim()}` : skill.phaseName}
+                    </span>
+                    <code className="text-[11px] font-mono text-[var(--cy)]">v{skill.version}</code>
+                    {skill.createdAt && <span className="text-[10px] font-mono text-[var(--t3)]">{skill.createdAt}</span>}
+                  </div>
                 </div>
               )
             })}

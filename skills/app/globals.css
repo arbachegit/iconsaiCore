@@ -179,3 +179,36 @@ body::before {
   border-top: 1px solid var(--brd);
   margin: 20px 0;
 }
+
+/* Floating Logo — Regra de Ouro (IMUTAVEL) */
+.floating-logo {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 900;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #000;
+  border: 2px solid #ef4444;
+  box-shadow: 0 4px 20px rgba(239,68,68,.3), 0 0 0 4px rgba(239,68,68,.08);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.floating-logo:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 24px rgba(239,68,68,.5), 0 0 0 6px rgba(239,68,68,.12);
+}
+.floating-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 6px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .floating-logo {
+    animation: none !important;
+    transition: none !important;
+  }
+}

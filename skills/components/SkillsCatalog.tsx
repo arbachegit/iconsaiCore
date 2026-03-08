@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState, useCallback } from 'react'
+import { useRef, useState, useCallback, useMemo } from 'react'
 import styles from '@/components/skills/skills.module.css'
 import SkillSection from '@/components/skills/skills-section'
 import PhaseNav from '@/components/PhaseNav'
@@ -38,9 +38,30 @@ export default function SkillsCatalog({ skills = [], dataSource = 'fallback' }: 
   const [activePhase, setActivePhase] = useState<string | null>(null)
   const [glowingSkill, setGlowingSkill] = useState<string | null>(null)
   const [showTable, setShowTable] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
   const sectionRefs = useRef<Map<string, HTMLDivElement>>(new Map())
 
-  const sections = groupByPhase(skills)
+  const allSections = groupByPhase(skills)
+
+  // Filter skills when search has 2+ chars
+  const filteredSkills = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase()
+    if (q.length < 2) return skills
+    return skills.filter(
+      (sk) =>
+        sk.name.toLowerCase().includes(q) ||
+        sk.id.toLowerCase().includes(q) ||
+        sk.description.toLowerCase().includes(q) ||
+        sk.keywords.toLowerCase().includes(q) ||
+        sk.techs.some((t) => t.toLowerCase().includes(q)),
+    )
+  }, [skills, searchQuery])
+
+  const sections = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase()
+    if (q.length < 2) return allSections
+    return groupByPhase(filteredSkills)
+  }, [searchQuery, allSections, filteredSkills])
 
   const handleScrollToPhase = useCallback((phaseNumber: string, skillName?: string) => {
     setActivePhase(phaseNumber)
@@ -74,6 +95,8 @@ export default function SkillsCatalog({ skills = [], dataSource = 'fallback' }: 
     setShowTable(true)
   }, [])
 
+  const isFiltering = searchQuery.trim().length >= 2
+
   return (
     <>
       <main className={styles.page}>
@@ -99,17 +122,45 @@ export default function SkillsCatalog({ skills = [], dataSource = 'fallback' }: 
               )}
             </p>
 
-            {/* Bottom row: stats on left, nav on right */}
+            {/* Bottom row: stats | search + webhook | nav */}
             <div className="flex items-end justify-between gap-6 flex-wrap mt-7">
               <div className="flex items-end gap-4 flex-wrap">
                 <div className={styles.metric}>
-                  <span className={styles.metricValue}>{skills.length}</span>
-                  <span className={styles.metricLabel}>skills validas</span>
+                  <span className={styles.metricValue}>
+                    {isFiltering ? filteredSkills.length : skills.length}
+                  </span>
+                  <span className={styles.metricLabel}>
+                    {isFiltering ? 'encontradas' : 'skills validas'}
+                  </span>
                 </div>
                 <div className={styles.metric}>
                   <span className={styles.metricValue}>{sections.length}</span>
                   <span className={styles.metricLabel}>secoes</span>
                 </div>
+              </div>
+
+              {/* Search + Webhook check */}
+              <div className="flex items-center gap-2">
+                <div className="relative">
+                  <svg
+                    className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[var(--t3)] pointer-events-none"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                  </svg>
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Buscar..."
+                    className="w-40 h-9 pl-8 pr-3 rounded-full border border-[rgba(34,211,238,0.3)] bg-transparent text-xs font-mono text-[var(--t1)] placeholder:text-[var(--t3)] outline-none focus:border-[var(--cy)] transition-colors"
+                  />
+                </div>
+                <WebhookCheckButton renderedCount={skills.length} />
               </div>
 
               <PhaseNav
@@ -123,16 +174,22 @@ export default function SkillsCatalog({ skills = [], dataSource = 'fallback' }: 
           </section>
 
           <div className={styles.sections}>
-            {sections.map((section) => (
-              <div
-                key={section.name}
-                ref={(el) => {
-                  if (el) sectionRefs.current.set(section.name, el)
-                }}
-              >
-                <SkillSection section={section} glowingSkill={glowingSkill} onOpenModal={handleOpenModalByName} />
+            {sections.length === 0 && isFiltering ? (
+              <div className="text-center py-16 text-[var(--t3)] text-sm font-mono">
+                Nenhuma skill encontrada para &quot;{searchQuery}&quot;
               </div>
-            ))}
+            ) : (
+              sections.map((section) => (
+                <div
+                  key={section.name}
+                  ref={(el) => {
+                    if (el) sectionRefs.current.set(section.name, el)
+                  }}
+                >
+                  <SkillSection section={section} glowingSkill={glowingSkill} onOpenModal={handleOpenModalByName} />
+                </div>
+              ))
+            )}
           </div>
         </div>
       </main>
@@ -140,5 +197,99 @@ export default function SkillsCatalog({ skills = [], dataSource = 'fallback' }: 
       <SkillModal skills={skills} skillId={modalSkillId} onClose={handleCloseModal} />
       <SkillsTable skills={skills} open={showTable} onClose={() => setShowTable(false)} onOpenSkillModal={handleOpenModal} />
     </>
+  )
+}
+
+/* ─── Webhook Check Button ─── */
+function WebhookCheckButton({ renderedCount }: { renderedCount: number }) {
+  const [status, setStatus] = useState<'idle' | 'loading' | 'ok' | 'warn' | 'error'>('idle')
+  const [tooltip, setTooltip] = useState('Verificar webhook')
+
+  const handleCheck = async () => {
+    setStatus('loading')
+    setTooltip('Verificando...')
+    try {
+      const res = await fetch('/skills/api/skills/sync', { cache: 'no-store' })
+      const data = await res.json()
+
+      if (!data.ok) {
+        const failures = Object.entries(data.checks as Record<string, string>)
+          .filter(([, v]) => v !== 'ok')
+          .map(([k]) => k)
+        setStatus('error')
+        setTooltip(`Falha: ${failures.join(', ')}`)
+      } else {
+        const ghCount = Number(data.checks?.skillCount ?? 0)
+        if (ghCount !== renderedCount) {
+          setStatus('warn')
+          setTooltip(`Desync: GitHub ${ghCount} vs Pagina ${renderedCount}`)
+        } else {
+          setStatus('ok')
+          setTooltip(`OK — ${ghCount} skills sincronizadas`)
+        }
+      }
+    } catch {
+      setStatus('error')
+      setTooltip('Endpoint inacessivel')
+    }
+    setTimeout(() => {
+      setStatus('idle')
+      setTooltip('Verificar webhook')
+    }, 4000)
+  }
+
+  const borderColor =
+    status === 'ok'
+      ? 'rgba(74,222,128,0.6)'
+      : status === 'warn'
+        ? 'rgba(250,204,21,0.6)'
+        : status === 'error'
+          ? 'rgba(248,113,113,0.6)'
+          : 'rgba(34,211,238,0.3)'
+
+  const iconColor =
+    status === 'ok'
+      ? '#4ade80'
+      : status === 'warn'
+        ? '#facc15'
+        : status === 'error'
+          ? '#f87171'
+          : 'var(--cy)'
+
+  return (
+    <button
+      onClick={handleCheck}
+      disabled={status === 'loading'}
+      className="group relative flex items-center justify-center w-9 h-9 rounded-full border text-xs font-bold transition-all duration-300 ease-out hover:scale-110 focus:outline-none cursor-pointer disabled:opacity-60"
+      style={{ borderColor, color: iconColor, backgroundColor: 'transparent' }}
+    >
+      {status === 'loading' ? (
+        <svg className="w-3.5 h-3.5 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+          <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+        </svg>
+      ) : status === 'ok' ? (
+        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+      ) : status === 'error' ? (
+        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      ) : status === 'warn' ? (
+        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+          <line x1="12" y1="9" x2="12" y2="13" />
+          <line x1="12" y1="17" x2="12.01" y2="17" />
+        </svg>
+      ) : (
+        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+        </svg>
+      )}
+      <span className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-[#1a1a1a] border border-[#333] px-2.5 py-1 text-[11px] font-normal text-[#ccc] opacity-0 group-hover:opacity-100 transition-opacity">
+        {tooltip}
+      </span>
+    </button>
   )
 }

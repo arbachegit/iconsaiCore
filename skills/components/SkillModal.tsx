@@ -42,6 +42,8 @@ export default function SkillModal({ skills, skillId, onClose }: SkillModalProps
     setTimeout(() => setCopied(false), 2000)
   }
 
+  const status = skill.isNew ? 'new' : 'active'
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
@@ -55,14 +57,24 @@ export default function SkillModal({ skills, skillId, onClose }: SkillModalProps
         {/* Sticky header */}
         <div className="sticky top-0 z-10 flex items-center justify-between p-5 pb-4 bg-[var(--bg-card)] border-b border-[var(--brd)]">
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 flex-wrap">
               <p
                 className="text-xs font-mono uppercase tracking-wider"
                 style={{ color }}
               >
-                {phase ? `${phase.number}. ${phase.name}` : skill.phaseName}
+                {phase ? `${phase.number}. ${phase.name}` : `${skill.phase}. ${skill.phaseName}`}
               </p>
               <code className="text-xs font-mono text-[var(--cy)]">{skill.trigger}</code>
+              <span
+                className="px-2 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-wider"
+                style={{
+                  backgroundColor: status === 'new' ? `${color}20` : 'rgba(74,222,128,0.15)',
+                  color: status === 'new' ? color : '#4ade80',
+                  border: `1px solid ${status === 'new' ? `${color}40` : 'rgba(74,222,128,0.3)'}`,
+                }}
+              >
+                {status}
+              </span>
             </div>
             <h2 className="mt-1 text-lg font-bold text-[var(--t1)]">{skill.name}</h2>
           </div>
@@ -87,23 +99,40 @@ export default function SkillModal({ skills, skillId, onClose }: SkillModalProps
           </div>
         </div>
 
+        {/* Metadata bar */}
+        <div className="px-5 py-3 border-b border-[var(--brd)] bg-[var(--bg-deep)]">
+          <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs font-mono text-[var(--t3)]">
+            <span>
+              <span className="text-[var(--t3)] opacity-60">id:</span>{' '}
+              <span className="text-[var(--t2)]">{skill.id}</span>
+            </span>
+            <span>
+              <span className="text-[var(--t3)] opacity-60">version:</span>{' '}
+              <span style={{ color }}>{skill.version}</span>
+            </span>
+            <span>
+              <span className="text-[var(--t3)] opacity-60">phase:</span>{' '}
+              <span className="text-[var(--t2)]">{skill.phase} — {skill.phaseName}</span>
+            </span>
+          </div>
+        </div>
+
         {/* Body */}
         <div className="p-5">
-          {loading ? (
-            <div className="flex items-center gap-3 py-8 justify-center text-[var(--t3)]">
-              <span className="w-4 h-4 border-2 border-[var(--cy)] border-t-transparent rounded-full animate-spin" />
-              <span className="text-sm">Carregando skill...</span>
-            </div>
-          ) : fullDoc ? (
-            <MarkdownRenderer content={fullDoc} className="md-content" />
-          ) : (
-            <div className="space-y-5">
-              {/* Description */}
+          {/* Structured fields — always visible */}
+          <div className="space-y-5">
+            {/* Description */}
+            <div>
+              <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--t3)] mb-2">
+                Descricao
+              </h3>
               <p className="text-sm text-[var(--t2)] leading-relaxed">
                 {skill.description}
               </p>
+            </div>
 
-              {/* Techs */}
+            {/* Techs */}
+            {skill.techs.length > 0 && (
               <div>
                 <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--t3)] mb-2">
                   Tecnologias
@@ -124,57 +153,71 @@ export default function SkillModal({ skills, skillId, onClose }: SkillModalProps
                   ))}
                 </div>
               </div>
+            )}
 
-              {/* Examples */}
-              {skill.examples.length > 0 && (
-                <div>
-                  <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--t3)] mb-2">
-                    Quando usar
-                  </h3>
-                  <ul className="space-y-1.5">
-                    {skill.examples.map((ex, i) => (
-                      <li key={i} className="flex items-start gap-2 text-sm text-[var(--t2)]">
-                        <span className="mt-1.5 w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: color }} />
-                        {ex}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+            {/* Examples */}
+            {skill.examples.length > 0 && (
+              <div>
+                <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--t3)] mb-2">
+                  Quando usar
+                </h3>
+                <ul className="space-y-1.5">
+                  {skill.examples.map((ex, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm text-[var(--t2)]">
+                      <span className="mt-1.5 w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: color }} />
+                      {ex}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
-              {/* Commands */}
-              {skill.commands.length > 0 && (
-                <div>
-                  <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--t3)] mb-2">
-                    Comandos
-                  </h3>
-                  <div className="space-y-1.5">
-                    {skill.commands.map((cmd) => (
-                      <code
-                        key={cmd}
-                        className="block px-3 py-2 rounded-lg bg-[var(--bg-deep)] text-sm font-mono text-[var(--cy)] border border-[var(--brd)]"
-                      >
-                        {cmd}
-                      </code>
-                    ))}
-                  </div>
+            {/* Commands */}
+            {skill.commands.length > 0 && (
+              <div>
+                <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--t3)] mb-2">
+                  Comandos
+                </h3>
+                <div className="space-y-1.5">
+                  {skill.commands.map((cmd) => (
+                    <code
+                      key={cmd}
+                      className="block px-3 py-2 rounded-lg bg-[var(--bg-deep)] text-sm font-mono text-[var(--cy)] border border-[var(--brd)]"
+                    >
+                      {cmd}
+                    </code>
+                  ))}
                 </div>
-              )}
+              </div>
+            )}
 
-              {/* Status */}
-              {skill.isNew && (
-                <div className="flex items-center gap-2">
-                  <span className="relative flex h-2.5 w-2.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ backgroundColor: color }} />
-                    <span className="relative inline-flex rounded-full h-2.5 w-2.5" style={{ backgroundColor: color }} />
-                  </span>
-                  <span className="text-xs font-mono uppercase tracking-wider" style={{ color }}>
-                    New
-                  </span>
-                </div>
-              )}
+            {/* Keywords */}
+            {skill.keywords && (
+              <div>
+                <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--t3)] mb-2">
+                  Keywords
+                </h3>
+                <p className="text-xs font-mono text-[var(--t3)] leading-relaxed">
+                  {skill.keywords}
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Full doc from SKILL.md — shown below structured fields */}
+          {loading ? (
+            <div className="flex items-center gap-3 py-8 justify-center text-[var(--t3)]">
+              <span className="w-4 h-4 border-2 border-[var(--cy)] border-t-transparent rounded-full animate-spin" />
+              <span className="text-sm">Carregando documentacao completa...</span>
             </div>
-          )}
+          ) : fullDoc ? (
+            <div className="mt-6 pt-5 border-t border-[var(--brd)]">
+              <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--t3)] mb-3">
+                Documentacao (SKILL.md)
+              </h3>
+              <MarkdownRenderer content={fullDoc} className="md-content" />
+            </div>
+          ) : null}
         </div>
       </div>
     </div>

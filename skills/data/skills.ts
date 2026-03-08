@@ -16,6 +16,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill-fullstack-audit',
     phase: '1',
     phaseName: 'Setup',
+    version: '1.0',
     techs: ['Monorepo', 'Node.js', 'Python'],
     description: 'Auditoria completa e deterministica do repositorio (front/back/infra) para detectar bagunca estrutural, duplicacoes, scripts quebrados, e inconsistencia de padroes. Apenas mede e aponta falhas, NAO corrige.',
     examples: [
@@ -27,6 +28,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     commands: ['/skill-fullstack-audit'],
     isNew: true,
     keywords: 'audit auditoria estrutura arquitetura monorepo duplicacao scripts bagunca fullstack front back infra',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
   {
     id: 'skill-frontend-normalization',
@@ -34,6 +37,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill-frontend-normalization',
     phase: '1',
     phaseName: 'Setup',
+    version: '1.0',
     techs: ['Next.js', 'TypeScript', 'Tailwind', 'shadcn/ui'],
     description: 'Padroniza o frontend do repositorio para um unico stack: Next.js App Router + TypeScript + Tailwind + shadcn/ui + Zod + TanStack Query. Remove fronts paralelos e legados.',
     examples: [
@@ -45,6 +49,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     commands: ['/skill-frontend-normalization'],
     isNew: true,
     keywords: 'frontend front normalizacao next nextjs react typescript tailwind shadcn vite cra migrar padronizar',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
   {
     id: 'skill-dependency-governance',
@@ -52,6 +58,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill-dependency-governance',
     phase: '1',
     phaseName: 'Setup',
+    version: '1.0',
     techs: ['Node.js', 'npm', 'pnpm'],
     description: 'Auditoria de governanca de dependencias: versoes pinadas, vulnerabilidades, dependencias duplicadas, e licencas. Garante reproducibilidade de builds.',
     examples: [
@@ -62,6 +69,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     ],
     commands: ['/skill-dependency-governance'],
     keywords: 'dependencias npm pnpm yarn package.json vulnerabilidade seguranca licenca versao pin lock',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
   {
     id: 'skill-architecture-mother-normalizer',
@@ -69,6 +78,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill-architecture-mother-normalizer',
     phase: '1',
     phaseName: 'Setup',
+    version: '1.0',
     techs: ['Node.js', 'Python', 'TypeScript', 'Clean Arch'],
     description: 'Define, audita e normaliza arquitetura full stack com separacao absoluta Front/Back, backend hibrido (Node + Python), Clean Architecture, 0% impacto funcional na migracao e frontend tipo BI com alta performance.',
     examples: [
@@ -80,6 +90,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     commands: ['/skill-architecture-mother-normalizer'],
     isNew: true,
     keywords: 'arquitetura architecture clean separacao front back desacoplar normalizar hibrido node python camadas domain application infrastructure controller service repository migracao impacto bi performance',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
 
   // PHASE 2: DESIGN / ARQUITETURA
@@ -89,6 +101,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill-floating-button',
     phase: '2',
     phaseName: 'Design',
+    version: '1.0',
     techs: ['React', 'CSS', 'Next.js'],
     description: 'Regra de Ouro do floating button IconsAI. Componente imutavel de navegacao fixa com logo i.ai sobre fundo preto. NUNCA modificar imagem, posicao, estilo ou comportamento.',
     examples: [
@@ -98,6 +111,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     ],
     commands: ['/skill-floating-button'],
     keywords: 'floating button botao fixo navegacao logo iconsai imutavel posicao estilo componente',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
   {
     id: 'skill-design-audit',
@@ -105,6 +120,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill-design-audit',
     phase: '2',
     phaseName: 'Design',
+    version: '1.0',
     techs: ['Figma', 'Tailwind', 'shadcn/ui'],
     description: 'Auditoria de consistencia visual e design system. Verifica uso correto de cores, espacamentos, tipografia, e componentes conforme o padrao definido.',
     examples: [
@@ -115,6 +131,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     ],
     commands: ['/skill-design-audit'],
     keywords: 'design ui ux visual cores espacamento tipografia componente acessibilidade wcag figma',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
   {
     id: 'skill-ui-button',
@@ -122,6 +140,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill-ui-button',
     phase: '2',
     phaseName: 'Design',
+    version: '1.0',
     techs: ['React', 'Tailwind', 'shadcn/ui'],
     description: 'Skill para criar botoes padronizados com altura identica ao textbox, bordas e texto com cor base, background claro derivado, hover com intensificacao tonal, e icone obrigatorio.',
     examples: [
@@ -131,6 +150,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     ],
     commands: ['/skill-ui-button'],
     keywords: 'button botao ui componente padrao hover icone tailwind react',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
   {
     id: 'favicon-guide',
@@ -138,6 +159,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/favicon-guide',
     phase: '2',
     phaseName: 'Design',
+    version: '1.0',
     techs: ['Next.js', 'SVG', 'PNG'],
     description: 'Guia completo para configuracao de favicon com fundo transparente no Next.js App Router, incluindo conversao automatica para SVG vetorial.',
     examples: [
@@ -154,6 +176,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/logo-guide',
     phase: '2',
     phaseName: 'Design',
+    version: '1.0',
     techs: ['SVG', 'PNG', 'Canva', 'CSS'],
     description: 'Guia completo do logo icons.ai: anatomia (play buttons, blocos icons/ai), cores canonicas (#D1D5DB/#EF4444), aspect ratio 2.57:1, variantes light/dark, validacoes e regras inviolaveis.',
     examples: [
@@ -171,6 +194,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill-design-login-iconsai',
     phase: '2',
     phaseName: 'Design',
+    version: '1.0',
     techs: ['Next.js', 'Tailwind', 'React', 'CSS Grid'],
     description: 'Blueprint oficial v1.3 para telas de login Icons.ai. Background ultra-escuro (#050d1a) com grid geometrico ciano e glows radiais sutis (ciano + violeta). Card max 420px, anti-distorcao, hierarquia fixa imutavel. Botao gradiente azul->ciano vibrante.',
     examples: [
@@ -182,6 +206,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     commands: ['/skill-design-login-iconsai'],
     isNew: true,
     keywords: 'login tela autenticacao design dark corporate gradiente card email senha botao entrar esqueci senha iconsai padrao visual blueprint anti distorcao max-width 420px viewport box-sizing responsivo grid tech glow ciano violeta background escuro',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
   {
     id: 'skill-brand-iconsai',
@@ -189,6 +215,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill-brand-iconsai',
     phase: '2',
     phaseName: 'Design',
+    version: '1.0',
     techs: ['React', 'CSS', 'Google Fonts', 'HTML'],
     description: 'Normalizacao da marca IconsAI em tipografia pura (sem imagem). Define componente React, CSS obrigatorio, cores canonicas (#F97316 laranja, #FFFFFF branco, #EF4444 vermelho) e fonte Libre Baskerville serif para o "i" inicial.',
     examples: [
@@ -200,6 +227,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     commands: ['/skill-brand-iconsai'],
     isNew: true,
     keywords: 'brand marca iconsai tipografia fonte font texto logo componente react css libre baskerville serif laranja vermelho branco cores padrao normalizacao',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
 
   // PHASE 3: BACKEND / APIs
@@ -209,6 +238,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill-api-validation-zod',
     phase: '3',
     phaseName: 'Backend',
+    version: '1.0',
     techs: ['Node.js', 'TypeScript', 'Zod'],
     description: 'Auditoria de normalizacao e validacao de entradas HTTP usando Zod. Garante que todos os inputs externos sejam parseados, normalizados e validados antes de qualquer logica de negocio.',
     examples: [
@@ -218,6 +248,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     ],
     commands: ['/skill-api-validation-zod'],
     keywords: 'zod validacao api http request body query params entrada gateway sanitizar normalizar typescript node express',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
   {
     id: 'skill-contract-jsonschema-ajv',
@@ -225,6 +257,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill-contract-jsonschema-ajv',
     phase: '3',
     phaseName: 'Backend',
+    version: '1.0',
     techs: ['JSON Schema', 'Ajv', 'OpenAPI'],
     description: 'Auditoria de contratos formais de API usando JSON Schema e validacao com Ajv. Garante contratos versionados, documentados e validados automaticamente.',
     examples: [
@@ -234,6 +267,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     ],
     commands: ['/skill-contract-jsonschema-ajv'],
     keywords: 'contrato contract json schema ajv openapi swagger documentacao api versionamento',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
   {
     id: 'skill-dto-nest-classvalidator',
@@ -241,6 +276,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill-dto-nest-classvalidator',
     phase: '3',
     phaseName: 'Backend',
+    version: '1.0',
     techs: ['NestJS', 'class-validator', 'class-transformer'],
     description: 'Auditoria de DTOs e pipeline de validacao em NestJS usando class-validator e class-transformer.',
     examples: [
@@ -250,6 +286,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     ],
     commands: ['/skill-dto-nest-classvalidator'],
     keywords: 'dto nestjs nest class-validator decorator validacao pipe whitelist',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
   {
     id: 'skill-python-pydantic',
@@ -257,6 +295,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill-python-pydantic',
     phase: '3',
     phaseName: 'Backend',
+    version: '1.0',
     techs: ['Python', 'Pydantic v2', 'FastAPI'],
     description: 'Auditoria de normalizacao e validacao de inputs em Python usando Pydantic. Garante que todos os dados externos sejam modelados, tipados e validados.',
     examples: [
@@ -266,6 +305,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     ],
     commands: ['/skill-python-pydantic'],
     keywords: 'python pydantic fastapi validacao model schema etl input normalizacao tipo',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
   {
     id: 'skill-python-marshmallow',
@@ -273,6 +314,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill-python-marshmallow',
     phase: '3',
     phaseName: 'Backend',
+    version: '1.0',
     techs: ['Python', 'Marshmallow', 'Flask'],
     description: 'Auditoria de schemas Marshmallow quando Pydantic nao e utilizado. Garante schemas completos com validacao e normalizacao centralizadas.',
     examples: [
@@ -282,6 +324,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     ],
     commands: ['/skill-python-marshmallow'],
     keywords: 'python marshmallow schema serialization flask legado rest api',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
   {
     id: 'skill-sanitization-validator',
@@ -289,6 +333,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill-sanitization-validator',
     phase: '3',
     phaseName: 'Backend',
+    version: '1.0',
     techs: ['validator.js', 'Node.js'],
     description: 'Auditoria de sanitizacao de strings externas usando validator.js. Garante que dados de entrada sejam limpos e seguros.',
     examples: [
@@ -298,6 +343,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     ],
     commands: ['/skill-sanitization-validator'],
     keywords: 'sanitizacao string validator xss injection header log limpeza escape',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
   {
     id: 'skill-normalize-identifiers',
@@ -305,6 +352,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill-normalize-identifiers',
     phase: '3',
     phaseName: 'Backend',
+    version: '1.0',
     techs: ['Node.js', 'Python'],
     description: 'Auditoria de normalizacao de identificadores (UUID, slugs, codigos internos). Garante formato unico e consistente.',
     examples: [
@@ -314,6 +362,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     ],
     commands: ['/skill-normalize-identifiers'],
     keywords: 'uuid ulid slug identificador pk fk url amigavel codigo normalizacao',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
   {
     id: 'skill-normalize-brazilian-codes',
@@ -321,6 +371,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill-normalize-brazilian-codes',
     phase: '3',
     phaseName: 'Backend',
+    version: '1.0',
     techs: ['Node.js', 'Python'],
     description: 'Auditoria de normalizacao e validacao de codigos brasileiros (CPF, CNPJ, IBGE, CEP). Validacao de digitos verificadores e mascaramento.',
     examples: [
@@ -330,6 +381,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     ],
     commands: ['/skill-normalize-brazilian-codes'],
     keywords: 'cpf cnpj ibge cep brasileiro codigo municipal siconfi receita digito verificador lgpd',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
 
   // PHASE 4: INTEGRACAO (ETL, MCP, Auth, Webhooks)
@@ -339,6 +392,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill-mcp-guardrails',
     phase: '4',
     phaseName: 'Integracao',
+    version: '1.0',
     techs: ['MCP', 'Claude', 'TypeScript'],
     description: 'Auditoria de contratos e guardrails para ferramentas MCP. Garante que ferramentas expostas a LLMs tenham descricoes claras e validacao robusta.',
     examples: [
@@ -348,6 +402,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     ],
     commands: ['/skill-mcp-guardrails'],
     keywords: 'mcp model context protocol ferramenta tool claude llm guardrail seguranca',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
   {
     id: 'skill-rag-ingestion',
@@ -355,6 +411,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill-rag-ingestion',
     phase: '4',
     phaseName: 'Integracao',
+    version: '1.0',
     techs: ['RAG', 'Embeddings', 'Vector DB'],
     description: 'Auditoria de pipeline de ingestao para sistemas RAG. Chunking, embeddings, e armazenamento vetorial.',
     examples: [
@@ -364,6 +421,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     ],
     commands: ['/skill-rag-ingestion'],
     keywords: 'rag ingestao documento chunk embedding vetor vector database',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
   {
     id: 'skill_auth_fase_1_sem_role',
@@ -371,6 +430,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill_auth_fase_1_sem_role',
     phase: '4',
     phaseName: 'Integracao',
+    version: '1.0',
     techs: ['Shell', 'Twilio', 'Infobip'],
     description: 'Cria usuarios sem roles com comunicacao via WhatsApp/SMS (Twilio + fallback Infobip). Gestao de ativos/inativos sem reload.',
     examples: [
@@ -380,6 +440,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     ],
     commands: ['/skill_auth_fase_1_sem_role'],
     keywords: 'auth usuario sem role whatsapp sms twilio infobip ativo inativo criar',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
   {
     id: 'skill_auth_fase_2_com_role',
@@ -387,6 +449,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill_auth_fase_2_com_role',
     phase: '4',
     phaseName: 'Integracao',
+    version: '1.0',
     techs: ['Shell', 'Twilio', 'Infobip'],
     description: 'Cria usuarios com roles (admin, editor, etc.) com comunicacao via WhatsApp/SMS (Twilio + fallback Infobip).',
     examples: [
@@ -396,6 +459,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     ],
     commands: ['/skill_auth_fase_2_com_role'],
     keywords: 'auth usuario role admin editor rbac whatsapp sms twilio infobip',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
   {
     id: 'skill_auth_fase_3_com_role_multi_tenant',
@@ -403,6 +468,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill_auth_fase_3_com_role_multi_tenant',
     phase: '4',
     phaseName: 'Integracao',
+    version: '1.0',
     techs: ['Shell', 'Twilio', 'Infobip'],
     description: 'Cria usuarios com roles e multi-tenant. Isolamento por tenant com comunicacao via WhatsApp/SMS (Twilio + fallback Infobip).',
     examples: [
@@ -412,26 +478,32 @@ export const FALLBACK_SKILLS: Skill[] = [
     ],
     commands: ['/skill_auth_fase_3_com_role_multi_tenant'],
     keywords: 'auth usuario role multi tenant isolamento rbac abac whatsapp sms twilio infobip',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
 
   // PHASE 5: LLM / AI (Prompts, RAG Retrieval, Agents)
   {
     id: 'skill-builder',
-    name: 'Skill Builder',
+    name: 'Skill Builder v2',
     trigger: '/skill-builder',
-    phase: '5',
-    phaseName: 'LLM',
-    techs: ['Claude', 'YAML', 'Markdown'],
-    description: 'Gerador de skills para o ecossistema IconsAI. Recebe descricao, classifica automaticamente na fase correta, gera SKILL.md + openai.yaml e valida a estrutura na tabela de skills.',
+    phase: '1',
+    phaseName: 'Setup',
+    version: '2.1',
+    techs: ['YAML', 'Markdown', 'Claude', 'Next.js', 'GitHub API'],
+    description: 'Gerador completo de skills IconsAI. Classifica na fase correta, gera YAML + SKILL.md, atualiza fallback, e garante que webhook e pagina publica funcionem end-to-end.',
     examples: [
-      'Criar nova skill a partir de descricao',
-      'Gerar YAML e Markdown automaticamente',
-      'Classificar skill na fase correta',
-      'Validar estrutura de skill existente',
+      'Criar nova skill para cache Redis',
+      'Gerar skill de monitoramento de logs',
+      'Criar skill de integracao com Stripe',
+      'Gerar skill de testes de performance',
+      'Atualizar skill existente com novos campos',
     ],
     commands: ['/skill-builder'],
     isNew: true,
-    keywords: 'builder gerador skill yaml markdown classificacao fase gerar criar template scaffold',
+    keywords: 'skill builder gerador criar nova classificar fase yaml markdown template scaffold webhook pipeline fallback card ui validacao version versionamento semver',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-08',
   },
   {
     id: 'skill-llm-prompt-safety',
@@ -439,6 +511,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill-llm-prompt-safety',
     phase: '5',
     phaseName: 'LLM',
+    version: '1.0',
     techs: ['LLM', 'Claude', 'OpenAI'],
     description: 'Auditoria de seguranca de prompts enviados a LLMs. Previne injection, vazamento de dados, e uso malicioso.',
     examples: [
@@ -448,6 +521,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     ],
     commands: ['/skill-llm-prompt-safety'],
     keywords: 'prompt llm seguranca injection vazamento claude openai sistema',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
   {
     id: 'skill-rag-retrieval',
@@ -455,6 +530,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill-rag-retrieval',
     phase: '5',
     phaseName: 'LLM',
+    version: '1.0',
     techs: ['RAG', 'Vector Search', 'Reranking'],
     description: 'Auditoria de retrieval em sistemas RAG. Busca semantica, reranking, e integracao com LLMs.',
     examples: [
@@ -464,6 +540,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     ],
     commands: ['/skill-rag-retrieval'],
     keywords: 'rag retrieval busca semantica rerank vetor embedding relevancia',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
   {
     id: 'skill-chat-Node',
@@ -471,6 +549,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill-chat-Node',
     phase: '5',
     phaseName: 'LLM',
+    version: '1.0',
     techs: ['Node.js', 'TypeScript', 'RAG'],
     description: 'Agente conversacional de producao com RAG, integracoes HTTP e handoff para analytics. NAO executa analises matematicas avancadas.',
     examples: [
@@ -487,6 +566,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill-chat-python',
     phase: '5',
     phaseName: 'LLM',
+    version: '1.0',
     techs: ['Python', 'Analytics', 'ML'],
     description: 'Motor analitico Python. Executa modelos, simulacoes, estatistica e gera graficos. Recebe pedidos estruturados e devolve resultados.',
     examples: [
@@ -505,6 +585,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill-node-quality',
     phase: '6',
     phaseName: 'Quality',
+    version: '1.0',
     techs: ['Node.js', 'ESLint', 'Prettier', 'Jest'],
     description: 'Auditoria de qualidade de codigo Node.js. Linting, formatacao, testes e cobertura.',
     examples: [
@@ -514,6 +595,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     ],
     commands: ['/skill-node-quality'],
     keywords: 'node nodejs eslint prettier jest teste test cobertura coverage lint',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
   {
     id: 'skill-python-quality',
@@ -521,6 +604,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill-python-quality',
     phase: '6',
     phaseName: 'Quality',
+    version: '1.0',
     techs: ['Python', 'ruff', 'mypy', 'pytest'],
     description: 'Auditoria e correcao de qualidade de codigo Python com ruff, mypy, black e pytest. Executa linting, type checking, formatacao e testes.',
     examples: [
@@ -530,6 +614,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     ],
     commands: ['/skill-python-quality'],
     keywords: 'python ruff mypy pytest black lint type check teste formatacao',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
   {
     id: 'api-test-audit',
@@ -537,6 +623,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/api-test-audit',
     phase: '6',
     phaseName: 'Quality',
+    version: '1.0',
     techs: ['Jest', 'Supertest', 'pytest'],
     description: 'Auditoria de cobertura de testes de API. Verifica endpoints nao testados e casos de borda.',
     examples: [
@@ -553,6 +640,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill-playwright-massive-tester',
     phase: '6',
     phaseName: 'Quality',
+    version: '1.0',
     techs: ['Playwright', 'TypeScript', 'Node.js'],
     description: 'Agente Tester Nuclear que testa massivamente aplicacoes web usando Playwright. Executa smoke, navegacao, forms, crawler e fuzzer de UI. Produz relatorio deterministico com evidencias (trace/screenshot/video/logs) e lista de bugs reproduziveis.',
     examples: [
@@ -572,6 +660,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill-codebase-sanitizer',
     phase: '6',
     phaseName: 'Quality',
+    version: '1.0',
     techs: ['Node.js', 'Python', 'TypeScript', 'SQL'],
     description: 'Sanitizacao completa e deterministica de codebase full stack: dead code, imports orfaos, seguranca (OWASP), performance (N+1, O(n2)), consistencia arquitetural, contratos de API e schema de banco. 12 fases com relatorio JSON e metricas de integridade/consistencia.',
     examples: [
@@ -583,6 +672,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     commands: ['/skill-codebase-sanitizer'],
     isNew: true,
     keywords: 'sanitizar sanitizacao codebase auditoria dead code morto seguranca security owasp performance n+1 consistencia integridade duplicacao import orfao fullstack frontend backend schema banco sql api contrato vulnerabilidade xss csrf injection',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
 
   // PHASE 7: ANALYTICS / DADOS (Opcional)
@@ -592,6 +683,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill-analise-espaco-temporal-arrecadacao',
     phase: '7',
     phaseName: 'Analytics',
+    version: '1.0',
     techs: ['Python', 'Pandas', 'GeoPandas'],
     description: 'Analise espacial e temporal de dados de arrecadacao municipal. Mapas, series temporais e correlacoes.',
     examples: [
@@ -601,6 +693,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     ],
     commands: ['/skill-analise-espaco-temporal-arrecadacao'],
     keywords: 'analise espacial temporal arrecadacao municipal mapa serie pandas geopandas',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
   {
     id: 'skill-projecao-temporal-econometrica-var',
@@ -608,6 +702,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill-projecao-temporal-econometrica-var',
     phase: '7',
     phaseName: 'Analytics',
+    version: '1.0',
     techs: ['Python', 'statsmodels', 'VAR'],
     description: 'Projecao econometrica usando modelos VAR (Vector Autoregression). Projeta series temporais multivariadas.',
     examples: [
@@ -617,6 +712,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     ],
     commands: ['/skill-projecao-temporal-econometrica-var'],
     keywords: 'projecao var econometria temporal serie statsmodels vetor autoregressao',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
   {
     id: 'skill-inferencia-temporal-dados-faltantes',
@@ -624,6 +721,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill-inferencia-temporal-dados-faltantes',
     phase: '7',
     phaseName: 'Analytics',
+    version: '1.0',
     techs: ['Python', 'scipy', 'statsmodels'],
     description: 'Inferencia de dados faltantes em series temporais usando metodos estatisticos. NAO usa interpolacao simples.',
     examples: [
@@ -633,6 +731,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     ],
     commands: ['/skill-inferencia-temporal-dados-faltantes'],
     keywords: 'inferencia temporal faltante missing imputacao serie estatistica',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
   {
     id: 'skill-roteador-analise-temporal-espacial',
@@ -640,6 +740,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill-roteador-analise-temporal-espacial',
     phase: '7',
     phaseName: 'Analytics',
+    version: '1.0',
     techs: ['Python', 'Router'],
     description: 'Roteador inteligente que direciona requisicoes para a skill correta de analise (temporal ou espacial).',
     examples: [
@@ -649,6 +750,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     ],
     commands: ['/skill-roteador-analise-temporal-espacial'],
     keywords: 'roteador router analise temporal espacial orquestracao',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
   {
     id: 'skill-mapas',
@@ -656,6 +759,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill-mapas',
     phase: '7',
     phaseName: 'Analytics',
+    version: '1.0',
     techs: ['Python', 'GeoJSON', 'Shapefile', 'IBGE'],
     description: 'Agente geoespacial profissional para geracao de mapas exclusivamente a partir de dados geograficos reais e oficiais (Shapefile, GeoJSON, TopoJSON, GeoPackage). Proibe geometrias sinteticas ou ficticias.',
     examples: [
@@ -667,6 +771,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     commands: ['/skill-mapas'],
     isNew: true,
     keywords: 'mapa map geoespacial geo shapefile geojson topojson ibge municipio estado fronteira territorio geopandas fidelidade',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
   {
     id: 'skill-estimador-cobertura-financeira-municipal',
@@ -674,6 +780,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill-estimador-cobertura-financeira-municipal',
     phase: '7',
     phaseName: 'Analytics',
+    version: '1.0',
     techs: ['Python', 'statsmodels', 'Bootstrap'],
     description: 'Calcula o percentual real de cobertura financeira das bases municipais (ICFM). Corrige distorcoes por cobertura incompleta, concentracao fiscal e assimetria regional usando modelo econometrico log-linear com bootstrap.',
     examples: [
@@ -685,6 +792,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     commands: ['/skill-estimador-cobertura-financeira-municipal'],
     isNew: true,
     keywords: 'estimador cobertura financeira municipal icfm ecfm bootstrap econometria fiscal arrecadacao despesa massa imputacao gini concentracao',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
 
   // PHASE 8: PRE-DEPLOY
@@ -694,6 +803,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill-pre-deploy',
     phase: '8',
     phaseName: 'Pre-Deploy',
+    version: '1.0',
     techs: ['CI/CD', 'Shell', 'Node.js'],
     description: 'Gatekeeper de pre-deploy que bloqueia deploy se qualquer contrato minimo (build/lint/tests/env/rotas) nao estiver comprovado com evidencia. Apenas valida e bloqueia, NAO corrige codigo.',
     examples: [
@@ -705,6 +815,30 @@ export const FALLBACK_SKILLS: Skill[] = [
     commands: ['/skill-pre-deploy'],
     isNew: true,
     keywords: 'pre deploy validacao build lint test env health check gatekeeper ci cd pipeline',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
+  },
+  {
+    id: 'skill-production-audit',
+    name: 'Production Audit Orchestrator',
+    trigger: '/skill-production-audit',
+    phase: '8',
+    phaseName: 'Pre-Deploy',
+    version: '1.0',
+    techs: ['Node.js', 'Python', 'Next.js', 'Shell', 'CI/CD'],
+    description: 'Orquestrador que executa todas as skills de auditoria aplicaveis ao projeto, consolida resultados em um relatorio unico e emite veredito de producao (READY / BLOCKED).',
+    examples: [
+      'Auditoria completa antes de deploy',
+      'Validar app nova antes do primeiro release',
+      'Checagem periodica de saude do projeto',
+      'Verificar refatoracao grande',
+      'Gerar relatorio de compliance',
+    ],
+    commands: ['/skill-production-audit'],
+    isNew: true,
+    keywords: 'production audit orchestrator checklist gate ready blocked compliance report quality security structure design deploy validation sanitization dead-code pre-deploy final-gate',
+    createdAt: '2026-03-08',
+    updatedAt: '2026-03-08',
   },
 
   // PHASE 9: DEPLOY / CI-CD
@@ -714,6 +848,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill_deploy_master',
     phase: '9',
     phaseName: 'Deploy',
+    version: '1.0',
     techs: ['Docker', 'Docker Compose', 'Shell'],
     description: 'Orquestra todas as fases do deploy de forma deterministica: pre-check, build, publish, deploy, validate, lock/release e versionamento.',
     examples: [
@@ -723,6 +858,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     ],
     commands: ['/skill_deploy_master'],
     keywords: 'deploy master pipeline completo deterministico fases orquestrador',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
   {
     id: 'skill_deploy_fase_0_pre_check',
@@ -730,6 +867,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill_deploy_fase_0_pre_check',
     phase: '9',
     phaseName: 'Deploy',
+    version: '1.0',
     techs: ['Docker', 'Shell'],
     description: 'Pre-check antes do deploy. Valida memoria, Docker, containers ativos, disco e permissoes.',
     examples: [
@@ -739,6 +877,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     ],
     commands: ['/skill_deploy_fase_0_pre_check'],
     keywords: 'pre check ambiente memoria disco docker verificar validar',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
   {
     id: 'skill_deploy_fase_1_build',
@@ -746,6 +886,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill_deploy_fase_1_build',
     phase: '9',
     phaseName: 'Deploy',
+    version: '1.0',
     techs: ['Docker', 'Vite', 'npm'],
     description: 'Build do deploy. Instala dependencias, executa build Vite e constroi imagens Docker.',
     examples: [
@@ -755,6 +896,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     ],
     commands: ['/skill_deploy_fase_1_build'],
     keywords: 'build imagem docker vite npm artefato construir',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
   {
     id: 'skill_deploy_fase_2_publish',
@@ -762,6 +905,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill_deploy_fase_2_publish',
     phase: '9',
     phaseName: 'Deploy',
+    version: '1.0',
     techs: ['Docker', 'GHCR'],
     description: 'Publica imagens construidas para o registry Docker (GHCR ou outro).',
     examples: [
@@ -771,6 +915,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     ],
     commands: ['/skill_deploy_fase_2_publish'],
     keywords: 'publish push registry docker ghcr tag imagem publicar',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
   {
     id: 'skill_deploy_fase_3_deploy',
@@ -778,6 +924,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill_deploy_fase_3_deploy',
     phase: '9',
     phaseName: 'Deploy',
+    version: '1.0',
     techs: ['Docker', 'Docker Compose'],
     description: 'Sobe containers no ambiente de producao. Para containers antigos e sobe novos via Docker Compose.',
     examples: [
@@ -787,6 +934,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     ],
     commands: ['/skill_deploy_fase_3_deploy'],
     keywords: 'deploy containers producao docker compose subir parar atualizar',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
   {
     id: 'skill_deploy_fase_4_validate',
@@ -794,6 +943,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill_deploy_fase_4_validate',
     phase: '9',
     phaseName: 'Deploy',
+    version: '1.0',
     techs: ['Docker', 'curl', 'Shell'],
     description: 'Valida que o deploy foi realizado corretamente. Checa containers ativos, logs de erro e endpoints de health.',
     examples: [
@@ -803,6 +953,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     ],
     commands: ['/skill_deploy_fase_4_validate'],
     keywords: 'validate validar health check pos deploy containers logs erro endpoint',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
   {
     id: 'skill_deploy_fase_5_lock_release',
@@ -810,6 +962,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill_deploy_fase_5_lock_release',
     phase: '9',
     phaseName: 'Deploy',
+    version: '1.0',
     techs: ['Shell'],
     description: 'Finaliza o deploy de forma segura com lock temporario, registro de versao e release.',
     examples: [
@@ -819,6 +972,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     ],
     commands: ['/skill_deploy_fase_5_lock_release'],
     keywords: 'lock release finalizar seguro versao registro deploy',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
   {
     id: 'skill_versioning',
@@ -826,6 +981,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill_versioning',
     phase: '9',
     phaseName: 'Deploy',
+    version: '1.0',
     techs: ['Git', 'Shell'],
     description: 'Registra commits, builds e versoes de forma deterministica com timestamp e hash do commit.',
     examples: [
@@ -835,6 +991,8 @@ export const FALLBACK_SKILLS: Skill[] = [
     ],
     commands: ['/skill_versioning'],
     keywords: 'versao version commit build registro historico rastreabilidade deploy',
+    createdAt: '2026-03-07',
+    updatedAt: '2026-03-07',
   },
 ]
 

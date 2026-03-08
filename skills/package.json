@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "sh -c 'HOST=${HOST:-127.0.0.1}; PORT=${PORT:-3003}; next dev -H \"$HOST\" -p \"$PORT\"'",
+    "prebuild": "node scripts/check-card-ui.mjs",
     "build": "next build",
     "start": "sh -c 'HOST=${HOST:-127.0.0.1}; PORT=${PORT:-3003}; next start -H \"$HOST\" -p \"$PORT\"'",
-    "lint": "next lint"
+    "lint": "next lint",
+    "check:ui": "node scripts/check-card-ui.mjs"
   },
   "dependencies": {
     "@radix-ui/react-dropdown-menu": "2.1.16",

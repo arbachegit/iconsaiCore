@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next'
 
 export const metadata: Metadata = {
   title: 'IconsAI Skills Navigator — Mobile',
-  description: 'Skills Navigator mobile — 44 Skills de Governança e IA.',
+  description: 'Skills Navigator mobile — Catalogo de skills do ecossistema IconsAI.',
 }
 
 export const viewport: Viewport = {

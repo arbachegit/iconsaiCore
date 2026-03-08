@@ -133,8 +133,11 @@ function normalizeSkill(rawSkill: RawSkillYaml, sourcePath: string): Skill | nul
 
   const examples = toStringArray(rawSkill.examples)
   const commands = toStringArray(rawSkill.commands)
+  const version = toNonEmptyString(rawSkill.version) ?? '1.0'
   const keywords = toNonEmptyString(rawSkill.keywords) ?? ''
   const isNew = rawSkill.isNew === true || rawSkill.isNew === 'true'
+  const createdAt = toNonEmptyString(rawSkill.createdAt) ?? undefined
+  const updatedAt = toNonEmptyString(rawSkill.updatedAt) ?? undefined
 
   return {
     id,
@@ -142,12 +145,15 @@ function normalizeSkill(rawSkill: RawSkillYaml, sourcePath: string): Skill | nul
     trigger,
     phase,
     phaseName,
+    version,
     techs,
     description,
     examples,
     commands,
     isNew: isNew || undefined,
     keywords,
+    createdAt,
+    updatedAt,
   }
 }
 

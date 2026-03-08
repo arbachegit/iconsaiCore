@@ -5,6 +5,7 @@ export interface RawSkillYaml {
   trigger?: unknown
   phase?: unknown
   phaseName?: unknown
+  version?: unknown
   category?: unknown
   section?: unknown
   order?: unknown
@@ -16,6 +17,8 @@ export interface RawSkillYaml {
   commands?: unknown
   isNew?: unknown
   keywords?: unknown
+  createdAt?: unknown
+  updatedAt?: unknown
   interface?: {
     display_name?: unknown
     short_description?: unknown
@@ -28,12 +31,15 @@ export interface Skill {
   trigger: string
   phase: string
   phaseName: string
+  version: string
   techs: string[]
   description: string
   examples: string[]
   commands: string[]
   isNew?: boolean
   keywords: string
+  createdAt?: string
+  updatedAt?: string
 }
 
 export interface GitHubContentItem {

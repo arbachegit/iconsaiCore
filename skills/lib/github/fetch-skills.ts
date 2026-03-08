@@ -29,8 +29,11 @@ function enrichWithFallback(githubSkills: Skill[]): Skill[] {
       description: skill.description && skill.description.length >= 20 ? skill.description : fb.description,
       examples: skill.examples.length > 0 ? skill.examples : fb.examples,
       commands: skill.commands.length > 0 ? skill.commands : fb.commands,
+      version: skill.version || fb.version,
       keywords: skill.keywords || fb.keywords,
       isNew: skill.isNew ?? fb.isNew,
+      createdAt: skill.createdAt || fb.createdAt,
+      updatedAt: skill.updatedAt || fb.updatedAt,
     }
   })
 }

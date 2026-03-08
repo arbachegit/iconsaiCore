@@ -29,7 +29,20 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        {/* Floating Logo — Regra de Ouro (IMUTAVEL) */}
+        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+        <a className="floating-logo" href="#" onClick={undefined}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/skills/favicon-float.png" alt="IconsAI" />
+        </a>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `document.querySelector('.floating-logo')?.addEventListener('click',function(e){e.preventDefault();window.scrollTo({top:0,behavior:'smooth'})})`,
+          }}
+        />
+      </body>
     </html>
   )
 }

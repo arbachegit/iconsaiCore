@@ -4,6 +4,7 @@ import { revalidatePath, revalidateTag } from 'next/cache'
 import { NextRequest, NextResponse } from 'next/server'
 
 import { getSkillsWebhookSecret } from '@/lib/github/env'
+import { getAllSkills } from '@/lib/github/skills'
 import type { SkillsSyncPayload } from '@/lib/github/types'
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -55,6 +56,44 @@ function verifyGitHubSignature(body: string, signature: string | null, secret: s
   }
 
   return timingSafeEqual(expectedBuffer, receivedBuffer)
+}
+
+/** Health check — used by the webhook status button in the UI */
+export async function GET() {
+  const checks: Record<string, string> = {}
+  let ok = true
+
+  // 1. Check webhook secret
+  try {
+    const secret = getSkillsWebhookSecret()
+    checks.secret = secret.length > 0 ? 'ok' : 'empty'
+    if (checks.secret !== 'ok') ok = false
+  } catch {
+    checks.secret = 'missing'
+    ok = false
+  }
+
+  // 2. Check GitHub API connectivity + skill count
+  try {
+    const skills = await getAllSkills()
+    checks.github = 'ok'
+    checks.skillCount = String(skills.length)
+    if (skills.length === 0) {
+      checks.github = 'empty'
+      ok = false
+    }
+  } catch (error) {
+    checks.github = 'unreachable'
+    checks.skillCount = '0'
+    checks.error = error instanceof Error ? error.message : 'unknown'
+    ok = false
+  }
+
+  return NextResponse.json({
+    ok,
+    checks,
+    timestamp: new Date().toISOString(),
+  })
 }
 
 export async function POST(request: NextRequest) {
