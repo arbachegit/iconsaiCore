@@ -10,7 +10,7 @@ interface PollingState {
   remoteCount: number | null
 }
 
-export function useNewSkillsPolling(renderedCount: number) {
+export function useNewSkillsPolling(renderedCount: number, renderedHash: string) {
   const [state, setState] = useState<PollingState>({ hasNew: false, remoteCount: null })
   const [dismissed, setDismissed] = useState(false)
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -22,8 +22,9 @@ export function useNewSkillsPolling(renderedCount: number) {
 
       const data = await res.json()
       const remoteCount = Number(data.checks?.skillCount ?? 0)
+      const remoteHash = typeof data.checks?.contentHash === 'string' ? data.checks.contentHash : ''
 
-      if (remoteCount > 0 && remoteCount !== renderedCount) {
+      if (remoteCount > 0 && (remoteCount !== renderedCount || (remoteHash && remoteHash !== renderedHash))) {
         setState({ hasNew: true, remoteCount })
       } else {
         setState({ hasNew: false, remoteCount })
@@ -31,7 +32,7 @@ export function useNewSkillsPolling(renderedCount: number) {
     } catch {
       // Silently ignore — network errors don't affect the UI
     }
-  }, [renderedCount])
+  }, [renderedCount, renderedHash])
 
   useEffect(() => {
     const timeout = setTimeout(check, INITIAL_DELAY_MS)

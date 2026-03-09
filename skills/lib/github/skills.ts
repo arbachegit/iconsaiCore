@@ -1,5 +1,7 @@
 import 'server-only'
 
+import { createHash } from 'node:crypto'
+
 import { load } from 'js-yaml'
 
 import { PHASES } from '@/data/phases'
@@ -161,7 +163,7 @@ function isYamlPath(path: string): boolean {
   return /\.ya?ml$/i.test(path)
 }
 
-async function fetchGitHubJson(path: string): Promise<unknown> {
+async function fetchGitHubJson(path: string, skipCache = false): Promise<unknown> {
   const { owner, repo, token } = getGitHubEnv()
   const headers: Record<string, string> = {
     Accept: 'application/vnd.github+json',
@@ -172,16 +174,23 @@ async function fetchGitHubJson(path: string): Promise<unknown> {
     headers.Authorization = `Bearer ${token}`
   }
 
+  const fetchOptions: RequestInit & { next?: Record<string, unknown> } = {
+    headers,
+    signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+  }
+
+  if (skipCache) {
+    fetchOptions.cache = 'no-store'
+  } else {
+    fetchOptions.next = {
+      revalidate: CACHE_REVALIDATE_SECONDS,
+      tags: [CACHE_TAG],
+    }
+  }
+
   const response = await fetch(
     `${GITHUB_API_BASE_URL}/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/${path}`,
-    {
-      headers,
-      next: {
-        revalidate: CACHE_REVALIDATE_SECONDS,
-        tags: [CACHE_TAG],
-      },
-      signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
-    },
+    fetchOptions,
   ).catch((error: unknown) => {
     console.error('[skills-github] request failed', { path, error })
     throw new GitHubSkillsError(
@@ -230,8 +239,8 @@ async function fetchGitHubJson(path: string): Promise<unknown> {
   return response.json()
 }
 
-async function listDirectory(path: string): Promise<GitHubContentItem[]> {
-  const response = await fetchGitHubJson(`contents/${encodeGitHubPath(path)}`)
+async function listDirectory(path: string, skipCache = false): Promise<GitHubContentItem[]> {
+  const response = await fetchGitHubJson(`contents/${encodeGitHubPath(path)}`, skipCache)
 
   if (!Array.isArray(response)) {
     throw new GitHubSkillsError(
@@ -246,8 +255,8 @@ async function listDirectory(path: string): Promise<GitHubContentItem[]> {
     .sort((left, right) => left.path.localeCompare(right.path, 'pt-BR', { sensitivity: 'base' }))
 }
 
-async function readFile(path: string): Promise<string> {
-  const response = await fetchGitHubJson(`contents/${encodeGitHubPath(path)}`)
+async function readFile(path: string, skipCache = false): Promise<string> {
+  const response = await fetchGitHubJson(`contents/${encodeGitHubPath(path)}`, skipCache)
 
   if (!isGitHubContentFile(response)) {
     throw new GitHubSkillsError(
@@ -268,14 +277,14 @@ async function readFile(path: string): Promise<string> {
   return Buffer.from(response.content.replace(/\n/g, ''), 'base64').toString('utf8')
 }
 
-async function walkSkillsDirectory(path: string): Promise<string[]> {
-  const items = await listDirectory(path)
+async function walkSkillsDirectory(path: string, skipCache = false): Promise<string[]> {
+  const items = await listDirectory(path, skipCache)
   const yamlFiles: string[] = []
 
   for (const item of items) {
     if (item.type === 'dir') {
       try {
-        yamlFiles.push(...(await walkSkillsDirectory(item.path)))
+        yamlFiles.push(...(await walkSkillsDirectory(item.path, skipCache)))
       } catch (error) {
         console.error('[skills-github] failed to read nested directory', {
           path: item.path,
@@ -295,9 +304,9 @@ async function walkSkillsDirectory(path: string): Promise<string[]> {
   )
 }
 
-async function loadSkillFromFile(path: string): Promise<Skill | null> {
+async function loadSkillFromFile(path: string, skipCache = false): Promise<Skill | null> {
   try {
-    const fileContents = await readFile(path)
+    const fileContents = await readFile(path, skipCache)
     const parsed = load(fileContents)
 
     if (!isRecord(parsed)) {
@@ -319,10 +328,10 @@ async function loadSkillFromFile(path: string): Promise<Skill | null> {
   }
 }
 
-export async function getAllSkills(): Promise<Skill[]> {
-  const yamlFiles = await walkSkillsDirectory(SKILLS_ROOT)
+export async function getAllSkills(skipCache = false): Promise<Skill[]> {
+  const yamlFiles = await walkSkillsDirectory(SKILLS_ROOT, skipCache)
 
-  const results = await Promise.allSettled(yamlFiles.map((path) => loadSkillFromFile(path)))
+  const results = await Promise.allSettled(yamlFiles.map((path) => loadSkillFromFile(path, skipCache)))
   const skills: Skill[] = []
 
   for (const result of results) {
@@ -342,6 +351,48 @@ export async function getAllSkills(): Promise<Skill[]> {
     if (phaseA !== phaseB) return phaseA - phaseB
     return a.name.localeCompare(b.name, 'pt-BR', { sensitivity: 'base' })
   })
+}
+
+export function computeSkillsHash(skills: Skill[]): string {
+  const sorted = [...skills].sort((a, b) => a.id.localeCompare(b.id))
+  const payload = sorted.map((s) => `${s.id}:${s.version}`).join('|')
+  return createHash('sha256').update(payload).digest('hex').slice(0, 12)
+}
+
+/**
+ * Compute a content hash from Git blob SHAs in the directory listing.
+ * @param skipCache - true for polling (fresh from GitHub), false for page render (cached)
+ * Cost: ~1-3 API calls (one per directory level), NOT 51+ per skill file.
+ */
+export async function getContentHash(skipCache = false): Promise<{ count: number; hash: string }> {
+  const items = await collectYamlItems(SKILLS_ROOT, skipCache)
+  const sorted = [...items].sort((a, b) => a.path.localeCompare(b.path))
+  const payload = sorted.map((item) => `${item.path}:${item.sha}`).join('|')
+  return {
+    count: items.length,
+    hash: createHash('sha256').update(payload).digest('hex').slice(0, 12),
+  }
+}
+
+async function collectYamlItems(path: string, skipCache: boolean): Promise<GitHubContentItem[]> {
+  const items = await listDirectory(path, skipCache)
+  const yamlItems: GitHubContentItem[] = []
+
+  for (const item of items) {
+    if (item.type === 'dir') {
+      try {
+        yamlItems.push(...(await collectYamlItems(item.path, skipCache)))
+      } catch {
+        // skip unreachable subdirectories
+      }
+      continue
+    }
+    if (item.type === 'file' && isYamlPath(item.path)) {
+      yamlItems.push(item)
+    }
+  }
+
+  return yamlItems
 }
 
 export function groupSkillsBySection(skills: Skill[]): SkillSection[] {

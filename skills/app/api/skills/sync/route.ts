@@ -4,7 +4,7 @@ import { revalidatePath, revalidateTag } from 'next/cache'
 import { NextRequest, NextResponse } from 'next/server'
 
 import { getSkillsWebhookSecret } from '@/lib/github/env'
-import { getAllSkills } from '@/lib/github/skills'
+import { getContentHash } from '@/lib/github/skills'
 import type { SkillsSyncPayload } from '@/lib/github/types'
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -73,12 +73,13 @@ export async function GET() {
     ok = false
   }
 
-  // 2. Check GitHub API connectivity + skill count
+  // 2. Check GitHub API connectivity + skill count (lightweight, cache-busting)
   try {
-    const skills = await getAllSkills()
+    const remote = await getContentHash(true)
     checks.github = 'ok'
-    checks.skillCount = String(skills.length)
-    if (skills.length === 0) {
+    checks.skillCount = String(remote.count)
+    checks.contentHash = remote.hash
+    if (remote.count === 0) {
       checks.github = 'empty'
       ok = false
     }

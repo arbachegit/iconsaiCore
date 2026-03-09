@@ -13,6 +13,7 @@ import type { Skill } from '@/lib/github/types'
 interface SkillsCatalogProps {
   skills: Skill[]
   dataSource: 'github' | 'fallback'
+  contentHash: string
 }
 
 interface SkillSectionData {
@@ -34,14 +35,14 @@ function groupByPhase(skills: Skill[]): SkillSectionData[] {
     .map(([name, sectionSkills]) => ({ name, skills: sectionSkills }))
 }
 
-export default function SkillsCatalog({ skills = [], dataSource = 'fallback' }: SkillsCatalogProps) {
+export default function SkillsCatalog({ skills = [], dataSource = 'fallback', contentHash = '' }: SkillsCatalogProps) {
   const [modalSkillId, setModalSkillId] = useState<string | null>(null)
   const [activePhase, setActivePhase] = useState<string | null>(null)
   const [glowingSkill, setGlowingSkill] = useState<string | null>(null)
   const [showTable, setShowTable] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const sectionRefs = useRef<Map<string, HTMLDivElement>>(new Map())
-  const polling = useNewSkillsPolling(skills.length)
+  const polling = useNewSkillsPolling(skills.length, contentHash)
 
   const allSections = groupByPhase(skills)
 
@@ -162,7 +163,7 @@ export default function SkillsCatalog({ skills = [], dataSource = 'fallback' }: 
                     className="w-40 h-9 pl-8 pr-3 rounded-full border border-[rgba(34,211,238,0.3)] bg-transparent text-xs font-mono text-[var(--t1)] placeholder:text-[var(--t3)] outline-none focus:border-[var(--cy)] transition-colors"
                   />
                 </div>
-                <WebhookCheckButton renderedCount={skills.length} polling={polling} />
+                <WebhookCheckButton renderedCount={skills.length} renderedHash={contentHash} polling={polling} />
               </div>
 
               <PhaseNav
@@ -205,10 +206,11 @@ export default function SkillsCatalog({ skills = [], dataSource = 'fallback' }: 
 /* ─── Webhook Check Button ─── */
 interface WebhookCheckButtonProps {
   renderedCount: number
+  renderedHash: string
   polling: { hasNewSkills: boolean; remoteCount: number | null; refresh: () => void }
 }
 
-function WebhookCheckButton({ renderedCount, polling }: WebhookCheckButtonProps) {
+function WebhookCheckButton({ renderedCount, renderedHash, polling }: WebhookCheckButtonProps) {
   const [status, setStatus] = useState<'idle' | 'loading' | 'ok' | 'warn' | 'error'>('idle')
   const [tooltip, setTooltip] = useState('Verificar webhook')
 
@@ -236,9 +238,12 @@ function WebhookCheckButton({ renderedCount, polling }: WebhookCheckButtonProps)
         setTooltip(`Falha: ${failures.join(', ')}`)
       } else {
         const ghCount = Number(data.checks?.skillCount ?? 0)
-        if (ghCount !== renderedCount) {
+        const ghHash = typeof data.checks?.contentHash === 'string' ? data.checks.contentHash : ''
+        if (ghCount !== renderedCount || (ghHash && ghHash !== renderedHash)) {
           setStatus('warn')
-          setTooltip(`Desync: GitHub ${ghCount} vs Página ${renderedCount}`)
+          setTooltip(ghCount !== renderedCount
+            ? `Desync: GitHub ${ghCount} vs Página ${renderedCount}`
+            : 'Desync: conteúdo alterado (versão atualizada)')
         } else {
           setStatus('ok')
           setTooltip(`OK — ${ghCount} skills sincronizadas`)
@@ -279,7 +284,7 @@ function WebhookCheckButton({ renderedCount, polling }: WebhookCheckButtonProps)
     : { borderColor, color: iconColor, backgroundColor: 'transparent' }
 
   const newTooltip = isNewDetected
-    ? `${polling.remoteCount !== null ? `${Math.abs(polling.remoteCount - renderedCount)} nova(s) skill(s) — clique para atualizar` : 'Novas skills — clique para atualizar'}`
+    ? `${polling.remoteCount !== null && polling.remoteCount !== renderedCount ? `${Math.abs(polling.remoteCount - renderedCount)} nova(s) skill(s) — clique para atualizar` : 'Skills atualizadas — clique para atualizar'}`
     : tooltip
 
   return (
