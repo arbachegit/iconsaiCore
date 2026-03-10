@@ -67,7 +67,7 @@ interface CompanyAssistant {
   assistant?: Assistant;
 }
 
-const APP_URL = import.meta.env.VITE_COMPANY_APP_URL || "https://core.iconsai.ai";
+const APP_URL = process.env.NEXT_PUBLIC_COMPANY_APP_URL || "https://core.iconsai.ai";
 
 export default function CompanyAssistantsTab() {
   const [companies, setCompanies] = useState<Company[]>([]);

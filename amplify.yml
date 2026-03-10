@@ -3,14 +3,14 @@ frontend:
   phases:
     preBuild:
       commands:
-        - npm install --legacy-peer-deps
+        - cd apps/web && npm install --legacy-peer-deps
     build:
       commands:
-        - npm run build
+        - cd apps/web && npm run build
   artifacts:
-    baseDirectory: dist
+    baseDirectory: apps/web/.next
     files:
       - '**/*'
   cache:
     paths:
-      - node_modules/**/*
+      - apps/web/node_modules/**/*

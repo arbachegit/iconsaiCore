@@ -29,16 +29,16 @@ export const DATABASE_CONFIGS: Record<string, DatabaseConfig> = {
   'brasil-data-hub': {
     name: 'brasil-data-hub',
     displayName: 'Brasil Data Hub',
-    url: import.meta.env.VITE_BRASIL_DATA_HUB_URL || '',
-    anonKey: import.meta.env.VITE_BRASIL_DATA_HUB_ANON_KEY || '',
-    serviceRoleKey: import.meta.env.VITE_BRASIL_DATA_HUB_SERVICE_KEY,
+    url: process.env.NEXT_PUBLIC_BRASIL_DATA_HUB_URL || '',
+    anonKey: process.env.NEXT_PUBLIC_BRASIL_DATA_HUB_ANON_KEY || '',
+    serviceRoleKey: process.env.BRASIL_DATA_HUB_SERVICE_KEY,
     description: 'Dados geográficos e demográficos do Brasil (geo_municipios, pop_municipios, pop_estados)',
   },
   'fiscal-municipal': {
     name: 'fiscal-municipal',
     displayName: 'Fiscal Municipal',
-    url: import.meta.env.VITE_SUPABASE_URL || '',
-    anonKey: import.meta.env.VITE_SUPABASE_ANON_KEY || '',
+    url: process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+    anonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '',
     description: 'Sistema fiscal municipal (diagnosticos, indicadores, municipios)',
   },
 };

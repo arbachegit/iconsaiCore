@@ -15,12 +15,12 @@ on:
 env:
   NODE_VERSION: '20'
   DEPLOY_PATH: /var/www/core.iconsai.ai
-  RETENTION_COUNT: 3  # Número de backups a manter
+  RETENTION_COUNT: 3  # Numero de backups a manter
 
 jobs:
   # ============================================
   # JOB 1: BUILD
-  # Compila o projeto no GitHub Actions (não no servidor)
+  # Compila o projeto no GitHub Actions (nao no servidor)
   # ============================================
   build:
     name: Build Application
@@ -35,7 +35,8 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Clean install dependencies
+      - name: Install dependencies (apps/web)
+        working-directory: apps/web
         run: |
           rm -rf node_modules package-lock.json
           npm install --legacy-peer-deps
@@ -43,18 +44,23 @@ jobs:
       - name: Run pre-deploy checks
         run: npm run pre-deploy || true
 
-      - name: Build application
+      - name: Build application (Next.js)
+        working-directory: apps/web
         run: npm run build
         env:
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
-          VITE_VOICE_API_URL: ${{ secrets.VITE_VOICE_API_URL }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          NEXT_PUBLIC_VOICE_API_URL: ${{ secrets.NEXT_PUBLIC_VOICE_API_URL }}
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: dist-${{ github.sha }}
-          path: dist/
+          name: build-${{ github.sha }}
+          path: |
+            apps/web/.next/
+            apps/web/public/
+            apps/web/package.json
+            apps/web/next.config.*
           retention-days: 7
 
   # ============================================
@@ -70,8 +76,8 @@ jobs:
       - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
-          name: dist-${{ github.sha }}
-          path: dist/
+          name: build-${{ github.sha }}
+          path: build/
 
       - name: Setup SSH key
         run: |
@@ -87,16 +93,16 @@ jobs:
             BACKUP_DIR="/var/www/backups"
             TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 
-            # Criar diretório de backups se não existir
+            # Criar diretorio de backups se nao existir
             mkdir -p $BACKUP_DIR
 
             # Fazer backup do deploy atual (se existir)
-            if [ -d "$DEPLOY_PATH/assets" ]; then
+            if [ -d "$DEPLOY_PATH/.next" ]; then
               echo "Creating backup: backup_$TIMESTAMP"
               cp -r $DEPLOY_PATH $BACKUP_DIR/backup_$TIMESTAMP
             fi
 
-            # Manter apenas os últimos 3 backups
+            # Manter apenas os ultimos 3 backups
             cd $BACKUP_DIR
             ls -dt backup_* 2>/dev/null | tail -n +4 | xargs rm -rf 2>/dev/null || true
 
@@ -108,18 +114,18 @@ jobs:
         run: |
           rsync -avzr --delete \
             -e "ssh -i ~/.ssh/deploy_key" \
-            dist/ \
+            build/ \
             ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:${{ env.DEPLOY_PATH }}/
 
-      - name: Set permissions and verify
+      - name: Install production dependencies and restart
         run: |
           ssh -i ~/.ssh/deploy_key ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'ENDSSH'
+            cd /var/www/core.iconsai.ai
+            npm install --production --legacy-peer-deps 2>/dev/null || true
             chmod -R 755 /var/www/core.iconsai.ai
-            echo "=== Deployed files verification ==="
-            ls -la /var/www/core.iconsai.ai/assets/ | grep VoiceAssistant
-            echo "=== Restarting nginx ==="
-            sudo systemctl reload nginx || sudo nginx -s reload || true
-            echo "Permissions set and nginx reloaded"
+            echo "=== Restarting application ==="
+            sudo systemctl restart iconsai-web 2>/dev/null || sudo systemctl reload nginx || sudo nginx -s reload || true
+            echo "Deploy completed and application restarted"
           ENDSSH
 
       - name: Cleanup SSH key
@@ -145,7 +151,7 @@ jobs:
           SITE_URL="${{ secrets.SITE_URL }}"
 
           if [ -z "$SITE_URL" ]; then
-            echo "⚠️ SITE_URL secret not configured, skipping health check"
+            echo "SITE_URL secret not configured, skipping health check"
             exit 0
           fi
 
@@ -154,15 +160,15 @@ jobs:
           HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$SITE_URL" --max-time 30)
 
           if [ "$HTTP_STATUS" -eq 200 ] || [ "$HTTP_STATUS" -eq 301 ] || [ "$HTTP_STATUS" -eq 302 ]; then
-            echo "✅ Health check passed! Status: $HTTP_STATUS"
+            echo "Health check passed! Status: $HTTP_STATUS"
           else
-            echo "❌ Health check failed! Status: $HTTP_STATUS"
+            echo "Health check failed! Status: $HTTP_STATUS"
             exit 1
           fi
 
       - name: Deployment summary
         run: |
-          echo "## 🚀 Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "## Deployment Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Item | Value |" >> $GITHUB_STEP_SUMMARY
           echo "|------|-------|" >> $GITHUB_STEP_SUMMARY
@@ -171,7 +177,7 @@ jobs:
           echo "| **Deployed by** | @${{ github.actor }} |" >> $GITHUB_STEP_SUMMARY
           echo "| **Timestamp** | $(date -u '+%Y-%m-%d %H:%M:%S UTC') |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "✅ **Deployment completed successfully!**" >> $GITHUB_STEP_SUMMARY
+          echo "Deployment completed successfully!" >> $GITHUB_STEP_SUMMARY
 
   # ============================================
   # JOB 4: NOTIFY (em caso de falha)
@@ -185,7 +191,7 @@ jobs:
     steps:
       - name: Create failure summary
         run: |
-          echo "## ❌ Deployment Failed" >> $GITHUB_STEP_SUMMARY
+          echo "## Deployment Failed" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Item | Value |" >> $GITHUB_STEP_SUMMARY
           echo "|------|-------|" >> $GITHUB_STEP_SUMMARY
@@ -194,12 +200,14 @@ jobs:
           echo "| **Triggered by** | @${{ github.actor }} |" >> $GITHUB_STEP_SUMMARY
           echo "| **Timestamp** | $(date -u '+%Y-%m-%d %H:%M:%S UTC') |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "⚠️ **Check the logs above for details.**" >> $GITHUB_STEP_SUMMARY
+          echo "Check the logs above for details." >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### 🔄 Rollback Instructions" >> $GITHUB_STEP_SUMMARY
+          echo "### Rollback Instructions" >> $GITHUB_STEP_SUMMARY
           echo "To rollback, run this on the server:" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
-          echo "cd /var/www/app" >> $GITHUB_STEP_SUMMARY
+          echo "cd /var/www" >> $GITHUB_STEP_SUMMARY
           echo "ls backups/  # List available backups" >> $GITHUB_STEP_SUMMARY
-          echo "rm -rf dist && cp -r backups/backup_YYYYMMDD_HHMMSS dist" >> $GITHUB_STEP_SUMMARY
+          echo "sudo systemctl stop iconsai-web" >> $GITHUB_STEP_SUMMARY
+          echo "rm -rf core.iconsai.ai && cp -r backups/backup_YYYYMMDD_HHMMSS core.iconsai.ai" >> $GITHUB_STEP_SUMMARY
+          echo "sudo systemctl start iconsai-web" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY

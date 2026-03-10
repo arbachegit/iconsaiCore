@@ -9,7 +9,7 @@
  * Usage:
  * - Import mock functions instead of real ones during development
  * - Data structure mirrors brasil-data-hub tables exactly
- * - Enable/disable via VITE_USE_MOCK_DATA=true
+ * - Enable/disable via NEXT_PUBLIC_USE_MOCK_DATA=true
  */
 
 import type {
@@ -28,7 +28,7 @@ import type {
 // ============================================
 
 export const MOCK_CONFIG = {
-  enabled: import.meta.env.VITE_USE_MOCK_DATA === 'true',
+  enabled: process.env.NEXT_PUBLIC_USE_MOCK_DATA === 'true',
   simulateLatency: true,
   latencyMs: { min: 100, max: 300 },
 };

@@ -193,8 +193,8 @@ function checkEnvVariables() {
   log.header('VARIÁVEIS DE AMBIENTE');
 
   const requiredEnvVars = [
-    'VITE_SUPABASE_URL',
-    'VITE_SUPABASE_PUBLISHABLE_KEY',
+    'NEXT_PUBLIC_SUPABASE_URL',
+    'NEXT_PUBLIC_SUPABASE_ANON_KEY',
   ];
 
   const envPath = path.join(ROOT, '.env');
@@ -283,20 +283,17 @@ function checkMigrations() {
 function checkBuild() {
   log.header('BUILD');
 
-  const distPath = path.join(ROOT, 'dist');
+  const nextBuildPath = path.join(ROOT, 'apps/web/.next');
 
-  if (!fs.existsSync(distPath)) {
+  if (!fs.existsSync(nextBuildPath)) {
     results.push({
       name: 'Build',
       passed: false,
-      message: 'dist/ não existe - execute: npm run build',
+      message: 'apps/web/.next/ nao existe - execute: npm run build',
       severity: 'warning',
     });
   } else {
-    const indexHtml = path.join(distPath, 'index.html');
-    if (fs.existsSync(indexHtml)) {
-      log.success('dist/index.html existe');
-    }
+    log.success('apps/web/.next/ existe');
   }
 }
 

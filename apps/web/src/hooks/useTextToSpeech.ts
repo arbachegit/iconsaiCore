@@ -136,7 +136,7 @@ export const useTextToSpeech = (options?: UseTextToSpeechOptions): UseTextToSpee
       }
 
       // Use Voice API backend for TTS
-      const voiceApiUrl = import.meta.env.VITE_VOICE_API_URL || import.meta.env.VITE_SUPABASE_URL;
+      const voiceApiUrl = process.env.NEXT_PUBLIC_VOICE_API_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
       const response = await fetch(
         `${voiceApiUrl}/functions/v1/text-to-speech`,
         {

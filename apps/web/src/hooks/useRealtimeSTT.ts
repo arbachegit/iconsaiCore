@@ -51,7 +51,7 @@ export interface TranscriptionEvent {
 }
 
 export interface UseRealtimeSTTOptions {
-  /** URL do backend (default: VITE_VOICE_API_URL) */
+  /** URL do backend (default: NEXT_PUBLIC_VOICE_API_URL) */
   backendUrl?: string;
   /** Idioma (default: pt) */
   language?: string;
@@ -94,7 +94,7 @@ export interface UseRealtimeSTTReturn {
 
 export function useRealtimeSTT(options: UseRealtimeSTTOptions = {}): UseRealtimeSTTReturn {
   const {
-    backendUrl = import.meta.env.VITE_VOICE_API_URL || import.meta.env.VITE_SUPABASE_URL,
+    backendUrl = process.env.NEXT_PUBLIC_VOICE_API_URL || process.env.NEXT_PUBLIC_SUPABASE_URL,
     language = 'pt',
     sampleRate = 16000,
     audioFormat = 'webm',

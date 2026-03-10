@@ -58,7 +58,7 @@ export async function sendToChatRouter(params: ChatRouterParams): Promise<ChatRo
   console.log(`[ChatRouter-${moduleType}] Enviando mensagem...`);
 
   try {
-    const voiceApiUrl = import.meta.env.VITE_VOICE_API_URL || import.meta.env.VITE_SUPABASE_URL;
+    const voiceApiUrl = process.env.NEXT_PUBLIC_VOICE_API_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
     const response = await fetch(`${voiceApiUrl}/functions/v1/chat-router`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

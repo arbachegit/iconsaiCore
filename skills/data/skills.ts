@@ -509,7 +509,7 @@ export const FALLBACK_SKILLS: Skill[] = [
     trigger: '/skill-builder',
     phase: '1',
     phaseName: 'Setup',
-    version: '2.1',
+    version: '2.3',
     techs: ['YAML', 'Markdown', 'Claude', 'Next.js', 'GitHub API'],
     description: 'Gerador completo de skills IconsAI. Classifica na fase correta, gera YAML + SKILL.md, atualiza fallback, e garante que webhook e página pública funcionem end-to-end.',
     examples: [

@@ -61,7 +61,7 @@ import {
   Hash,
 } from "lucide-react";
 
-const VOICE_API_URL = import.meta.env.VITE_VOICE_API_URL || "";
+const VOICE_API_URL = process.env.NEXT_PUBLIC_VOICE_API_URL || "";
 const APP_URL = "https://core.iconsai.ai";
 
 interface TTSSettings {

@@ -149,7 +149,7 @@ export const IdeasModuleContainer: React.FC<IdeasModuleContainerProps> = ({ onBa
         mimeType = "audio/mp4";
       }
 
-      const voiceApiUrl = import.meta.env.VITE_VOICE_API_URL || import.meta.env.VITE_SUPABASE_URL;
+      const voiceApiUrl = process.env.NEXT_PUBLIC_VOICE_API_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
       const sttResponse = await fetch(`${voiceApiUrl}/functions/v1/voice-to-text`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

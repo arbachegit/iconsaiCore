@@ -154,7 +154,7 @@ export class AudioStreamPlayer {
 }
 
 export async function generateAudioUrl(text: string, chatType?: "study" | "health"): Promise<string> {
-  const voiceApiUrl = import.meta.env.VITE_VOICE_API_URL || import.meta.env.VITE_SUPABASE_URL;
+  const voiceApiUrl = process.env.NEXT_PUBLIC_VOICE_API_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
   const TTS_URL = `${voiceApiUrl}/functions/v1/text-to-speech`;
 
   const response = await fetch(TTS_URL, {

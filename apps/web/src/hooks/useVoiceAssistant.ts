@@ -15,7 +15,7 @@
  */
 
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
-// Note: Using Python backend directly via fetch (VITE_VOICE_API_URL)
+// Note: Using Python backend directly via fetch (NEXT_PUBLIC_VOICE_API_URL)
 import { VoicePlayer } from '@/core/services/VoiceService/VoicePlayer';
 import { VoiceRecorder } from '@/core/services/VoiceService/VoiceRecorder';
 import {
@@ -356,11 +356,11 @@ export function useVoiceAssistant(config: Partial<VoiceAssistantConfig> = {}) {
       }
 
       // 2. Transcrever com Whisper + word timestamps (Python Backend)
-      const voiceApiUrl = import.meta.env.VITE_VOICE_API_URL || import.meta.env.VITE_SUPABASE_URL;
+      const voiceApiUrl = process.env.NEXT_PUBLIC_VOICE_API_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
 
       console.log('[VoiceAssistant] v3.2.0 - Recording stopped, processing with Whisper...', {
         apiUrl: voiceApiUrl,
-        hasVoiceApiUrl: !!import.meta.env.VITE_VOICE_API_URL,
+        hasVoiceApiUrl: !!process.env.NEXT_PUBLIC_VOICE_API_URL,
       });
 
       const transcriptionResponse = await fetch(`${voiceApiUrl}/functions/v1/voice-to-text`, {

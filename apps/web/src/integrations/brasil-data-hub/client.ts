@@ -12,8 +12,8 @@ import { createClient } from '@supabase/supabase-js';
 import type { BrasilDataHubDatabase } from './types';
 
 // Brasil Data Hub Supabase credentials
-const BRASIL_DATA_HUB_URL = import.meta.env.VITE_BRASIL_DATA_HUB_URL || 'https://mnfjkegtynjtgesfphge.supabase.co';
-const BRASIL_DATA_HUB_ANON_KEY = import.meta.env.VITE_BRASIL_DATA_HUB_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1uZmprZWd0eW5qdGdlc2ZwaGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2NTIyODIsImV4cCI6MjA4NDIyODI4Mn0.vvv-UGwfkx1aNXLQl3n0KlhfXh13FYZTlL_kQy20-R0';
+const BRASIL_DATA_HUB_URL = process.env.NEXT_PUBLIC_BRASIL_DATA_HUB_URL || 'https://mnfjkegtynjtgesfphge.supabase.co';
+const BRASIL_DATA_HUB_ANON_KEY = process.env.NEXT_PUBLIC_BRASIL_DATA_HUB_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1uZmprZWd0eW5qdGdlc2ZwaGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2NTIyODIsImV4cCI6MjA4NDIyODI4Mn0.vvv-UGwfkx1aNXLQl3n0KlhfXh13FYZTlL_kQy20-R0';
 
 /**
  * Cliente Supabase para o Brasil Data Hub

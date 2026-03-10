@@ -11,7 +11,7 @@
 import { supabase } from "@/integrations/supabase/client";
 
 // Use Voice API URL which points to our Python backend
-const API_BASE_URL = import.meta.env.VITE_VOICE_API_URL || import.meta.env.VITE_SUPABASE_URL;
+const API_BASE_URL = process.env.NEXT_PUBLIC_VOICE_API_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
 
 export interface AdminUser {
   id: string;
