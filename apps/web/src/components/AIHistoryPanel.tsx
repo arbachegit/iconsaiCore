@@ -79,7 +79,7 @@ export const AIHistoryPanel = ({ onClose }: AIHistoryPanelProps) => {
   const eventRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const timelineRef = useRef<HTMLDivElement | null>(null);
   
-  const vimeoUrl = settings?.vimeo_history_url;
+  const vimeoUrl = (settings as any)?.vimeo_history_url;
   
   // Fetch timeline events from database
   const { data: dbEvents, isLoading: loadingEvents } = useQuery({
