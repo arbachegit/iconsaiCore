@@ -3,6 +3,9 @@ import { Inter } from "next/font/google";
 import "@/styles/globals.css";
 import { Providers } from "./providers";
 
+// Force dynamic rendering - this SPA uses localStorage/auth on all pages
+export const dynamic = "force-dynamic";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
