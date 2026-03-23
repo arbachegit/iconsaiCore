@@ -501,6 +501,27 @@ export const FALLBACK_SKILLS: Skill[] = [
     createdAt: '2026-03-07',
     updatedAt: '2026-03-07',
   },
+  {
+    id: 'skill-obsidian-to-skills',
+    name: 'Obsidian to Skills Sync',
+    trigger: '/skill-obsidian-to-skills',
+    phase: '4',
+    phaseName: 'Integração',
+    version: '1.0',
+    techs: ['Python', 'YAML', 'Git', 'Webhook', 'Obsidian'],
+    description: 'Pipeline que sincroniza skills .md do vault Obsidian com o catalogo icon.iconsai.ai/skills via Git e webhook.',
+    examples: [
+      'Sincronizar skills do Obsidian para o catalogo',
+      'Criar nova skill a partir do vault Obsidian',
+      'Atualizar skill existente no catalogo via Obsidian',
+      'Publicar skills do vault no site icon.iconsai.ai/skills',
+    ],
+    commands: ['/skill-obsidian-to-skills'],
+    isNew: true,
+    keywords: 'obsidian vault sync skills catalogo yaml pipeline webhook git iconsaiconfig publicar frontmatter markdown',
+    createdAt: '2026-03-21',
+    updatedAt: '2026-03-23',
+  },
 
   // PHASE 5: LLM / AI (Prompts, RAG Retrieval, Agents)
   {
