@@ -100,8 +100,15 @@ function inferSkillIdFromPath(sourcePath: string): string | null {
   }
 
   const fileName = segments[segments.length - 1]
+
+  // agents/openai.yaml → use grandparent directory name as id
   if (/^openai\.ya?ml$/i.test(fileName) && segments.length >= 3) {
     return segments[segments.length - 3]
+  }
+
+  // skill.yaml or skill.yml → use parent directory name as id
+  if (/^skill\.ya?ml$/i.test(fileName) && segments.length >= 2) {
+    return segments[segments.length - 2]
   }
 
   return fileName.replace(/\.ya?ml$/i, '') || null
@@ -345,7 +352,24 @@ export async function getAllSkills(skipCache = false): Promise<Skill[]> {
     }
   }
 
-  return skills.sort((a, b) => {
+  // Deduplicate by id — when multiple YAML files share the same id
+  // (e.g. skill.yaml + agents/openai.yaml), keep the most complete entry.
+  const byId = new Map<string, Skill>()
+  for (const skill of skills) {
+    const existing = byId.get(skill.id)
+    if (!existing) {
+      byId.set(skill.id, skill)
+      continue
+    }
+    // Prefer the entry with more metadata (longer description, more techs)
+    const existingScore = (existing.description?.length ?? 0) + existing.techs.length * 10
+    const currentScore = (skill.description?.length ?? 0) + skill.techs.length * 10
+    if (currentScore > existingScore) {
+      byId.set(skill.id, skill)
+    }
+  }
+
+  return Array.from(byId.values()).sort((a, b) => {
     const phaseA = parseInt(a.phase, 10) || 99
     const phaseB = parseInt(b.phase, 10) || 99
     if (phaseA !== phaseB) return phaseA - phaseB
