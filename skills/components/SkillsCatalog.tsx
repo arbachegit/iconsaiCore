@@ -107,7 +107,19 @@ export default function SkillsCatalog({ skills = [], dataSource = 'fallback', co
           <section className={styles.hero}>
             {/* Top row: logo */}
             <div className="flex justify-between items-start">
-              <p className={styles.eyebrow}>Repositório fonte: iconsaiConfig</p>
+              <p className={styles.eyebrow}>
+                Repositório fonte: iconsaiConfig
+                <a
+                  href="https://icon.iconsai.ai/tools"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: '#22c55e', fontWeight: 700, marginLeft: 8, textDecoration: 'none', letterSpacing: '0.05em' }}
+                  onMouseEnter={e => (e.currentTarget.style.opacity = '0.8')}
+                  onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+                >
+                  TOOLS
+                </a>
+              </p>
               <img
                 src="/skills/logo.png"
                 alt="IconsAI"
