@@ -69,6 +69,32 @@
   font-weight: 600;
 }
 
+.dashboardBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(34, 211, 238, 0.08);
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  border-radius: 10px;
+  color: var(--cy);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.15s ease, border-color 0.15s ease;
+  font-family: var(--mono);
+}
+
+.dashboardBtn:hover {
+  background: rgba(34, 211, 238, 0.14);
+  border-color: rgba(34, 211, 238, 0.5);
+}
+
+.dashboardBtn svg {
+  width: 14px;
+  height: 14px;
+}
+
 /* === NAV TABS === */
 .navTabs {
   max-width: 1400px;
