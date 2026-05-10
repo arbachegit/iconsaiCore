@@ -1,0 +1,13 @@
+id: skill-infobip-sms
+name: skill-infobip-sms
+trigger: /skill-infobip-sms
+phase: integracao
+phaseName: Integração & Mensageria
+version: "1.0"
+techs: [infobip, sms, nodejs, otp]
+description: "Padrão canônico de envio de SMS no ecossistema IconsAI via Infobip. Define vars de ambiente globais, wrapper Node.js com retry/backoff, rate-limit por telefone E.164, templates de mensagem versionados, logging em messaging_logs, e política de aprovação de templates por país."
+examples: []
+commands: []
+keywords: [sms, infobip, otp, messaging, rate-limit, templates, integration]
+createdAt: "2026-05-09"
+updatedAt: "2026-05-09"

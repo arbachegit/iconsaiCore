@@ -1,0 +1,13 @@
+id: skill-cpf-validation
+name: skill-cpf-validation
+trigger: /skill-cpf-validation
+phase: integracao
+phaseName: Integração & Compliance
+version: "1.0"
+techs: [idwall, gemini, lgpd, kyc]
+description: "Padrão canônico de validação de CPF + nome no ecossistema IconsAI. Define camadas de validação (mod-11 sanity → Gemini pré-filtro → Idwall canônico), hardening anti-fraude (CPF de outra pessoa, enumeração brute-force), audit em public.cpf_validations, mascaramento LGPD, controle de custo."
+examples: []
+commands: []
+keywords: [cpf, identity, validation, idwall, gemini, fraud, lgpd, audit, compliance, kyc, datavalid, receita-federal]
+createdAt: "2026-05-09"
+updatedAt: "2026-05-09"

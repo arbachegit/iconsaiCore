@@ -1,0 +1,13 @@
+id: skill-identity-onboarding
+name: skill-identity-onboarding
+trigger: /skill-identity-onboarding
+phase: integracao
+phaseName: Integração & Identidade
+version: "1.0"
+techs: [nextjs, supabase, jose, jwt, otp, 2fa, totp]
+description: "Padrão canônico do Identity Hub V2 do ecossistema IconsAI. Define como apps integram com o hub centralizado de identidade (login + signup + 2FA), separação de canais usuário comum vs super-admin, contratos de JWT/cookie, fluxo de redirect cross-app, e algoritmo de identity resolution (correlação CPF + email + telefone + IP + dim_pessoas + Idwall + Gemini)."
+examples: []
+commands: []
+keywords: [identity, onboarding, jwt, cookie, otp, 2fa, totp, sso, super-admin, lgpd, idwall, gemini, redirect, cross-app]
+createdAt: "2026-05-09"
+updatedAt: "2026-05-09"
