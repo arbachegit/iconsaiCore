@@ -28,7 +28,7 @@ A validação é necessária no **signup novo** (Identity Hub V2) quando user fo
 
 ---
 
-## 1. PIPELINE DE 3 CAMADAS
+## 1. PIPELINE DE 4 CAMADAS
 
 ```
 [User entra CPF + nome auto-declarado + (opcional) data nascimento]
@@ -42,13 +42,20 @@ A validação é necessária no **signup novo** (Identity Hub V2) quando user fo
    └─ hit com nome similar (>80% Levenshtein) → MATCH (sem chamar provider)
         │ no hit ou nome divergente
         ▼
-[3] Gemini pré-filtro (cost ~R$0.001, cache 90d)
-   └─ "Existe correspondência pública entre CPF terminado em XXX 
-       e nome '[nome]' em [cidade do IP]?"
-   └─ resultado "claramente não" → reject (poupa Idwall)
-        │ "talvez" ou "sim"
+[3] DO Gradient AI (Haiku) pré-filtro (cost ~R$0,0002, cache 7d)
+   └─ "CPF '...XXX' + nome '[nome]' + região '[UF]' → plausível?"
+   └─ confidence: yes / maybe / no
+        ├── "no"    → reject (poupa custo Idwall)
+        ├── "yes"   → vai direto pra [5] Idwall (skip Gemini)
+        └── "maybe" → vai pra [4] Gemini web
+        │
         ▼
-[4] Idwall (cost ~R$0,30, cache 30d)
+[4] Gemini googleSearch (cost ~R$0,001, cache 90d) — só quando DO=maybe
+   └─ Pesquisa web pública: confirma associação CPF+nome+contexto?
+   └─ Sinaliza pra [5] Idwall (não é decisão final, é reforço)
+        │
+        ▼
+[5] Idwall (cost ~R$0,30, cache 30d) — fonte canônica
    POST /v3/validacoes/dados-pf { cpf, nome, nascimento? }
    ←  { cpf_match, nome_match, nascimento_match }
         │
@@ -56,6 +63,8 @@ A validação é necessária no **signup novo** (Identity Hub V2) quando user fo
         ├── nome_match=false → REJEITA hard + alerta admin
         └── erro/timeout → fila manual review
 ```
+
+**Por que 2 estágios LLM (DO + Gemini)?** DO Gradient (Haiku via `DO_INFERENCE_*`) é ~6× mais barato que Claude direto e basta pra classificação simples. Gemini é insubstituível só quando precisa web search efetivo. Anthropic Claude com `web_search` tool serve de fallback se DPA Google indisponível.
 
 **Decisão final retorna:**
 - `match` (com `dim_pessoa_id` se já existia, ou `created=true` se foi auto-criado)
@@ -68,10 +77,18 @@ A validação é necessária no **signup novo** (Identity Hub V2) quando user fo
 ## 2. VARS
 
 ```bash
-IDWALL_API_KEY=...          # secret
+# Idwall
+IDWALL_API_KEY=...                # secret
 IDWALL_BASE_URL=https://api-v3.idwall.co  # ou sandbox URL
 IDWALL_ENV=sandbox|prod
-GEMINI_API_KEY=...          # já provisionado (skill compartilhada)
+
+# DO Gradient AI (já provisionado no ecossistema — secrets do Discovery)
+DO_INFERENCE_BASE_URL=...
+DO_INFERENCE_KEY=...
+
+# Gemini (web search) + fallback Anthropic
+GEMINI_API_KEY=...                # opcional se DPA Google ainda não confirmado
+ANTHROPIC_API_KEY=...             # já provisionado; serve como fallback Gemini
 ```
 
 ---
@@ -203,18 +220,18 @@ create index ix_cpf_validations_ip on public.cpf_validations (ip, created_at des
 
 ---
 
-## 6. CUSTOS ESPERADOS
+## 6. CUSTOS ESPERADOS (pipeline 2 estágios LLM)
 
-| Cenário | Cost por validação | A 100 onboardings/mês |
+| Cenário (mix realista) | Cost por validação | A 100 onboardings/mês |
 |---|---|---|
 | Cache hit | R$ 0,00 | R$ 0 |
-| dim_pessoas hit | R$ 0,00 | R$ 0 |
-| Gemini "no" sem Idwall | ~R$ 0,001 | ~R$ 0,10 |
-| Gemini "talvez" + Idwall | ~R$ 0,30 + R$ 0,001 | ~R$ 30 |
-| Idwall (sem Gemini) | ~R$ 0,30 | ~R$ 30 |
-| **Total estimado** (mix realista, ~50% precisa Idwall) | **~R$ 0,15-0,20** médio | **~R$ 15-20/mês** |
+| dim_pessoas direct match | R$ 0,00 | R$ 0 |
+| DO pré-filtro retorna "no" (reject sem Idwall) | ~R$ 0,0002 | ~R$ 0,02 |
+| DO "yes" + Idwall direto (skip Gemini) | ~R$ 0,0002 + R$ 0,30 | ~R$ 30 |
+| DO "maybe" + Gemini + Idwall | ~R$ 0,0002 + R$ 0,001 + R$ 0,30 | ~R$ 30 |
+| **Total estimado** (mix realista, ~40% precisa Idwall) | **~R$ 0,12** médio | **~R$ 12-15/mês** |
 
-Linear até 10k onboardings/mês (~R$ 1.500-2.000/mês).
+Linear até 10k onboardings/mês (~R$ 1.200-1.500/mês). Pipeline 2 estágios reduz ~20% vs pipeline original (Gemini-only).
 
 ---
 

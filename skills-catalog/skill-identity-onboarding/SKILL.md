@@ -208,8 +208,9 @@ Sinais (peso entre parênteses):
 - Telefone normalizado (+20)
 - UF do IP bate (+5)
 - Sócio em `fato_qsa` da empresa-context (+30)
+- DO Gradient (Haiku) pré-filtro confirma plausibilidade (+15) ou rejeita (-30)
 - Idwall confirma CPF+nome (+50)
-- Gemini confirma associação email/phone↔nome+empresa (+25)
+- Gemini googleSearch confirma associação email/phone↔nome+empresa (+25, só roda se DO=maybe)
 - PEP-positive (-20, força fila manual)
 - `media_negativa_count > 5` (-10)
 
@@ -231,9 +232,13 @@ Mascaramento LGPD nos cards: iniciais + cidade + empresa principal + razões. Nu
 | Infobip | SMS OTP | `/skill-infobip-sms` |
 | Resend | Email OTP + transacional | (template env+wrapper) |
 | Idwall | Validação CPF+nome | `/skill-cpf-validation` |
-| Gemini | Identity research (web search) | (em design) |
+| **DO Gradient AI (Haiku)** | Pré-filtro de plausibilidade + classificação fila manual + normalização cargo | (CLAUDE.md global §4 + `/skill-llm-prompt-safety`) |
+| **Gemini** (`gemini-2.0-flash` + `googleSearch`) | Identity research web — só quando DO retorna "maybe" | (em design) |
+| **Anthropic Claude Haiku** (`web_search` tool) | Fallback se DPA Google indisponível | (var `ANTHROPIC_API_KEY`) |
 | otplib | TOTP (Google Authenticator) | (lib pura, sem skill dedicada) |
 | ipapi.co / IPinfo | GeoIP do request | (env: `IPAPI_KEY`) |
+
+**Pipeline LLM 2 estágios** (otimização de custo): DO Gradient (Haiku) classifica plausibilidade (~R$0,0002); só os "maybe" escalam pra Gemini googleSearch (~R$0,001 cache miss). Reduz custo médio por onboarding de R$0,15 → R$0,12.
 
 ---
 
