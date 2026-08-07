@@ -1,18 +1,39 @@
 import type { Metadata } from 'next'
+import { Inter, JetBrains_Mono, Libre_Baskerville, Plus_Jakarta_Sans } from 'next/font/google'
+
+import FloatingLogo from '@/components/FloatingLogo'
 import './globals.css'
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-sans',
+  display: 'swap',
+})
+
+const jetBrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-mono',
+  display: 'swap',
+})
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  weight: ['700', '800'],
+  variable: '--font-logo',
+  display: 'swap',
+})
+
+const libreBaskerville = Libre_Baskerville({
+  subsets: ['latin'],
+  weight: ['700'],
+  variable: '--font-logo-i',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: 'Catálogo de Skills | IconsAI',
   description:
-    'Catálogo de skills renderizado no servidor a partir do repositório iconsaiConfig.',
-  icons: {
-    icon: [
-      { url: '/skills/icon.svg', type: 'image/svg+xml' },
-      { url: '/skills/icon.png', type: 'image/png', sizes: '32x32' },
-    ],
-    apple: [{ url: '/skills/apple-icon.png', sizes: '180x180', type: 'image/png' }],
-    shortcut: ['/skills/icon.png'],
-  },
+    'Atlas operacional das skills canônicas do ecossistema IconsAI.',
 }
 
 export default function RootLayout({
@@ -21,27 +42,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="pt-BR">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+    <html lang="pt-BR" className={`${inter.variable} ${jetBrainsMono.variable} ${plusJakartaSans.variable} ${libreBaskerville.variable}`}>
       <body>
         {children}
-        {/* Floating Logo — Regra de Ouro (IMUTAVEL) */}
-        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-        <a className="floating-logo" href="#" onClick={undefined}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/skills/favicon-float.png" alt="IconsAI" />
-        </a>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `document.querySelector('.floating-logo')?.addEventListener('click',function(e){e.preventDefault();window.scrollTo({top:0,behavior:'smooth'})})`,
-          }}
-        />
+        <FloatingLogo />
       </body>
     </html>
   )

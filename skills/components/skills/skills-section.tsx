@@ -1,3 +1,4 @@
+import { PHASE_COLOR_RAW } from '@/data/phases'
 import type { Skill } from '@/lib/github/types'
 
 import SkillCard from './skill-card'
@@ -5,43 +6,52 @@ import styles from './skills.module.css'
 
 interface SkillSectionData {
   name: string
+  number: string
+  description: string
+  subtitle: string
   skills: Skill[]
 }
 
 interface SkillsSectionProps {
   section: SkillSectionData
-  glowingSkill?: string | null
-  onOpenModal?: (skillName: string) => void
+  onOpenModal?: (skillId: string) => void
 }
 
-function formatSectionName(sectionName: string): string {
-  return sectionName
-    .split(/[-_\s]+/)
-    .filter(Boolean)
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(' ')
-}
+export default function SkillsSection({ section, onOpenModal }: SkillsSectionProps) {
+  const accent = PHASE_COLOR_RAW[section.number] || '#22d3ee'
 
-export default function SkillsSection({ section, glowingSkill, onOpenModal }: SkillsSectionProps) {
   return (
-    <section className={styles.section}>
-      <div className={styles.sectionHeader}>
-        <div>
-          <p className={styles.sectionEyebrow}>Secao</p>
-          <h2 className={styles.sectionTitle}>{formatSectionName(section.name)}</h2>
-        </div>
-        <span className={styles.sectionCount}>{section.skills.length} skills</span>
+    <section
+      className={styles.section}
+      id={`fase-${section.number}`}
+      style={{ '--phase-color': accent } as React.CSSProperties}
+    >
+      <div className={styles.sectionIndex} aria-hidden="true">
+        {section.number.padStart(2, '0')}
       </div>
 
-      <div className={styles.cardGrid}>
-        {section.skills.map((skill) => (
-          <SkillCard
-            key={skill.name}
-            skill={skill}
-            glowing={glowingSkill === skill.name}
-            onOpenModal={onOpenModal}
-          />
-        ))}
+      <div className={styles.sectionContent}>
+        <header className={styles.sectionHeader}>
+          <div className={styles.sectionTitleGroup}>
+            <span>{section.subtitle}</span>
+            <h3>{section.name}</h3>
+            <p>{section.description}</p>
+          </div>
+          <span className={styles.sectionCount}>
+            {section.skills.length.toString().padStart(2, '0')}
+            <small>skills</small>
+          </span>
+        </header>
+
+        <div className={styles.cardGrid}>
+          {section.skills.map((skill) => (
+            <SkillCard
+              key={skill.id}
+              skill={skill}
+              onOpenModal={onOpenModal}
+            />
+          ))}
+        </div>
       </div>
     </section>
   )

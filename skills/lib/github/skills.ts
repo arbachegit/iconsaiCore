@@ -14,6 +14,7 @@ const FETCH_TIMEOUT_MS = 10_000
 const CACHE_REVALIDATE_SECONDS = 3600
 const CACHE_TAG = 'skills'
 const SKILLS_ROOT = 'skills'
+const GITHUB_BRANCH = 'main'
 
 type GitHubErrorCode = 'FORBIDDEN' | 'NOT_FOUND' | 'RATE_LIMIT' | 'UNKNOWN'
 
@@ -35,6 +36,13 @@ export class GitHubSkillsError extends Error {
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null
+}
+
+function isGitTreeBlob(value: unknown): value is { type: 'blob'; path: string; sha: string } {
+  return isRecord(value)
+    && value.type === 'blob'
+    && typeof value.path === 'string'
+    && typeof value.sha === 'string'
 }
 
 function isGitHubContentItem(value: unknown): value is GitHubContentItem {
@@ -111,6 +119,10 @@ function inferSkillIdFromPath(sourcePath: string): string | null {
     return segments[segments.length - 2]
   }
 
+  if (/^skill\.md$/i.test(fileName) && segments.length >= 2) {
+    return segments[segments.length - 2]
+  }
+
   return fileName.replace(/\.ya?ml$/i, '') || null
 }
 
@@ -163,11 +175,128 @@ function normalizeSkill(rawSkill: RawSkillYaml, sourcePath: string): Skill | nul
     keywords,
     createdAt,
     updatedAt,
+    sourcePath,
   }
 }
 
 function isYamlPath(path: string): boolean {
   return /\.ya?ml$/i.test(path)
+}
+
+function isSkillMarkdownPath(path: string): boolean {
+  return /\/skill\.md$/i.test(path)
+}
+
+function isSkillSourcePath(path: string): boolean {
+  return isYamlPath(path) || isSkillMarkdownPath(path)
+}
+
+function parseFrontmatter(content: string): Record<string, unknown> {
+  if (!content.startsWith('---')) return {}
+  const end = content.indexOf('\n---', 3)
+  if (end < 0) return {}
+
+  const source = content.slice(3, end)
+  try {
+    const parsed = load(source)
+    return isRecord(parsed) ? parsed : {}
+  } catch {
+    const entries = source
+      .split('\n')
+      .map((line) => line.match(/^([a-zA-Z][a-zA-Z0-9_-]*):\s*(.*)$/))
+      .filter((match): match is RegExpMatchArray => match !== null)
+      .map((match) => [match[1], match[2].trim()] as const)
+    return Object.fromEntries(entries)
+  }
+}
+
+function readMetadataValue(content: string, label: string): string | null {
+  const escapedLabel = label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  const match = content.match(new RegExp(`\\*\\*${escapedLabel}:\\*\\*\\s*([^\\n]+)`, 'i'))
+  return match?.[1] ? match[1].replace(/`/g, '').trim() : null
+}
+
+function extractSectionBullets(content: string, names: string[]): string[] {
+  const lines = content.split('\n')
+  const normalizedNames = names.map((name) => name.toLocaleLowerCase('pt-BR'))
+  const sectionStart = lines.findIndex((line) => {
+    const heading = line
+      .replace(/^#+\s*/, '')
+      .replace(/[*`]/g, '')
+      .trim()
+      .toLocaleLowerCase('pt-BR')
+    return normalizedNames.some((name) => heading === name || heading.startsWith(`${name} `))
+  })
+  if (sectionStart < 0) return []
+
+  const bullets: string[] = []
+  for (const line of lines.slice(sectionStart + 1)) {
+    if (/^#{1,3}\s+/.test(line)) break
+    const match = line.match(/^\s*[-*]\s+(.+)/)
+    if (match?.[1]) bullets.push(match[1].replace(/[*`]/g, '').trim())
+    if (bullets.length === 5) break
+  }
+  return bullets
+}
+
+function inferLifecyclePhase(skillText: string): string {
+  const haystack = skillText.toLocaleLowerCase('pt-BR')
+  let selectedPhase = PHASES[0]
+  let selectedScore = 0
+
+  for (const phase of PHASES) {
+    const score = phase.slugs.reduce(
+      (total, slug) => total + (haystack.includes(slug.toLocaleLowerCase('pt-BR')) ? 1 : 0),
+      0,
+    )
+    if (score > selectedScore) {
+      selectedPhase = phase
+      selectedScore = score
+    }
+  }
+
+  return selectedPhase.number
+}
+
+function normalizeMarkdownSkill(content: string, sourcePath: string): Skill | null {
+  const frontmatter = parseFrontmatter(content)
+  const id = toNonEmptyString(frontmatter.name) ?? inferSkillIdFromPath(sourcePath)
+  if (!id) return null
+
+  const heading = content.match(/^#\s+(.+)$/m)?.[1]
+  const name = toNonEmptyString(frontmatter.title)
+    ?? heading?.replace(/^Skill:\s*/i, '').replace(/[*`]/g, '').trim()
+    ?? id
+  const description = toNonEmptyString(frontmatter.description)
+    ?? readMetadataValue(content, 'Descrição')
+    ?? `Skill canônica ${id} do ecossistema IconsAI.`
+  const technologyValue = readMetadataValue(content, 'Tecnologia')
+    ?? readMetadataValue(content, 'Tecnologias')
+  const techs = toStringArray(frontmatter.tags).length > 0
+    ? toStringArray(frontmatter.tags)
+    : technologyValue?.split(/[,|+]/).map((item) => item.trim()).filter(Boolean) ?? []
+  const phaseNumber = toNonEmptyString(frontmatter.phase)
+    ?? inferLifecyclePhase([id, name, description, techs.join(' '), content.slice(0, 4_000)].join(' '))
+  const phase = PHASES.find((item) => item.number === phaseNumber) ?? PHASES[0]
+  const examples = extractSectionBullets(content, ['Quando usar', 'Quando usar esta skill', 'Aplicável em'])
+  const version = readMetadataValue(content, 'Versão')
+    ?? toNonEmptyString(frontmatter.version)
+    ?? '1.0.0'
+
+  return {
+    id,
+    name,
+    trigger: `/${id}`,
+    phase: phase.number,
+    phaseName: phase.name,
+    version,
+    techs,
+    description,
+    examples,
+    commands: [`/${id}`],
+    keywords: [id, name, description, ...techs].join(' ').toLocaleLowerCase('pt-BR'),
+    sourcePath,
+  }
 }
 
 async function fetchGitHubJson(path: string, skipCache = false): Promise<unknown> {
@@ -286,12 +415,12 @@ async function readFile(path: string, skipCache = false): Promise<string> {
 
 async function walkSkillsDirectory(path: string, skipCache = false): Promise<string[]> {
   const items = await listDirectory(path, skipCache)
-  const yamlFiles: string[] = []
+  const sourceFiles: string[] = []
 
   for (const item of items) {
     if (item.type === 'dir') {
       try {
-        yamlFiles.push(...(await walkSkillsDirectory(item.path, skipCache)))
+        sourceFiles.push(...(await walkSkillsDirectory(item.path, skipCache)))
       } catch (error) {
         console.error('[skills-github] failed to read nested directory', {
           path: item.path,
@@ -301,12 +430,12 @@ async function walkSkillsDirectory(path: string, skipCache = false): Promise<str
       continue
     }
 
-    if (item.type === 'file' && isYamlPath(item.path)) {
-      yamlFiles.push(item.path)
+    if (item.type === 'file' && isSkillSourcePath(item.path)) {
+      sourceFiles.push(item.path)
     }
   }
 
-  return yamlFiles.sort((left, right) =>
+  return sourceFiles.sort((left, right) =>
     left.localeCompare(right, 'pt-BR', { sensitivity: 'base' }),
   )
 }
@@ -314,6 +443,11 @@ async function walkSkillsDirectory(path: string, skipCache = false): Promise<str
 async function loadSkillFromFile(path: string, skipCache = false): Promise<Skill | null> {
   try {
     const fileContents = await readFile(path, skipCache)
+
+    if (isSkillMarkdownPath(path)) {
+      return normalizeMarkdownSkill(fileContents, path)
+    }
+
     const parsed = load(fileContents)
 
     if (!isRecord(parsed)) {
@@ -336,9 +470,9 @@ async function loadSkillFromFile(path: string, skipCache = false): Promise<Skill
 }
 
 export async function getAllSkills(skipCache = false): Promise<Skill[]> {
-  const yamlFiles = await walkSkillsDirectory(SKILLS_ROOT, skipCache)
+  const sourceFiles = await walkSkillsDirectory(SKILLS_ROOT, skipCache)
 
-  const results = await Promise.allSettled(yamlFiles.map((path) => loadSkillFromFile(path, skipCache)))
+  const results = await Promise.allSettled(sourceFiles.map((path) => loadSkillFromFile(path, skipCache)))
   const skills: Skill[] = []
 
   for (const result of results) {
@@ -379,44 +513,40 @@ export async function getAllSkills(skipCache = false): Promise<Skill[]> {
 
 export function computeSkillsHash(skills: Skill[]): string {
   const sorted = [...skills].sort((a, b) => a.id.localeCompare(b.id))
-  const payload = sorted.map((s) => `${s.id}:${s.version}`).join('|')
+  const payload = sorted
+    .map((skill) => [skill.id, skill.version, skill.updatedAt, skill.description].join(':'))
+    .join('|')
   return createHash('sha256').update(payload).digest('hex').slice(0, 12)
 }
 
 /**
- * Compute a content hash from Git blob SHAs in the directory listing.
+ * Compute a content hash from Git blob SHAs in the recursive repository tree.
  * @param skipCache - true for polling (fresh from GitHub), false for page render (cached)
- * Cost: ~1-3 API calls (one per directory level), NOT 51+ per skill file.
+ * Cost: one GitHub API call, independent of the number of skill directories.
  */
 export async function getContentHash(skipCache = false): Promise<{ count: number; hash: string }> {
-  const items = await collectYamlItems(SKILLS_ROOT, skipCache)
-  const sorted = [...items].sort((a, b) => a.path.localeCompare(b.path))
-  const payload = sorted.map((item) => `${item.path}:${item.sha}`).join('|')
+  const response = await fetchGitHubJson(
+    `git/trees/${encodeURIComponent(GITHUB_BRANCH)}?recursive=1`,
+    skipCache,
+  )
+  if (!isRecord(response) || !Array.isArray(response.tree)) {
+    throw new GitHubSkillsError(
+      'A API do GitHub não retornou a árvore esperada para as skills.',
+      500,
+      'UNKNOWN',
+    )
+  }
+
+  const items = response.tree
+    .filter(isGitTreeBlob)
+    .filter((item) => item.path.startsWith(`${SKILLS_ROOT}/`) && isSkillSourcePath(item.path))
+    .map((item) => ({ path: item.path, sha: item.sha }))
+    .sort((left, right) => left.path.localeCompare(right.path, 'pt-BR', { sensitivity: 'base' }))
+  const payload = items.map((item) => `${item.path}:${item.sha}`).join('|')
   return {
     count: items.length,
     hash: createHash('sha256').update(payload).digest('hex').slice(0, 12),
   }
-}
-
-async function collectYamlItems(path: string, skipCache: boolean): Promise<GitHubContentItem[]> {
-  const items = await listDirectory(path, skipCache)
-  const yamlItems: GitHubContentItem[] = []
-
-  for (const item of items) {
-    if (item.type === 'dir') {
-      try {
-        yamlItems.push(...(await collectYamlItems(item.path, skipCache)))
-      } catch {
-        // skip unreachable subdirectories
-      }
-      continue
-    }
-    if (item.type === 'file' && isYamlPath(item.path)) {
-      yamlItems.push(item)
-    }
-  }
-
-  return yamlItems
 }
 
 export function groupSkillsBySection(skills: Skill[]): SkillSection[] {

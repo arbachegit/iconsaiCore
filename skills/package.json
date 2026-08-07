@@ -4,37 +4,46 @@
   "private": true,
   "scripts": {
     "dev": "sh -c 'HOST=${HOST:-127.0.0.1}; PORT=${PORT:-3003}; next dev -H \"$HOST\" -p \"$PORT\"'",
-    "prebuild": "node scripts/check-card-ui.mjs",
+    "prebuild": "npm run check:ui && npm run check:advisor",
     "build": "next build",
-    "start": "sh -c 'HOST=${HOST:-127.0.0.1}; PORT=${PORT:-3003}; next start -H \"$HOST\" -p \"$PORT\"'",
+    "start": "node .next/standalone/server.js",
     "lint": "next lint",
-    "check:ui": "node scripts/check-card-ui.mjs"
+    "check:ui": "node scripts/check-card-ui.mjs",
+    "check:advisor": "node scripts/check-skill-advisor.mjs",
+    "sync:skills": "node scripts/sync-skills-snapshot.mjs"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "0.67.0",
     "@radix-ui/react-dropdown-menu": "2.1.16",
     "@radix-ui/react-slot": "1.2.4",
     "@tailwindcss/postcss": "4.2.1",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
-    "js-yaml": "4.1.1",
+    "js-yaml": "4.3.1",
     "lucide-react": "0.577.0",
-    "next": "15.5.12",
-    "postcss": "8.5.8",
+    "next": "15.5.23",
+    "postcss": "8.5.23",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "sharp": "0.35.0",
     "tailwind-merge": "3.5.0",
-    "tailwindcss": "4.2.1"
+    "tailwindcss": "4.2.1",
+    "zod": "4.1.12"
   },
   "devDependencies": {
     "@types/node": "22.19.13",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "eslint": "9.39.3",
-    "eslint-config-next": "15.5.12",
+    "eslint-config-next": "15.5.23",
     "typescript": "5.9.3"
   },
   "engines": {
     "node": ">=20.0.0",
     "npm": ">=10.0.0"
+  },
+  "overrides": {
+    "postcss": "8.5.23",
+    "sharp": "0.35.0"
   }
 }

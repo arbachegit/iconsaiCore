@@ -1,5 +1,7 @@
 'use client'
 
+import { CircleAlert } from 'lucide-react'
+
 import styles from '@/components/skills/skills.module.css'
 
 export default function Error({
@@ -11,16 +13,15 @@ export default function Error({
 }) {
   return (
     <main className={styles.page}>
-      <div className={styles.shell}>
-        <section className={styles.errorState}>
-          <p className={styles.eyebrow}>Erro inesperado</p>
-          <h1>Algo falhou ao montar a pagina</h1>
+      <section className={styles.errorState}>
+        <CircleAlert aria-hidden="true" />
+        <div>
+          <span className={styles.catalogEyebrow}>Falha no catálogo</span>
+          <h2>Não foi possível montar a página</h2>
           <p>{error.message || 'Tente novamente em alguns instantes.'}</p>
-          <button className={styles.retryButton} onClick={reset} type="button">
-            Tentar novamente
-          </button>
-        </section>
-      </div>
+        </div>
+        <button onClick={reset} type="button">Tentar novamente</button>
+      </section>
     </main>
   )
 }

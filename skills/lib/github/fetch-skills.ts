@@ -6,7 +6,7 @@ import type { Skill } from './types'
 
 function hasEnrichedFields(skills: Skill[]): boolean {
   if (skills.length === 0) return false
-  const withPhase = skills.filter((s) => s.phase && s.phaseName && s.techs.length > 0)
+  const withPhase = skills.filter((s) => s.phase && s.phaseName && s.description.length >= 10)
   return withPhase.length / skills.length > 0.8
 }
 
@@ -17,9 +17,6 @@ function enrichWithFallback(githubSkills: Skill[]): Skill[] {
   return githubSkills.map((skill) => {
     const fb = fallbackMap.get(skill.id)
     if (!fb) return skill
-
-    const isIncomplete = skill.techs.length === 0 || !skill.description || skill.description.length < 20
-    if (!isIncomplete) return skill
 
     return {
       ...skill,
@@ -34,6 +31,7 @@ function enrichWithFallback(githubSkills: Skill[]): Skill[] {
       isNew: skill.isNew ?? fb.isNew,
       createdAt: skill.createdAt || fb.createdAt,
       updatedAt: skill.updatedAt || fb.updatedAt,
+      sourcePath: skill.sourcePath || fb.sourcePath,
     }
   })
 }
@@ -48,7 +46,7 @@ export async function fetchSkillsWithFallback(): Promise<{ skills: Skill[]; sour
     }
 
     if (!hasEnrichedFields(skills)) {
-      console.warn(`[skills-fetch] GitHub returned ${skills.length} skills but YAML files lack enriched fields (phase, phaseName, techs). Using fallback until YAMLs are updated.`)
+      console.warn(`[skills-fetch] GitHub returned ${skills.length} skills without enough metadata. Using the canonical local snapshot.`)
       return { skills: FALLBACK_SKILLS, source: 'fallback' }
     }
 

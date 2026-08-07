@@ -32,7 +32,7 @@ export function getGitHubEnv(): GitHubServerEnv {
   return {
     owner: readOptionalEnv('GITHUB_OWNER') ?? 'arbachegit',
     repo: readOptionalEnv('GITHUB_REPO') ?? 'iconsaiConfig',
-    token: readOptionalEnv('GITHUB_TOKEN'),
+    token: readOptionalEnv('SKILLS_GITHUB_TOKEN') ?? readOptionalEnv('GITHUB_TOKEN'),
   }
 }
 

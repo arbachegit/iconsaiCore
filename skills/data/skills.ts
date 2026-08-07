@@ -1,4 +1,6 @@
 import type { Skill } from '@/lib/github/types'
+import skillSnapshot from '@/data/skill-snapshot.json'
+import { PHASES } from '@/data/phases'
 
 export type { Skill }
 export { PHASES, PHASE_COLORS, PHASE_COLOR_RAW } from '@/data/phases'
@@ -8,7 +10,7 @@ export type { Phase } from '@/data/phases'
  * Static fallback data — used when the GitHub API is unavailable.
  * The primary source is getAllSkills() which reads YAMLs from iconsaiConfig.
  */
-export const FALLBACK_SKILLS: Skill[] = [
+const LEGACY_SKILLS: Skill[] = [
   // PHASE 1: SETUP / INICIALIZAÇÃO
   {
     id: 'skill-fullstack-audit',
@@ -1054,6 +1056,54 @@ export const FALLBACK_SKILLS: Skill[] = [
     updatedAt: '2026-03-07',
   },
 ]
+
+type SnapshotSkill = Omit<Skill, 'phase' | 'phaseName'>
+
+function inferPhase(skill: SnapshotSkill): string {
+  const haystack = [skill.id, skill.name, skill.description, skill.keywords, ...skill.techs]
+    .join(' ')
+    .toLocaleLowerCase('pt-BR')
+
+  let selectedPhase = PHASES[0]
+  let selectedScore = 0
+
+  for (const phase of PHASES) {
+    const score = phase.slugs.reduce(
+      (total, slug) => total + (haystack.includes(slug.toLocaleLowerCase('pt-BR')) ? 1 : 0),
+      0,
+    )
+    if (score > selectedScore) {
+      selectedPhase = phase
+      selectedScore = score
+    }
+  }
+
+  return selectedPhase.number
+}
+
+const legacyById = new Map(LEGACY_SKILLS.map((skill) => [skill.id, skill]))
+
+/**
+ * Snapshot committed with the app so the catalog remains complete when the
+ * private GitHub API is temporarily unavailable. Refresh with
+ * `npm run sync:skills` before publishing catalog changes.
+ */
+export const FALLBACK_SKILLS: Skill[] = (skillSnapshot as SnapshotSkill[]).map((snapshotSkill) => {
+  const legacySkill = legacyById.get(snapshotSkill.id)
+  const phaseNumber = legacySkill?.phase ?? inferPhase(snapshotSkill)
+  const phase = PHASES.find((item) => item.number === phaseNumber) ?? PHASES[0]
+
+  return {
+    ...legacySkill,
+    ...snapshotSkill,
+    phase: phase.number,
+    phaseName: phase.name,
+    techs: snapshotSkill.techs.length > 0 ? snapshotSkill.techs : legacySkill?.techs ?? [],
+    examples: snapshotSkill.examples.length > 0 ? snapshotSkill.examples : legacySkill?.examples ?? [],
+    commands: snapshotSkill.commands.length > 0 ? snapshotSkill.commands : [snapshotSkill.trigger],
+    isNew: false,
+  }
+})
 
 /** @deprecated Use skills prop from server component instead. Kept for compatibility. */
 export const SKILLS = FALLBACK_SKILLS

@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { Copy, Check, ExternalLink } from 'lucide-react'
+import { ArrowUpRight, Check, Copy } from 'lucide-react'
+
 import { PHASE_COLOR_RAW } from '@/data/phases'
 import type { Skill } from '@/lib/github/types'
 
@@ -9,83 +10,68 @@ import styles from './skills.module.css'
 
 interface SkillCardProps {
   skill: Skill
-  glowing?: boolean
-  onOpenModal?: (skillName: string) => void
+  onOpenModal?: (skillId: string) => void
 }
 
-export default function SkillCard({ skill, glowing, onOpenModal }: SkillCardProps) {
+export default function SkillCard({ skill, onOpenModal }: SkillCardProps) {
   const [copied, setCopied] = useState(false)
   const accent = PHASE_COLOR_RAW[skill.phase] || '#22d3ee'
+  const visibleTechs = skill.techs.slice(0, 3)
 
-  const handleCopy = async (e: React.MouseEvent) => {
-    e.stopPropagation()
+  const handleCopy = async () => {
     await navigator.clipboard.writeText(skill.trigger)
     setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+    window.setTimeout(() => setCopied(false), 1800)
   }
 
-  const status = skill.isNew ? 'new' : 'active'
-
   return (
-    <article className={`${styles.card} ${glowing ? styles.cardGlow : ''}`}>
-      <span className={styles.statusBadge} data-status={status}>
-        {status}
-      </span>
-      <div className={styles.cardHeader}>
-        <div>
-          <h3 className={styles.cardTitle}>{skill.name}</h3>
-          <p className={styles.cardName}>{skill.id}</p>
-        </div>
+    <article
+      className={styles.card}
+      style={{ '--phase-color': accent } as React.CSSProperties}
+    >
+      <div className={styles.cardTopline}>
+        <span className={styles.cardPhase}>F{skill.phase.padStart(2, '0')}</span>
+        <span className={styles.cardVersion}>v{skill.version}</span>
+        {skill.isNew && <span className={styles.newBadge}>nova</span>}
       </div>
 
-      <p className={styles.cardDescription}>
-        {skill.description || 'Sem descrição informada para esta skill.'}
-      </p>
-
-      <div className={styles.cardMeta}>
-        <span
-          className={styles.phaseBadge}
-          style={{ color: accent, borderColor: `${accent}40`, backgroundColor: `${accent}18` }}
+      <div className={styles.cardBody}>
+        <button
+          type="button"
+          className={styles.cardTitleButton}
+          onClick={() => onOpenModal?.(skill.id)}
         >
-          {skill.phaseName ? `${skill.phase}. ${skill.phaseName}` : `Fase ${skill.phase}`}
-        </span>
-        <code className={styles.triggerCode}>{skill.trigger}</code>
+          <span>{skill.name}</span>
+          <ArrowUpRight aria-hidden="true" />
+        </button>
+        <p className={styles.cardId}>{skill.id}</p>
+        <p className={styles.cardDescription}>
+          {skill.description || 'Sem descrição informada para esta skill.'}
+        </p>
       </div>
 
-      <div className={styles.tags}>
-        {skill.techs.length === 0 ? (
-          <span className={styles.tagMuted}>sem tags</span>
+      <div className={styles.tags} aria-label="Tecnologias">
+        {visibleTechs.length > 0 ? (
+          <>
+            {visibleTechs.map((tech) => (
+              <span key={tech} className={styles.tag}>{tech}</span>
+            ))}
+            {skill.techs.length > 3 && <span className={styles.tagMuted}>mais</span>}
+          </>
         ) : (
-          skill.techs.map((tag) => (
-            <span key={tag} className={styles.tag}>
-              {tag}
-            </span>
-          ))
+          <span className={styles.tagMuted}>protocolo transversal</span>
         )}
       </div>
 
-      {/* Footer actions */}
-      <div className={styles.cardActions}>
+      <div className={styles.cardFooter}>
+        <code title={skill.trigger}>{skill.trigger}</code>
         <button
+          type="button"
           onClick={handleCopy}
-          className={styles.cardActionBtn}
-          title="Copiar comando"
+          aria-label={copied ? 'Comando copiado' : `Copiar ${skill.trigger}`}
+          title={copied ? 'Comando copiado' : 'Copiar comando'}
         >
-          {copied ? (
-            <Check className="w-4 h-4 text-green-400" />
-          ) : (
-            <Copy className="w-4 h-4" />
-          )}
-        </button>
-        <button
-          onClick={(e) => {
-            e.stopPropagation()
-            if (onOpenModal) onOpenModal(skill.name)
-          }}
-          className={styles.cardActionBtn}
-          title="Ver detalhes da skill"
-        >
-          <ExternalLink className="w-4 h-4" />
+          {copied ? <Check aria-hidden="true" /> : <Copy aria-hidden="true" />}
         </button>
       </div>
     </article>

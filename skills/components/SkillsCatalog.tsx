@@ -1,12 +1,23 @@
 'use client'
 
-import { useRef, useState, useCallback, useMemo } from 'react'
-import styles from '@/components/skills/skills.module.css'
-import SkillSection from '@/components/skills/skills-section'
-import PhaseNav from '@/components/PhaseNav'
+import { useCallback, useDeferredValue, useMemo, useState } from 'react'
+import {
+  ArrowUpRight,
+  Check,
+  CircleAlert,
+  Database,
+  GitBranch,
+  RefreshCw,
+  Search,
+  X,
+} from 'lucide-react'
+
+import BrandWordmark from '@/app/BrandWordmark'
 import SkillModal from '@/components/SkillModal'
-import SkillsTable from '@/components/SkillsTable'
-import { PHASES } from '@/data/phases'
+import SkillAdvisor from '@/components/SkillAdvisor'
+import SkillSection from '@/components/skills/skills-section'
+import styles from '@/components/skills/skills.module.css'
+import { PHASES, PHASE_COLOR_RAW } from '@/data/phases'
 import { useNewSkillsPolling } from '@/hooks/use-new-skills-polling'
 import type { Skill } from '@/lib/github/types'
 
@@ -18,204 +29,311 @@ interface SkillsCatalogProps {
 
 interface SkillSectionData {
   name: string
+  number: string
+  description: string
+  subtitle: string
   skills: Skill[]
 }
 
 function groupByPhase(skills: Skill[]): SkillSectionData[] {
-  const grouped = new Map<string, Skill[]>()
-  for (const skill of skills) {
-    const phase = PHASES.find((p) => p.number === skill.phase)
-    const sectionName = phase ? `${phase.number}. ${phase.name}` : skill.phaseName
-    const list = grouped.get(sectionName) ?? []
-    list.push(skill)
-    grouped.set(sectionName, list)
-  }
-  return Array.from(grouped.entries())
-    .sort(([a], [b]) => a.localeCompare(b, 'pt-BR'))
-    .map(([name, sectionSkills]) => ({ name, skills: sectionSkills }))
+  return PHASES.map((phase) => ({
+    name: phase.name,
+    number: phase.number,
+    description: phase.description,
+    subtitle: phase.subtitle,
+    skills: skills.filter((skill) => skill.phase === phase.number),
+  })).filter((section) => section.skills.length > 0)
 }
 
-export default function SkillsCatalog({ skills = [], dataSource = 'fallback', contentHash = '' }: SkillsCatalogProps) {
-  const [modalSkillId, setModalSkillId] = useState<string | null>(null)
-  const [activePhase, setActivePhase] = useState<string | null>(null)
-  const [glowingSkill, setGlowingSkill] = useState<string | null>(null)
-  const [showTable, setShowTable] = useState(false)
+function matchesSearch(skill: Skill, query: string): boolean {
+  const searchable = [
+    skill.name,
+    skill.id,
+    skill.description,
+    skill.keywords,
+    skill.trigger,
+    ...skill.techs,
+  ].join(' ').toLocaleLowerCase('pt-BR')
+
+  return searchable.includes(query)
+}
+
+export default function SkillsCatalog({
+  skills = [],
+  dataSource = 'fallback',
+  contentHash = '',
+}: SkillsCatalogProps) {
+  const [activePhase, setActivePhase] = useState<string>('all')
   const [searchQuery, setSearchQuery] = useState('')
-  const sectionRefs = useRef<Map<string, HTMLDivElement>>(new Map())
+  const [modalSkillId, setModalSkillId] = useState<string | null>(null)
+  const deferredQuery = useDeferredValue(searchQuery)
   const polling = useNewSkillsPolling(skills.length, contentHash)
 
-  const allSections = groupByPhase(skills)
+  const phaseCounts = useMemo(
+    () => Object.fromEntries(PHASES.map((phase) => [
+      phase.number,
+      skills.filter((skill) => skill.phase === phase.number).length,
+    ])),
+    [skills],
+  )
 
-  // Filter skills when search has 2+ chars
-  const filteredSkills = useMemo(() => {
-    const q = searchQuery.trim().toLowerCase()
-    if (q.length < 2) return skills
-    return skills.filter(
-      (sk) =>
-        sk.name.toLowerCase().includes(q) ||
-        sk.id.toLowerCase().includes(q) ||
-        sk.description.toLowerCase().includes(q) ||
-        sk.keywords.toLowerCase().includes(q) ||
-        sk.techs.some((t) => t.toLowerCase().includes(q)),
-    )
-  }, [skills, searchQuery])
+  const visibleSkills = useMemo(() => {
+    const normalizedQuery = deferredQuery.trim().toLocaleLowerCase('pt-BR')
+    return skills.filter((skill) => {
+      const matchesPhase = activePhase === 'all' || skill.phase === activePhase
+      const matchesQuery = normalizedQuery.length < 2 || matchesSearch(skill, normalizedQuery)
+      return matchesPhase && matchesQuery
+    })
+  }, [activePhase, deferredQuery, skills])
 
-  const sections = useMemo(() => {
-    const q = searchQuery.trim().toLowerCase()
-    if (q.length < 2) return allSections
-    return groupByPhase(filteredSkills)
-  }, [searchQuery, allSections, filteredSkills])
+  const sections = useMemo(() => groupByPhase(visibleSkills), [visibleSkills])
+  const isFiltering = activePhase !== 'all' || deferredQuery.trim().length >= 2
+  const activePhaseData = PHASES.find((phase) => phase.number === activePhase)
 
-  const handleScrollToPhase = useCallback((phaseNumber: string, skillName?: string) => {
-    setActivePhase(phaseNumber)
-    const phase = PHASES.find((p) => p.number === phaseNumber)
-    if (!phase) return
-    const sectionName = `${phase.number}. ${phase.name}`
-    const el = sectionRefs.current.get(sectionName)
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      if (skillName) {
-        setGlowingSkill(skillName)
-        setTimeout(() => setGlowingSkill(null), 3000)
-      }
-    }
-  }, [])
-
-  const handleOpenModal = useCallback((skillId: string) => {
+  const handleOpenSkill = useCallback((skillId: string) => {
     setModalSkillId(skillId)
   }, [])
 
-  const handleOpenModalByName = useCallback((skillName: string) => {
-    const skill = skills.find((s) => s.name === skillName)
-    if (skill) setModalSkillId(skill.id)
-  }, [skills])
-
-  const handleCloseModal = useCallback(() => {
-    setModalSkillId(null)
+  const resetFilters = useCallback(() => {
+    setSearchQuery('')
+    setActivePhase('all')
   }, [])
-
-  const handleOpenTable = useCallback(() => {
-    setShowTable(true)
-  }, [])
-
-  const isFiltering = searchQuery.trim().length >= 2
 
   return (
     <>
       <main className={styles.page}>
-        <div className={styles.shell}>
-          <section className={styles.hero}>
-            {/* Top row: logo */}
-            <div className="flex justify-between items-start">
-              <p className={styles.eyebrow}>
-                Repositório fonte: iconsaiConfig
-                <a
-                  href="https://icon.iconsai.ai/tools"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ color: '#22c55e', fontWeight: 700, marginLeft: 8, textDecoration: 'none', letterSpacing: '0.05em' }}
-                  onMouseEnter={e => (e.currentTarget.style.opacity = '0.8')}
-                  onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
-                >
-                  TOOLS
-                </a>
-              </p>
-              <img
-                src="/skills/logo.png"
-                alt="IconsAI"
-                className="h-10 w-auto opacity-90"
-              />
+        <header className={styles.topbar}>
+          <BrandWordmark />
+
+          <div className={styles.topbarTrail} aria-label="Localização atual">
+            <span>ecossistema</span>
+            <span className={styles.trailDivider}>/</span>
+            <strong>skills</strong>
+          </div>
+
+          <a
+            className={styles.toolsLink}
+            href="https://icon.iconsai.ai/tools"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Ferramentas
+            <ArrowUpRight aria-hidden="true" />
+          </a>
+        </header>
+
+        <div className={styles.atlas}>
+          <aside className={styles.rail} aria-label="Fases do ciclo de desenvolvimento">
+            <div className={styles.railHeading}>
+              <span>Mapa do ciclo</span>
+              <small>09 fases</small>
             </div>
 
-            {/* Title & description */}
-            <h1 className={styles.title}>Catálogo de Skills</h1>
-            <p className={styles.description}>
-              A página pública em <code>/skills</code> é atualizada por webhook sempre que o
-              repositório fonte recebe alterações em YAML.
-              {dataSource === 'fallback' && (
-                <span className="ml-2 text-xs text-[var(--yl)]">(offline — dados em cache)</span>
-              )}
-            </p>
+            <nav className={styles.phaseNav}>
+              <button
+                type="button"
+                className={styles.phaseButton}
+                data-active={activePhase === 'all'}
+                onClick={() => setActivePhase('all')}
+                aria-pressed={activePhase === 'all'}
+              >
+                <span className={styles.phaseNumber}>00</span>
+                <span className={styles.phaseCopy}>
+                  <strong>Visão completa</strong>
+                  <small>Todo o catálogo</small>
+                </span>
+                <span className={styles.phaseCount}>{skills.length}</span>
+              </button>
 
-            {/* Bottom row: stats | search + webhook | nav */}
-            <div className="flex items-end justify-between gap-6 flex-wrap mt-7">
-              <div className="flex items-end gap-4 flex-wrap">
-                <div className={styles.metric}>
-                  <span className={styles.metricValue}>
-                    {isFiltering ? filteredSkills.length : skills.length}
-                  </span>
-                  <span className={styles.metricLabel}>
-                    {isFiltering ? 'encontradas' : 'skills válidas'}
-                  </span>
+              {PHASES.map((phase) => {
+                const count = phaseCounts[phase.number] ?? 0
+                const isActive = activePhase === phase.number
+                return (
+                  <button
+                    key={phase.number}
+                    type="button"
+                    className={styles.phaseButton}
+                    data-active={isActive}
+                    onClick={() => setActivePhase(isActive ? 'all' : phase.number)}
+                    aria-pressed={isActive}
+                    style={{ '--phase-color': PHASE_COLOR_RAW[phase.number] } as React.CSSProperties}
+                  >
+                    <span className={styles.phaseNumber}>{phase.number.padStart(2, '0')}</span>
+                    <span className={styles.phaseCopy}>
+                      <strong>{phase.name.split('/')[0].trim()}</strong>
+                      <small>{phase.subtitle}</small>
+                    </span>
+                    <span className={styles.phaseCount}>{count}</span>
+                  </button>
+                )
+              })}
+            </nav>
+
+            <div className={styles.sourceCard}>
+              <div className={styles.sourceCardTop}>
+                <GitBranch aria-hidden="true" />
+                <span>Fonte canônica</span>
+              </div>
+              <strong>iconsaiConfig / skills</strong>
+              <p>Arquivos SKILL.md lidos do repositório central.</p>
+              <a
+                href="https://github.com/arbachegit/iconsaiConfig/tree/main/skills"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Abrir repositório
+                <ArrowUpRight aria-hidden="true" />
+              </a>
+            </div>
+          </aside>
+
+          <div className={styles.content}>
+            <section className={styles.hero}>
+              <div className={styles.heroStatusRow}>
+                <span className={styles.kicker}>Atlas operacional / edição 2026</span>
+                <SourceStatus source={dataSource} />
+              </div>
+
+              <div className={styles.heroGrid}>
+                <div>
+                  <h1>
+                    Skills que fazem
+                    <span>o trabalho avançar.</span>
+                  </h1>
+                  <p className={styles.heroDescription}>
+                    Encontre o protocolo certo para cada etapa: da arquitetura inicial ao deploy.
+                    Cada skill reúne instruções canônicas, gatilhos e contexto de aplicação.
+                  </p>
                 </div>
-                <div className={styles.metric}>
-                  <span className={styles.metricValue}>{sections.length}</span>
-                  <span className={styles.metricLabel}>seções</span>
+
+                <div className={styles.heroMetrics} aria-label="Resumo do catálogo">
+                  <div>
+                    <strong>{skills.length}</strong>
+                    <span>skills canônicas</span>
+                  </div>
+                  <div>
+                    <strong>{PHASES.length}</strong>
+                    <span>fases do ciclo</span>
+                  </div>
+                  <div>
+                    <strong>{contentHash || 'local'}</strong>
+                    <span>versão do índice</span>
+                  </div>
                 </div>
               </div>
 
-              {/* Search + Webhook check */}
-              <div className="flex items-center gap-2">
-                <div className="relative">
-                  <svg
-                    className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[var(--t3)] pointer-events-none"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
+              <div className={styles.searchBar}>
+                <Search aria-hidden="true" />
+                <label htmlFor="skill-search">Buscar no catálogo</label>
+                <input
+                  id="skill-search"
+                  type="search"
+                  value={searchQuery}
+                  onChange={(event) => setSearchQuery(event.target.value)}
+                  placeholder="Ex.: autenticação, Zod, RAG, deploy..."
+                  autoComplete="off"
+                />
+                {searchQuery && (
+                  <button
+                    type="button"
+                    className={styles.clearSearch}
+                    onClick={() => setSearchQuery('')}
+                    aria-label="Limpar busca"
                   >
-                    <circle cx="11" cy="11" r="8" />
-                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                  </svg>
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Buscar..."
-                    className="w-40 h-9 pl-8 pr-3 rounded-full border border-[rgba(34,211,238,0.3)] bg-transparent text-xs font-mono text-[var(--t1)] placeholder:text-[var(--t3)] outline-none focus:border-[var(--cy)] transition-colors"
+                    <X aria-hidden="true" />
+                  </button>
+                )}
+                <span className={styles.searchHint}>mín. 2 caracteres</span>
+              </div>
+
+              <SkillAdvisor skills={skills} onOpenSkill={handleOpenSkill} />
+            </section>
+
+            <section className={styles.catalog} aria-labelledby="catalog-title">
+              <div className={styles.catalogHeader}>
+                <div>
+                  <span className={styles.catalogEyebrow}>
+                    {isFiltering ? 'Recorte ativo' : 'Índice completo'}
+                  </span>
+                  <h2 id="catalog-title">
+                    {activePhaseData ? activePhaseData.name : 'Mapa completo de execução'}
+                  </h2>
+                  <p>
+                    {activePhaseData
+                      ? activePhaseData.description
+                      : 'Navegue por fase ou busque pelo problema, tecnologia ou comando.'}
+                  </p>
+                </div>
+
+                <div className={styles.catalogActions}>
+                  <span className={styles.resultCount}>
+                    <strong>{visibleSkills.length}</strong>
+                    {visibleSkills.length === 1 ? ' resultado' : ' resultados'}
+                  </span>
+                  {isFiltering && (
+                    <button type="button" className={styles.resetButton} onClick={resetFilters}>
+                      Limpar filtros
+                      <X aria-hidden="true" />
+                    </button>
+                  )}
+                  <WebhookCheckButton
+                    renderedCount={skills.length}
+                    renderedHash={contentHash}
+                    polling={polling}
                   />
                 </div>
-                <WebhookCheckButton renderedCount={skills.length} renderedHash={contentHash} polling={polling} />
               </div>
 
-              <PhaseNav
-                skills={skills}
-                activePhase={activePhase}
-                onScrollToPhase={handleScrollToPhase}
-                onOpenSkillModal={handleOpenModal}
-                onOpenTable={handleOpenTable}
-              />
-            </div>
-          </section>
-
-          <div className={styles.sections}>
-            {sections.length === 0 && isFiltering ? (
-              <div className="text-center py-16 text-[var(--t3)] text-sm font-mono">
-                Nenhuma skill encontrada para &quot;{searchQuery}&quot;
-              </div>
-            ) : (
-              sections.map((section) => (
-                <div
-                  key={section.name}
-                  ref={(el) => {
-                    if (el) sectionRefs.current.set(section.name, el)
-                  }}
-                >
-                  <SkillSection section={section} glowingSkill={glowingSkill} onOpenModal={handleOpenModalByName} />
+              {sections.length === 0 ? (
+                <div className={styles.emptyState}>
+                  <CircleAlert aria-hidden="true" />
+                  <div>
+                    <h3>Nenhuma skill neste recorte</h3>
+                    <p>Tente outro termo ou volte para a visão completa.</p>
+                  </div>
+                  <button type="button" onClick={resetFilters}>Ver todas as skills</button>
                 </div>
-              ))
-            )}
+              ) : (
+                <div className={styles.sections}>
+                  {sections.map((section) => (
+                    <SkillSection
+                      key={section.number}
+                      section={section}
+                      onOpenModal={handleOpenSkill}
+                    />
+                  ))}
+                </div>
+              )}
+            </section>
           </div>
         </div>
+
+        <footer className={styles.footer}>
+          <span>Catálogo operacional IconsAI</span>
+          <span>SKILL.md como fonte de verdade</span>
+          <span>{skills.length} protocolos indexados</span>
+        </footer>
       </main>
 
-      <SkillModal skills={skills} skillId={modalSkillId} onClose={handleCloseModal} />
-      <SkillsTable skills={skills} open={showTable} onClose={() => setShowTable(false)} onOpenSkillModal={handleOpenModal} />
+      <SkillModal
+        skills={skills}
+        skillId={modalSkillId}
+        onClose={() => setModalSkillId(null)}
+      />
     </>
   )
 }
 
-/* ─── Webhook Check Button ─── */
+function SourceStatus({ source }: { source: 'github' | 'fallback' }) {
+  const isLive = source === 'github'
+  return (
+    <span className={styles.sourceStatus} data-live={isLive}>
+      <span className={styles.statusDot} />
+      {isLive ? 'GitHub sincronizado' : 'Snapshot local'}
+    </span>
+  )
+}
+
 interface WebhookCheckButtonProps {
   renderedCount: number
   renderedHash: string
@@ -224,124 +342,65 @@ interface WebhookCheckButtonProps {
 
 function WebhookCheckButton({ renderedCount, renderedHash, polling }: WebhookCheckButtonProps) {
   const [status, setStatus] = useState<'idle' | 'loading' | 'ok' | 'warn' | 'error'>('idle')
-  const [tooltip, setTooltip] = useState('Verificar webhook')
-
-  // When polling detects new skills, auto-activate the button to green
-  const isNewDetected = polling.hasNewSkills && status === 'idle'
+  const hasRemoteUpdate = polling.hasNewSkills && status === 'idle'
 
   const handleCheck = async () => {
-    // If new skills detected by polling, reload the page
-    if (isNewDetected) {
+    if (hasRemoteUpdate) {
       polling.refresh()
       return
     }
 
     setStatus('loading')
-    setTooltip('Verificando...')
     try {
-      const res = await fetch('/skills/api/skills/sync', { cache: 'no-store' })
-      const data = await res.json()
-
-      if (!data.ok) {
-        const failures = Object.entries(data.checks as Record<string, string>)
-          .filter(([, v]) => v !== 'ok')
-          .map(([k]) => k)
+      const response = await fetch('/skills/api/skills/sync', { cache: 'no-store' })
+      const payload = await response.json()
+      if (!payload.ok) {
         setStatus('error')
-        setTooltip(`Falha: ${failures.join(', ')}`)
       } else {
-        const ghCount = Number(data.checks?.skillCount ?? 0)
-        const ghHash = typeof data.checks?.contentHash === 'string' ? data.checks.contentHash : ''
-        if (ghCount !== renderedCount || (ghHash && ghHash !== renderedHash)) {
-          setStatus('warn')
-          setTooltip(ghCount !== renderedCount
-            ? `Desync: GitHub ${ghCount} vs Página ${renderedCount}`
-            : 'Desync: conteúdo alterado (versão atualizada)')
-        } else {
-          setStatus('ok')
-          setTooltip(`OK — ${ghCount} skills sincronizadas`)
-        }
+        const remoteCount = Number(payload.checks?.skillCount ?? 0)
+        const remoteHash = typeof payload.checks?.contentHash === 'string'
+          ? payload.checks.contentHash
+          : ''
+        setStatus(
+          remoteCount !== renderedCount || (remoteHash && remoteHash !== renderedHash)
+            ? 'warn'
+            : 'ok',
+        )
       }
     } catch {
       setStatus('error')
-      setTooltip('Endpoint inacessível')
     }
-    setTimeout(() => {
-      setStatus('idle')
-      setTooltip('Verificar webhook')
-    }, 4000)
+
+    window.setTimeout(() => setStatus('idle'), 4000)
   }
 
-  const effectiveStatus = isNewDetected ? 'new' : status
-
-  const borderColor =
-    effectiveStatus === 'new' || effectiveStatus === 'ok'
-      ? 'rgba(74,222,128,0.6)'
-      : effectiveStatus === 'warn'
-        ? 'rgba(250,204,21,0.6)'
-        : effectiveStatus === 'error'
-          ? 'rgba(248,113,113,0.6)'
-          : 'rgba(34,211,238,0.3)'
-
-  const iconColor =
-    effectiveStatus === 'new' || effectiveStatus === 'ok'
-      ? '#4ade80'
-      : effectiveStatus === 'warn'
-        ? '#facc15'
-        : effectiveStatus === 'error'
-          ? '#f87171'
-          : 'var(--cy)'
-
-  const glowStyle = isNewDetected
-    ? { borderColor, color: iconColor, backgroundColor: 'transparent', boxShadow: '0 0 12px rgba(74,222,128,0.5), 0 0 32px rgba(74,222,128,0.15)', animation: 'webhookGlow 2s ease-in-out infinite' }
-    : { borderColor, color: iconColor, backgroundColor: 'transparent' }
-
-  const newTooltip = isNewDetected
-    ? `${polling.remoteCount !== null && polling.remoteCount !== renderedCount ? `${Math.abs(polling.remoteCount - renderedCount)} nova(s) skill(s) — clique para atualizar` : 'Skills atualizadas — clique para atualizar'}`
-    : tooltip
+  const effectiveStatus = hasRemoteUpdate ? 'warn' : status
+  const label = effectiveStatus === 'warn'
+    ? 'Atualização disponível'
+    : effectiveStatus === 'ok'
+      ? 'Índice sincronizado'
+      : effectiveStatus === 'error'
+        ? 'Falha ao verificar'
+        : effectiveStatus === 'loading'
+          ? 'Verificando índice'
+          : 'Verificar índice'
 
   return (
-    <>
-      {isNewDetected && (
-        <style>{`@keyframes webhookGlow { 0%,100% { box-shadow: 0 0 12px rgba(74,222,128,0.5), 0 0 32px rgba(74,222,128,0.15); } 50% { box-shadow: 0 0 20px rgba(74,222,128,0.7), 0 0 48px rgba(74,222,128,0.25); } }`}</style>
+    <button
+      type="button"
+      className={styles.syncButton}
+      data-status={effectiveStatus}
+      onClick={handleCheck}
+      disabled={status === 'loading'}
+    >
+      {effectiveStatus === 'ok' ? (
+        <Check aria-hidden="true" />
+      ) : effectiveStatus === 'error' ? (
+        <Database aria-hidden="true" />
+      ) : (
+        <RefreshCw aria-hidden="true" data-spinning={status === 'loading'} />
       )}
-      <button
-        onClick={handleCheck}
-        disabled={status === 'loading'}
-        className="group relative flex items-center justify-center w-9 h-9 rounded-full border text-xs font-bold transition-all duration-300 ease-out hover:scale-110 focus:outline-none cursor-pointer disabled:opacity-60"
-        style={glowStyle}
-      >
-        {status === 'loading' ? (
-          <svg className="w-3.5 h-3.5 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-            <path d="M21 12a9 9 0 1 1-6.219-8.56" />
-          </svg>
-        ) : isNewDetected ? (
-          <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-            <polyline points="20 6 9 17 4 12" />
-          </svg>
-        ) : status === 'ok' ? (
-          <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-            <polyline points="20 6 9 17 4 12" />
-          </svg>
-        ) : status === 'error' ? (
-          <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-            <line x1="18" y1="6" x2="6" y2="18" />
-            <line x1="6" y1="6" x2="18" y2="18" />
-          </svg>
-        ) : status === 'warn' ? (
-          <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
-            <line x1="12" y1="9" x2="12" y2="13" />
-            <line x1="12" y1="17" x2="12.01" y2="17" />
-          </svg>
-        ) : (
-          <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-          </svg>
-        )}
-        <span className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-[#1a1a1a] border border-[#333] px-2.5 py-1 text-[11px] font-normal text-[#ccc] opacity-0 group-hover:opacity-100 transition-opacity">
-          {newTooltip}
-        </span>
-      </button>
-    </>
+      {label}
+    </button>
   )
 }

@@ -40,6 +40,7 @@ export interface Skill {
   keywords: string
   createdAt?: string
   updatedAt?: string
+  sourcePath?: string
 }
 
 export interface GitHubContentItem {

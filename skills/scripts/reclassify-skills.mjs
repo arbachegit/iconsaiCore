@@ -10,7 +10,7 @@
  *   node scripts/reclassify-skills.mjs [--dry-run]
  */
 
-import { readFileSync, writeFileSync, existsSync, readdirSync } from 'fs'
+import { writeFileSync, existsSync, readdirSync } from 'fs'
 import { join } from 'path'
 
 // ── Config ──

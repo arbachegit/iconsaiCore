@@ -1,0 +1,1579 @@
+[
+  {
+    "id": "api-test-audit",
+    "name": "API Test Audit",
+    "trigger": "/api-test-audit",
+    "version": "1.0.0",
+    "techs": [
+      "Jest",
+      "Vitest",
+      "Supertest",
+      "pytest",
+      "httpx"
+    ],
+    "description": "Auditoria de cobertura e qualidade de testes de API",
+    "examples": [
+      "Auditoria de cobertura de testes em APIs REST/GraphQL",
+      "Revisao de PRs que adicionam ou modificam endpoints",
+      "Verificacao de CI gates de teste",
+      "Projetos com APIs que precisam de validacao de contrato"
+    ],
+    "commands": [
+      "/api-test-audit"
+    ],
+    "keywords": "api-test-audit auditoria de cobertura e qualidade de testes de api jest vitest supertest pytest httpx",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/api-test-audit/SKILL.md"
+  },
+  {
+    "id": "arquitetura",
+    "name": "SYSTEM PROMPT — ARCHITECTURE_MOTHER_NORMALIZER v1.0",
+    "trigger": "/arquitetura",
+    "version": "2.0.0",
+    "techs": [
+      "Next.js",
+      "Monorepo"
+    ],
+    "description": "SYSTEM PROMPT — ARCHITECTURE_MOTHER_NORMALIZER v1.0",
+    "examples": [],
+    "commands": [
+      "/arquitetura"
+    ],
+    "keywords": "arquitetura system prompt — architecture_mother_normalizer v1.0 next.js monorepo",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/arquitetura/SKILL.md"
+  },
+  {
+    "id": "audito",
+    "name": "SYSTEM PROMPT — AUDITO v1.0",
+    "trigger": "/audito",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "SYSTEM PROMPT — AUDITO v1.0",
+    "examples": [],
+    "commands": [
+      "/audito"
+    ],
+    "keywords": "audito system prompt — audito v1.0",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/audito/SKILL.md"
+  },
+  {
+    "id": "auth",
+    "name": "Skill — AUTH OTP (Skill Global)",
+    "trigger": "/auth",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Autenticacao OTP com escolha de canal (SMS Infobip / Email Resend) — padrao canonico IconsAI (Skill Global)",
+    "examples": [
+      "Implementar login/retomada via OTP em qualquer app IconsAI",
+      "Adicionar verificacao de identidade (CPF, email, telefone) a um projeto",
+      "Construir fluxo de confirmacao de posse de dispositivo"
+    ],
+    "commands": [
+      "/auth"
+    ],
+    "keywords": "auth autenticacao otp com escolha de canal (sms infobip / email resend) — padrao canonico iconsai (skill global)",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/auth/SKILL.md"
+  },
+  {
+    "id": "authz-policy-audit",
+    "name": "Authz Policy Audit",
+    "trigger": "/authz-policy-audit",
+    "version": "1.0.0",
+    "techs": [
+      "FastAPI",
+      "Express",
+      "Next.js",
+      "NestJS",
+      "Supabase RLS"
+    ],
+    "description": "Skill: Authz Policy Audit",
+    "examples": [
+      "Apos adicionar endpoints novos",
+      "Apos refatorar autenticacao",
+      "Auditoria pre-deploy",
+      "Pos-pentest"
+    ],
+    "commands": [
+      "/authz-policy-audit"
+    ],
+    "keywords": "authz-policy-audit skill: authz policy audit fastapi express next.js nestjs supabase rls",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/authz-policy-audit/SKILL.md"
+  },
+  {
+    "id": "bi-design",
+    "name": "BI Design (Database Explorer + Analytics Admin)",
+    "trigger": "/bi-design",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Skill: BI Design (Database Explorer + Analytics Admin)",
+    "examples": [
+      "Construção de página /admin com explorer de banco Supabase.",
+      "Dashboard analítico com KPIs, charts e drill-down em tabelas.",
+      "Painel \"Saiba Mais\" sobre dados (alimentado por LLM).",
+      "Diagrama ER navegável.",
+      "Painel operacional em tempo real → /warroom-design."
+    ],
+    "commands": [
+      "/bi-design"
+    ],
+    "keywords": "bi-design skill: bi design (database explorer + analytics admin)",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/bi-design/SKILL.md"
+  },
+  {
+    "id": "brand",
+    "name": "Brand IconsAI - Normalizacao Tipografica",
+    "trigger": "/brand",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Skill: Brand IconsAI - Normalizacao Tipografica",
+    "examples": [
+      "Criacao de novos projetos/paginas com a marca IconsAI",
+      "Auditoria de branding em projetos existentes",
+      "PRs que mencionam a marca em texto ou codigo",
+      "Normalizacao de componentes de brand em design systems",
+      "Qualquer contexto onde \"IconsAI\" aparece em UI ou texto"
+    ],
+    "commands": [
+      "/brand"
+    ],
+    "keywords": "brand skill: brand iconsai - normalizacao tipografica",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/brand/SKILL.md"
+  },
+  {
+    "id": "builder",
+    "name": "Skill Builder v2 — Gerador de Skills IconsAI",
+    "trigger": "/builder",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Skill Builder v2 — Gerador de Skills IconsAI",
+    "examples": [],
+    "commands": [
+      "/builder"
+    ],
+    "keywords": "builder skill builder v2 — gerador de skills iconsai",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/builder/SKILL.md"
+  },
+  {
+    "id": "cors-headers-security",
+    "name": "CORS, Headers & Rate Limit",
+    "trigger": "/cors-headers-security",
+    "version": "1.0.0",
+    "techs": [
+      "Next.js",
+      "Express",
+      "FastAPI",
+      "Caddy/Nginx"
+    ],
+    "description": "Skill: CORS, Headers & Rate Limit",
+    "examples": [
+      "Antes de exposicao publica do endpoint",
+      "Auditoria pre-deploy",
+      "Apos relatorio de pentest",
+      "Apos qualquer mudanca em proxy/Caddy/Nginx"
+    ],
+    "commands": [
+      "/cors-headers-security"
+    ],
+    "keywords": "cors-headers-security skill: cors, headers & rate limit next.js express fastapi caddy/nginx",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/cors-headers-security/SKILL.md"
+  },
+  {
+    "id": "deploy",
+    "name": "SKILL — DEPLOY (pipeline único IconsAI)",
+    "trigger": "/deploy",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "SKILL — DEPLOY (pipeline único IconsAI)",
+    "examples": [],
+    "commands": [
+      "/deploy"
+    ],
+    "keywords": "deploy skill — deploy (pipeline único iconsai)",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/deploy/SKILL.md"
+  },
+  {
+    "id": "design",
+    "name": "SYSTEM PROMPT — DESIGN v1.0",
+    "trigger": "/design",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "SYSTEM PROMPT — DESIGN v1.0",
+    "examples": [],
+    "commands": [
+      "/design"
+    ],
+    "keywords": "design system prompt — design v1.0",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/design/SKILL.md"
+  },
+  {
+    "id": "design-login",
+    "name": "DESIGN SKILL OFICIAL - LOGIN PADRAO ICONSAI",
+    "trigger": "/design-login",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "DESIGN SKILL OFICIAL - LOGIN PADRAO ICONSAI",
+    "examples": [],
+    "commands": [
+      "/design-login"
+    ],
+    "keywords": "design-login design skill oficial - login padrao iconsai",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/design-login/SKILL.md"
+  },
+  {
+    "id": "dev-design",
+    "name": "Dev Design Tools Builder",
+    "trigger": "/dev-design",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Dev Design Tools Builder",
+    "examples": [],
+    "commands": [
+      "/dev-design"
+    ],
+    "keywords": "dev-design dev design tools builder",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/dev-design/SKILL.md"
+  },
+  {
+    "id": "estimador-cobertura",
+    "name": "Estimador de Cobertura Financeira Municipal (ECFM)",
+    "trigger": "/estimador-cobertura",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "SKILL: Estimador de Cobertura Financeira Municipal (ECFM)",
+    "examples": [],
+    "commands": [
+      "/estimador-cobertura"
+    ],
+    "keywords": "estimador-cobertura skill: estimador de cobertura financeira municipal (ecfm)",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/estimador-cobertura/SKILL.md"
+  },
+  {
+    "id": "favicon",
+    "name": "SKILL — FAVICON NUCLEAR IconsAI (i.ai)",
+    "trigger": "/favicon",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "SKILL — FAVICON NUCLEAR IconsAI (i.ai)",
+    "examples": [],
+    "commands": [
+      "/favicon"
+    ],
+    "keywords": "favicon skill — favicon nuclear iconsai (i.ai)",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/favicon/SKILL.md"
+  },
+  {
+    "id": "favicon-guide",
+    "name": "Guia de Configuracao de Favicon (Skill Global)",
+    "trigger": "/favicon-guide",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Guia completo para configuracao de favicon com fundo transparente no Next.js App Router, incluindo conversao automatica para SVG vetorial",
+    "examples": [],
+    "commands": [
+      "/favicon-guide"
+    ],
+    "keywords": "favicon-guide guia completo para configuracao de favicon com fundo transparente no next.js app router, incluindo conversao automatica para svg vetorial",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/favicon-guide/SKILL.md"
+  },
+  {
+    "id": "finalizar",
+    "name": "SYSTEM PROMPT — FINALIZE_ORCHESTRATOR v1.0",
+    "trigger": "/finalizar",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "SYSTEM PROMPT — FINALIZE_ORCHESTRATOR v1.0",
+    "examples": [],
+    "commands": [
+      "/finalizar"
+    ],
+    "keywords": "finalizar system prompt — finalize_orchestrator v1.0",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/finalizar/SKILL.md"
+  },
+  {
+    "id": "floating-button",
+    "name": "Floating Button - Regra de Ouro (Skill Global)",
+    "trigger": "/floating-button",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Floating Button - Regra de Ouro (Skill Global)",
+    "examples": [],
+    "commands": [
+      "/floating-button"
+    ],
+    "keywords": "floating-button floating button - regra de ouro (skill global)",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/floating-button/SKILL.md"
+  },
+  {
+    "id": "frontend-design",
+    "name": "frontend-design",
+    "trigger": "/frontend-design",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Skill frontend-design",
+    "examples": [],
+    "commands": [
+      "/frontend-design"
+    ],
+    "keywords": "frontend-design skill frontend-design",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/frontend-design/SKILL.md"
+  },
+  {
+    "id": "header-hero",
+    "name": "Header Hero Icons.ai",
+    "trigger": "/header-hero",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Header Hero Icons.ai",
+    "examples": [],
+    "commands": [
+      "/header-hero"
+    ],
+    "keywords": "header-hero header hero icons.ai",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/header-hero/SKILL.md"
+  },
+  {
+    "id": "ia-contexto-container",
+    "name": "IA de Contexto e Conteiner — Pipeline de Orquestracao v4",
+    "trigger": "/ia-contexto-container",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "IA de Contexto e Conteiner — Pipeline de Orquestracao v4",
+    "examples": [],
+    "commands": [
+      "/ia-contexto-container"
+    ],
+    "keywords": "ia-contexto-container ia de contexto e conteiner — pipeline de orquestracao v4",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/ia-contexto-container/SKILL.md"
+  },
+  {
+    "id": "ia-contextual",
+    "name": "IA Contextual — Extracao e Implantacao de Metadados (Camada 1 do Pipeline de 3 IAs)",
+    "trigger": "/ia-contextual",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "IA Contextual — Extracao e Implantacao de Metadados (Camada 1 do Pipeline de 3 IAs)",
+    "examples": [],
+    "commands": [
+      "/ia-contextual"
+    ],
+    "keywords": "ia-contextual ia contextual — extracao e implantacao de metadados (camada 1 do pipeline de 3 ias)",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/ia-contextual/SKILL.md"
+  },
+  {
+    "id": "ia-simulacao-container",
+    "name": "IA Agente de Simulacao — Camada 3 do Pipeline de 3 IAs",
+    "trigger": "/ia-simulacao-container",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "IA Agente de Simulacao — Camada 3 do Pipeline de 3 IAs",
+    "examples": [],
+    "commands": [
+      "/ia-simulacao-container"
+    ],
+    "keywords": "ia-simulacao-container ia agente de simulacao — camada 3 do pipeline de 3 ias",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/ia-simulacao-container/SKILL.md"
+  },
+  {
+    "id": "injection-defense",
+    "name": "Injection Defense — Textfields & External Inputs",
+    "trigger": "/injection-defense",
+    "version": "1.0.0",
+    "techs": [
+      "Agnóstica (Node.js",
+      "TypeScript",
+      "Python",
+      "SQL",
+      "MongoDB",
+      "LLM)"
+    ],
+    "description": "Skill: Injection Defense — Textfields & External Inputs",
+    "examples": [
+      "Formulários com campos text, textarea, search, comment, bio, description",
+      "Endpoints que constroem queries dinâmicas a partir de input",
+      "Funções que repassam input para exec, spawn, eval, ou shell",
+      "Endpoints que aceitam URLs ou paths do usuário",
+      "Prompts LLM que concatenam input de usuário em system prompt"
+    ],
+    "commands": [
+      "/injection-defense"
+    ],
+    "keywords": "injection-defense skill: injection defense — textfields & external inputs agnóstica (node.js typescript python sql mongodb llm)",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/injection-defense/SKILL.md"
+  },
+  {
+    "id": "legacy-killer",
+    "name": "SYSTEM PROMPT — LEGACY_KILLER v1.0",
+    "trigger": "/legacy-killer",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "SYSTEM PROMPT — LEGACY_KILLER v1.0",
+    "examples": [],
+    "commands": [
+      "/legacy-killer"
+    ],
+    "keywords": "legacy-killer system prompt — legacy_killer v1.0",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/legacy-killer/SKILL.md"
+  },
+  {
+    "id": "lgpd-pii-mapper",
+    "name": "LGPD PII Mapper",
+    "trigger": "/lgpd-pii-mapper",
+    "version": "1.0.0",
+    "techs": [
+      "Agnostica"
+    ],
+    "description": "Skill: LGPD PII Mapper",
+    "examples": [
+      "Onboarding de feature que coleta dados",
+      "Auditoria pre-deploy",
+      "DPO solicitando inventario de dados",
+      "Resposta a solicitacao de titular (LAI/LGPD)",
+      "Apos vazamento"
+    ],
+    "commands": [
+      "/lgpd-pii-mapper"
+    ],
+    "keywords": "lgpd-pii-mapper skill: lgpd pii mapper agnostica",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/lgpd-pii-mapper/SKILL.md"
+  },
+  {
+    "id": "logo",
+    "name": "Wordmark icons.ai — Especificacao Canonica Imutavel",
+    "trigger": "/logo",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Especificacao deterministica e imutavel do wordmark icons.ai — tipografia, cores, fontes, CSS e validacao",
+    "examples": [],
+    "commands": [
+      "/logo"
+    ],
+    "keywords": "logo especificacao deterministica e imutavel do wordmark icons.ai — tipografia, cores, fontes, css e validacao",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/logo/SKILL.md"
+  },
+  {
+    "id": "magazine-design",
+    "name": "Magazine Design (Editorial / Long-form)",
+    "trigger": "/magazine-design",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Skill: Magazine Design (Editorial / Long-form)",
+    "examples": [
+      "Construção de painéis editoriais com tom de revista digital.",
+      "Páginas long-form, dossiês, ensaios, artigos de profundidade.",
+      "Projetos onde leitura e respiração são prioritários (vs densidade).",
+      "Substituição visual de PDFs/whitepapers por experiência web."
+    ],
+    "commands": [
+      "/magazine-design"
+    ],
+    "keywords": "magazine-design skill: magazine design (editorial / long-form)",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/magazine-design/SKILL.md"
+  },
+  {
+    "id": "modal-info-builder",
+    "name": "Modal Info Builder",
+    "trigger": "/modal-info-builder",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Modal Info Builder",
+    "examples": [],
+    "commands": [
+      "/modal-info-builder"
+    ],
+    "keywords": "modal-info-builder modal info builder",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/modal-info-builder/SKILL.md"
+  },
+  {
+    "id": "normalize",
+    "name": "Normalize Brazilian Codes - CPF, CNPJ, IBGE, CEP",
+    "trigger": "/normalize",
+    "version": "1.0.0",
+    "techs": [
+      "Agnóstico (Node.js",
+      "Python)"
+    ],
+    "description": "Skill: Normalize Brazilian Codes - CPF, CNPJ, IBGE, CEP",
+    "examples": [
+      "Cadastro de pessoas físicas/jurídicas",
+      "Integração com SICONFI, IBGE, Receita",
+      "Validação de endereços",
+      "PRs que manipulam dados brasileiros",
+      "Logs e auditoria (mascaramento obrigatório)"
+    ],
+    "commands": [
+      "/normalize"
+    ],
+    "keywords": "normalize skill: normalize brazilian codes - cpf, cnpj, ibge, cep agnóstico (node.js python)",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/normalize/SKILL.md"
+  },
+  {
+    "id": "obsidian",
+    "name": "Obsidian → Skills Sync",
+    "trigger": "/obsidian",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Obsidian → Skills Sync",
+    "examples": [
+      "Ao criar uma nova skill no vault e querer publica-la no catalogo.",
+      "Ao atualizar uma skill existente e sincronizar com o site.",
+      "Para fazer sync completo de todas as skills do vault."
+    ],
+    "commands": [
+      "/obsidian"
+    ],
+    "keywords": "obsidian obsidian → skills sync",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/obsidian/SKILL.md"
+  },
+  {
+    "id": "pdf",
+    "name": "PDF — Padrão Canônico de Geração de Documentos (Skill Global)",
+    "trigger": "/pdf",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Regras canônicas de geração de PDF no ecossistema IconsAI — dois modelos (print-based showcase via PdfDocument.tsx, script-based standalone via md_to_pdf.py). Identidade visual, estrutura de página A4, localização, @media print, gates F29-F32, proibições. Motor editorial completo com tipografia profissional, design system, diagramas SVG/Mermaid, paged media engine e auditoria PASS/FAIL de 44 items. Use SEMPRE que o usuário mencionar \"PDF\", \"gerar PDF\", \"documento PDF\", \"print\", \"impressão\" de showcase, ou disser \"/pdf\".",
+    "examples": [],
+    "commands": [
+      "/pdf"
+    ],
+    "keywords": "pdf regras canônicas de geração de pdf no ecossistema iconsai — dois modelos (print-based showcase via pdfdocument.tsx, script-based standalone via md_to_pdf.py). identidade visual, estrutura de página a4, localização, @media print, gates f29-f32, proibições. motor editorial completo com tipografia profissional, design system, diagramas svg/mermaid, paged media engine e auditoria pass/fail de 44 items. use sempre que o usuário mencionar \"pdf\", \"gerar pdf\", \"documento pdf\", \"print\", \"impressão\" de showcase, ou disser \"/pdf\".",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/pdf/SKILL.md"
+  },
+  {
+    "id": "prd-builder",
+    "name": "PRD Builder — Workflow Completo para Empresas",
+    "trigger": "/prd-builder",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "PRD Builder — Workflow Completo para Empresas",
+    "examples": [],
+    "commands": [
+      "/prd-builder"
+    ],
+    "keywords": "prd-builder prd builder — workflow completo para empresas",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/prd-builder/SKILL.md"
+  },
+  {
+    "id": "projeto-novo",
+    "name": "SKILL — PROJETO NOVO (bootstrap canônico IconsAI)",
+    "trigger": "/projeto-novo",
+    "version": "1.0",
+    "techs": [],
+    "description": "SKILL — PROJETO NOVO (bootstrap canônico IconsAI)",
+    "examples": [],
+    "commands": [
+      "/projeto-novo"
+    ],
+    "keywords": "projeto-novo skill — projeto novo (bootstrap canônico iconsai)",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/projeto-novo/SKILL.md"
+  },
+  {
+    "id": "quality-finalizer",
+    "name": "SYSTEM PROMPT — QUALITY_FINALIZER v1.0",
+    "trigger": "/quality-finalizer",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "SYSTEM PROMPT — QUALITY_FINALIZER v1.0",
+    "examples": [],
+    "commands": [
+      "/quality-finalizer"
+    ],
+    "keywords": "quality-finalizer system prompt — quality_finalizer v1.0",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/quality-finalizer/SKILL.md"
+  },
+  {
+    "id": "secrets-hygiene",
+    "name": "Secrets Hygiene",
+    "trigger": "/secrets-hygiene",
+    "version": "1.0.0",
+    "techs": [
+      "Agnostica"
+    ],
+    "description": "Skill: Secrets Hygiene",
+    "examples": [
+      "Antes de qualquer commit que toque .env ou config",
+      "Auditoria pre-deploy",
+      "Onboarding de novo repo",
+      "Pos-incidente de seguranca (rotacao de secrets)",
+      "PRs que adicionam integracoes externas"
+    ],
+    "commands": [
+      "/secrets-hygiene"
+    ],
+    "keywords": "secrets-hygiene skill: secrets hygiene agnostica",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/secrets-hygiene/SKILL.md"
+  },
+  {
+    "id": "security",
+    "name": "SYSTEM PROMPT — SECURITY v1.0",
+    "trigger": "/security",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "SYSTEM PROMPT — SECURITY v1.0",
+    "examples": [],
+    "commands": [
+      "/security"
+    ],
+    "keywords": "security system prompt — security v1.0",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/security/SKILL.md"
+  },
+  {
+    "id": "security-finalizer",
+    "name": "SYSTEM PROMPT — SECURITY_FINALIZER v1.0",
+    "trigger": "/security-finalizer",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "SYSTEM PROMPT — SECURITY_FINALIZER v1.0",
+    "examples": [],
+    "commands": [
+      "/security-finalizer"
+    ],
+    "keywords": "security-finalizer system prompt — security_finalizer v1.0",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/security-finalizer/SKILL.md"
+  },
+  {
+    "id": "showcase",
+    "name": "Showcase — Padrão Canônico de Keynote Interativo (Skill Global)",
+    "trigger": "/showcase",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Showcase — Padrão Canônico de Keynote Interativo (Skill Global)",
+    "examples": [],
+    "commands": [
+      "/showcase"
+    ],
+    "keywords": "showcase showcase — padrão canônico de keynote interativo (skill global)",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/showcase/SKILL.md"
+  },
+  {
+    "id": "skill_auth_fase_1_sem_role",
+    "name": "skill_auth_fase_1_sem_role",
+    "trigger": "/skill_auth_fase_1_sem_role",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Auth sem role com Twilio e Infobip",
+    "examples": [],
+    "commands": [
+      "/skill_auth_fase_1_sem_role"
+    ],
+    "keywords": "skill_auth_fase_1_sem_role auth sem role com twilio e infobip",
+    "sourcePath": "skills/skill_auth_fase_1_sem_role/skill.md"
+  },
+  {
+    "id": "skill_auth_fase_2_com_role",
+    "name": "skill_auth_fase_2_com_role",
+    "trigger": "/skill_auth_fase_2_com_role",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Auth com role e Twilio/Infobip",
+    "examples": [],
+    "commands": [
+      "/skill_auth_fase_2_com_role"
+    ],
+    "keywords": "skill_auth_fase_2_com_role auth com role e twilio/infobip",
+    "sourcePath": "skills/skill_auth_fase_2_com_role/skill.md"
+  },
+  {
+    "id": "skill_auth_fase_3_com_role_multi_tenant",
+    "name": "skill_auth_fase_3_com_role_multi_tenant",
+    "trigger": "/skill_auth_fase_3_com_role_multi_tenant",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Auth com role e multi-tenant",
+    "examples": [],
+    "commands": [
+      "/skill_auth_fase_3_com_role_multi_tenant"
+    ],
+    "keywords": "skill_auth_fase_3_com_role_multi_tenant auth com role e multi-tenant",
+    "sourcePath": "skills/skill_auth_fase_3_com_role_multi_tenant/skill.md"
+  },
+  {
+    "id": "skill_deploy_fase_0_pre_check",
+    "name": "skill_deploy_fase_0_pre_check",
+    "trigger": "/skill_deploy_fase_0_pre_check",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Pre-check de ambiente antes do deploy",
+    "examples": [],
+    "commands": [
+      "/skill_deploy_fase_0_pre_check"
+    ],
+    "keywords": "skill_deploy_fase_0_pre_check pre-check de ambiente antes do deploy",
+    "sourcePath": "skills/skill_deploy_fase_0_pre_check/skill.md"
+  },
+  {
+    "id": "skill_deploy_fase_1_build",
+    "name": "skill_deploy_fase_1_build",
+    "trigger": "/skill_deploy_fase_1_build",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Build deterministico com logs e tags",
+    "examples": [],
+    "commands": [
+      "/skill_deploy_fase_1_build"
+    ],
+    "keywords": "skill_deploy_fase_1_build build deterministico com logs e tags",
+    "sourcePath": "skills/skill_deploy_fase_1_build/skill.md"
+  },
+  {
+    "id": "skill_deploy_fase_2_publish",
+    "name": "skill_deploy_fase_2_publish",
+    "trigger": "/skill_deploy_fase_2_publish",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Publish de imagem em registry",
+    "examples": [],
+    "commands": [
+      "/skill_deploy_fase_2_publish"
+    ],
+    "keywords": "skill_deploy_fase_2_publish publish de imagem em registry",
+    "sourcePath": "skills/skill_deploy_fase_2_publish/skill.md"
+  },
+  {
+    "id": "skill_deploy_fase_3_deploy",
+    "name": "skill_deploy_fase_3_deploy",
+    "trigger": "/skill_deploy_fase_3_deploy",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Deploy em producao com health check",
+    "examples": [],
+    "commands": [
+      "/skill_deploy_fase_3_deploy"
+    ],
+    "keywords": "skill_deploy_fase_3_deploy deploy em producao com health check",
+    "sourcePath": "skills/skill_deploy_fase_3_deploy/skill.md"
+  },
+  {
+    "id": "skill_deploy_fase_4_validate",
+    "name": "skill_deploy_fase_4_validate",
+    "trigger": "/skill_deploy_fase_4_validate",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Validacao pos-deploy de containers e endpoints",
+    "examples": [],
+    "commands": [
+      "/skill_deploy_fase_4_validate"
+    ],
+    "keywords": "skill_deploy_fase_4_validate validacao pos-deploy de containers e endpoints",
+    "sourcePath": "skills/skill_deploy_fase_4_validate/skill.md"
+  },
+  {
+    "id": "skill_deploy_fase_5_lock_release",
+    "name": "skill_deploy_fase_5_lock_release",
+    "trigger": "/skill_deploy_fase_5_lock_release",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Lock e release de ambiente pos-deploy",
+    "examples": [],
+    "commands": [
+      "/skill_deploy_fase_5_lock_release"
+    ],
+    "keywords": "skill_deploy_fase_5_lock_release lock e release de ambiente pos-deploy",
+    "sourcePath": "skills/skill_deploy_fase_5_lock_release/skill.md"
+  },
+  {
+    "id": "skill_deploy_master",
+    "name": "skill_deploy_master",
+    "trigger": "/skill_deploy_master",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Orquestrador master do deploy deterministico",
+    "examples": [],
+    "commands": [
+      "/skill_deploy_master"
+    ],
+    "keywords": "skill_deploy_master orquestrador master do deploy deterministico",
+    "sourcePath": "skills/skill_deploy_master/skill.md"
+  },
+  {
+    "id": "skill_versioning",
+    "name": "skill_versioning",
+    "trigger": "/skill_versioning",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Versionamento de deploy com commits e builds",
+    "examples": [],
+    "commands": [
+      "/skill_versioning"
+    ],
+    "keywords": "skill_versioning versionamento de deploy com commits e builds",
+    "sourcePath": "skills/skill_versioning/skill.md"
+  },
+  {
+    "id": "skill-analise-espaco-temporal-arrecadacao",
+    "name": "Analise_Espaco_Temporal_Arrecadacao",
+    "trigger": "/skill-analise-espaco-temporal-arrecadacao",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Analise espaco-temporal de arrecadacao municipal",
+    "examples": [
+      "Voce tem multiplas cidades e quer explicacao comparativa (nao so previsao)",
+      "Voce quer isolar \"efeito estrutural\" vs \"efeito gestao/execucao\"",
+      "Voce quer detectar spillovers regionais",
+      "Diagnostico de performance relativa"
+    ],
+    "commands": [
+      "/skill-analise-espaco-temporal-arrecadacao"
+    ],
+    "keywords": "skill-analise-espaco-temporal-arrecadacao analise espaco-temporal de arrecadacao municipal",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/skill-analise-espaco-temporal-arrecadacao/SKILL.md"
+  },
+  {
+    "id": "skill-api-validation-zod",
+    "name": "API Request Normalization - Node/Zod",
+    "trigger": "/skill-api-validation-zod",
+    "version": "1.0.0",
+    "techs": [
+      "Node.js",
+      "TypeScript",
+      "Zod"
+    ],
+    "description": "Normalizacao de requests API com Node.js e Zod",
+    "examples": [
+      "Revisão de rotas Express/Fastify/Hono",
+      "Auditoria de Controllers NestJS (quando usando Zod)",
+      "PRs que adicionam/modificam endpoints HTTP",
+      "Validação de webhooks e callbacks externos"
+    ],
+    "commands": [
+      "/skill-api-validation-zod"
+    ],
+    "keywords": "skill-api-validation-zod normalizacao de requests api com node.js e zod node.js typescript zod",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/skill-api-validation-zod/SKILL.md"
+  },
+  {
+    "id": "skill-architecture-mother-normalizer",
+    "name": "SYSTEM PROMPT — ARCHITECTURE_MOTHER_NORMALIZER v1.0",
+    "trigger": "/skill-architecture-mother-normalizer",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Auditoria e normalizacao de arquitetura fullstack",
+    "examples": [],
+    "commands": [
+      "/skill-architecture-mother-normalizer"
+    ],
+    "keywords": "skill-architecture-mother-normalizer auditoria e normalizacao de arquitetura fullstack",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/skill-architecture-mother-normalizer/SKILL.md"
+  },
+  {
+    "id": "skill-chat-node",
+    "name": "Chat Node.js Quality Audit",
+    "trigger": "/skill-chat-node",
+    "version": "1.0.0",
+    "techs": [
+      "Node.js",
+      "TypeScript",
+      "WebSocket",
+      "Socket.io",
+      "SSE"
+    ],
+    "description": "Auditoria de qualidade para features de chat em Node.js",
+    "examples": [
+      "Projetos com chat em tempo real (WebSocket, Socket.io, SSE)",
+      "APIs de mensageria ou notificacoes push",
+      "Integracao com LLMs via streaming (chat completions)",
+      "Qualquer feature de comunicacao bidirecional em Node.js"
+    ],
+    "commands": [
+      "/skill-chat-node"
+    ],
+    "keywords": "skill-chat-node auditoria de qualidade para features de chat em node.js node.js typescript websocket socket.io sse",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/skill-chat-node/SKILL.md"
+  },
+  {
+    "id": "skill-chat-python",
+    "name": "Chat Python Quality Audit",
+    "trigger": "/skill-chat-python",
+    "version": "1.0.0",
+    "techs": [
+      "Python",
+      "FastAPI",
+      "WebSocket",
+      "asyncio",
+      "SSE"
+    ],
+    "description": "Auditoria de qualidade para features de chat em Python",
+    "examples": [
+      "Projetos Python com chat em tempo real (WebSocket, SSE)",
+      "APIs de mensageria com FastAPI/Django Channels",
+      "Integracao com LLMs via streaming (chat completions)",
+      "Qualquer feature de comunicacao bidirecional em Python"
+    ],
+    "commands": [
+      "/skill-chat-python"
+    ],
+    "keywords": "skill-chat-python auditoria de qualidade para features de chat em python python fastapi websocket asyncio sse",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/skill-chat-python/SKILL.md"
+  },
+  {
+    "id": "skill-codebase-sanitizer",
+    "name": "SYSTEM PROMPT — CODEBASE_SANITIZER_FULL_STACK_AUDITOR v1.0",
+    "trigger": "/skill-codebase-sanitizer",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Sanitizacao completa e deterministica de codebase fullstack",
+    "examples": [],
+    "commands": [
+      "/skill-codebase-sanitizer"
+    ],
+    "keywords": "skill-codebase-sanitizer sanitizacao completa e deterministica de codebase fullstack",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/skill-codebase-sanitizer/SKILL.md"
+  },
+  {
+    "id": "skill-contract-jsonschema-ajv",
+    "name": "Contract Validation - JSON Schema + Ajv",
+    "trigger": "/skill-contract-jsonschema-ajv",
+    "version": "1.0.0",
+    "techs": [
+      "JSON Schema",
+      "Ajv",
+      "OpenAPI"
+    ],
+    "description": "Validacao de contratos com JSON Schema e Ajv",
+    "examples": [
+      "Definição de novos endpoints",
+      "Mudanças em contratos existentes",
+      "Auditoria de API Gateway",
+      "Revisão de documentação OpenAPI/Swagger",
+      "PRs que modificam schemas de request/response"
+    ],
+    "commands": [
+      "/skill-contract-jsonschema-ajv"
+    ],
+    "keywords": "skill-contract-jsonschema-ajv validacao de contratos com json schema e ajv json schema ajv openapi",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/skill-contract-jsonschema-ajv/SKILL.md"
+  },
+  {
+    "id": "skill-dependency-governance",
+    "name": "Dependency Governance - Next.js + Lockfiles + SBOM",
+    "trigger": "/skill-dependency-governance",
+    "version": "2.0.0",
+    "techs": [
+      "npm",
+      "pnpm",
+      "yarn",
+      "pip",
+      "poetry",
+      "Next.js"
+    ],
+    "description": "Governanca de dependencias Next.js, lockfiles e SBOM",
+    "examples": [],
+    "commands": [
+      "/skill-dependency-governance"
+    ],
+    "keywords": "skill-dependency-governance governanca de dependencias next.js, lockfiles e sbom npm pnpm yarn pip poetry next.js",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/skill-dependency-governance/SKILL.md"
+  },
+  {
+    "id": "skill-design-audit",
+    "name": "Design Audit (Skill Global)",
+    "trigger": "/skill-design-audit",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Skill para auditoria de design e UI/UX do sistema. Use para verificar consistencia visual, validar componentes contra as regras de design, identificar desvios de padrao, e garantir que novas paginas sigam o Design System.",
+    "examples": [],
+    "commands": [
+      "/skill-design-audit"
+    ],
+    "keywords": "skill-design-audit skill para auditoria de design e ui/ux do sistema. use para verificar consistencia visual, validar componentes contra as regras de design, identificar desvios de padrao, e garantir que novas paginas sigam o design system.",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/skill-design-audit/SKILL.md"
+  },
+  {
+    "id": "skill-dto-nest-classvalidator",
+    "name": "DTO Validation - NestJS + class-validator",
+    "trigger": "/skill-dto-nest-classvalidator",
+    "version": "1.0.0",
+    "techs": [
+      "NestJS",
+      "class-validator",
+      "class-transformer"
+    ],
+    "description": "Validacao de DTOs com NestJS e class-validator",
+    "examples": [
+      "Criação/modificação de DTOs NestJS",
+      "Configuração de ValidationPipe",
+      "Revisão de endpoints com body/query/params",
+      "Auditoria de segurança em APIs NestJS"
+    ],
+    "commands": [
+      "/skill-dto-nest-classvalidator"
+    ],
+    "keywords": "skill-dto-nest-classvalidator validacao de dtos com nestjs e class-validator nestjs class-validator class-transformer",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/skill-dto-nest-classvalidator/SKILL.md"
+  },
+  {
+    "id": "skill-frontend-normalization",
+    "name": "Frontend Normalization - Next.js",
+    "trigger": "/skill-frontend-normalization",
+    "version": "2.0.0",
+    "techs": [
+      "Next.js",
+      "React"
+    ],
+    "description": "Normalizacao de frontends para Next.js",
+    "examples": [],
+    "commands": [
+      "/skill-frontend-normalization"
+    ],
+    "keywords": "skill-frontend-normalization normalizacao de frontends para next.js next.js react",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/skill-frontend-normalization/SKILL.md"
+  },
+  {
+    "id": "skill-fullstack-audit",
+    "name": "Fullstack Audit - Next.js Compliance",
+    "trigger": "/skill-fullstack-audit",
+    "version": "2.0.0",
+    "techs": [
+      "Next.js",
+      "Monorepo"
+    ],
+    "description": "Auditoria fullstack de compliance Next.js",
+    "examples": [],
+    "commands": [
+      "/skill-fullstack-audit"
+    ],
+    "keywords": "skill-fullstack-audit auditoria fullstack de compliance next.js next.js monorepo",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/skill-fullstack-audit/SKILL.md"
+  },
+  {
+    "id": "skill-inferencia-temporal-dados-faltantes",
+    "name": "Inferencia_Temporal_Dados_Faltantes",
+    "trigger": "/skill-inferencia-temporal-dados-faltantes",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Inferencia temporal para dados faltantes",
+    "examples": [
+      "Ha NaNs/buracos e voce precisa de serie completa para BI, projecao ou painel",
+      "Voce quer imputacao com incerteza e consistencia temporal",
+      "Pre-requisito para Projecao_Temporal_Econometrica_VAR ou Analise_Espaco_Temporal_Arrecadacao"
+    ],
+    "commands": [
+      "/skill-inferencia-temporal-dados-faltantes"
+    ],
+    "keywords": "skill-inferencia-temporal-dados-faltantes inferencia temporal para dados faltantes",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/skill-inferencia-temporal-dados-faltantes/SKILL.md"
+  },
+  {
+    "id": "skill-llm-prompt-safety",
+    "name": "LLM Prompt Template Versioning and Safety",
+    "trigger": "/skill-llm-prompt-safety",
+    "version": "1.0.0",
+    "techs": [
+      "Python/TypeScript",
+      "OpenAI",
+      "Anthropic",
+      "Langchain"
+    ],
+    "description": "Versionamento e seguranca de prompts LLM",
+    "examples": [
+      "Criação/modificação de prompts",
+      "Configuração de system prompts",
+      "Habilitação de function calling/tools",
+      "Auditoria de segurança LLM",
+      "PRs que modificam orquestração"
+    ],
+    "commands": [
+      "/skill-llm-prompt-safety"
+    ],
+    "keywords": "skill-llm-prompt-safety versionamento e seguranca de prompts llm python/typescript openai anthropic langchain",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/skill-llm-prompt-safety/SKILL.md"
+  },
+  {
+    "id": "skill-mcp-guardrails",
+    "name": "MCP Tool Contract and Guardrails",
+    "trigger": "/skill-mcp-guardrails",
+    "version": "1.0.0",
+    "techs": [
+      "MCP SDK",
+      "TypeScript/Python"
+    ],
+    "description": "Contratos e guardrails para ferramentas MCP",
+    "examples": [
+      "Criação de novos MCP servers",
+      "Adição de tools a MCPs existentes",
+      "Auditoria de segurança de MCPs",
+      "Revisão de integrações LLM",
+      "PRs que modificam ferramentas expostas a agentes"
+    ],
+    "commands": [
+      "/skill-mcp-guardrails"
+    ],
+    "keywords": "skill-mcp-guardrails contratos e guardrails para ferramentas mcp mcp sdk typescript/python",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/skill-mcp-guardrails/SKILL.md"
+  },
+  {
+    "id": "skill-node-quality",
+    "name": "Node Code Quality - ESLint + Prettier",
+    "trigger": "/skill-node-quality",
+    "version": "1.0.0",
+    "techs": [
+      "Node.js",
+      "TypeScript",
+      "ESLint",
+      "Prettier"
+    ],
+    "description": "Qualidade de codigo Node.js com ESLint e Prettier",
+    "examples": [
+      "Revisão de PRs em projetos Node/TS",
+      "Auditoria de qualidade de código",
+      "Verificação de CI gates",
+      "Setup inicial de projetos",
+      "Qualquer código Node.js/TypeScript"
+    ],
+    "commands": [
+      "/skill-node-quality"
+    ],
+    "keywords": "skill-node-quality qualidade de codigo node.js com eslint e prettier node.js typescript eslint prettier",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/skill-node-quality/SKILL.md"
+  },
+  {
+    "id": "skill-normalize-brazilian-codes",
+    "name": "Normalize Brazilian Codes - CPF, CNPJ, IBGE, CEP",
+    "trigger": "/skill-normalize-brazilian-codes",
+    "version": "1.0.0",
+    "techs": [
+      "Agnóstico (Node.js",
+      "Python)"
+    ],
+    "description": "Normalizacao de codigos brasileiros (CPF, CNPJ, IBGE, CEP)",
+    "examples": [
+      "Cadastro de pessoas físicas/jurídicas",
+      "Integração com SICONFI, IBGE, Receita",
+      "Validação de endereços",
+      "PRs que manipulam dados brasileiros",
+      "Logs e auditoria (mascaramento obrigatório)"
+    ],
+    "commands": [
+      "/skill-normalize-brazilian-codes"
+    ],
+    "keywords": "skill-normalize-brazilian-codes normalizacao de codigos brasileiros (cpf, cnpj, ibge, cep) agnóstico (node.js python)",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/skill-normalize-brazilian-codes/SKILL.md"
+  },
+  {
+    "id": "skill-normalize-identifiers",
+    "name": "Normalize Identifiers - UUID, Slug, Codes",
+    "trigger": "/skill-normalize-identifiers",
+    "version": "1.0.0",
+    "techs": [
+      "Agnóstico (Node.js",
+      "Python)"
+    ],
+    "description": "Normalizacao de identificadores (UUID, Slug, Codes)",
+    "examples": [
+      "Definição de PKs/FKs",
+      "Criação de URLs amigáveis (slugs)",
+      "Códigos internos de entidades",
+      "Integrações com sistemas externos",
+      "PRs que criam novos identificadores"
+    ],
+    "commands": [
+      "/skill-normalize-identifiers"
+    ],
+    "keywords": "skill-normalize-identifiers normalizacao de identificadores (uuid, slug, codes) agnóstico (node.js python)",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/skill-normalize-identifiers/SKILL.md"
+  },
+  {
+    "id": "skill-playwright-massive-tester",
+    "name": "Playwright Massive Tester",
+    "trigger": "/skill-playwright-massive-tester",
+    "version": "1.0.0",
+    "techs": [
+      "Playwright",
+      "TypeScript",
+      "Node.js"
+    ],
+    "description": "Testes E2E massivos com Playwright para auditoria de qualidade",
+    "examples": [
+      "Auditoria de cobertura E2E em projetos web",
+      "Validacao pre-deploy de fluxos criticos",
+      "Testes de regressao visual (screenshot comparison)",
+      "Verificacao de acessibilidade automatizada",
+      "Testes de responsividade multi-viewport"
+    ],
+    "commands": [
+      "/skill-playwright-massive-tester"
+    ],
+    "keywords": "skill-playwright-massive-tester testes e2e massivos com playwright para auditoria de qualidade playwright typescript node.js",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/skill-playwright-massive-tester/SKILL.md"
+  },
+  {
+    "id": "skill-projecao-temporal-econometrica-var",
+    "name": "Projecao_Temporal_Econometrica_VAR",
+    "trigger": "/skill-projecao-temporal-econometrica-var",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Projecao temporal econometrica com modelo VAR",
+    "examples": [
+      "Serie completa (ou ja imputada pela skill de inferencia)",
+      "Voce quer projecao conjunta de Y e variaveis correlatas",
+      "Ha dependencia temporal e interdependencia entre variaveis",
+      "Cenarios de forecast/backcast para planejamento"
+    ],
+    "commands": [
+      "/skill-projecao-temporal-econometrica-var"
+    ],
+    "keywords": "skill-projecao-temporal-econometrica-var projecao temporal econometrica com modelo var",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/skill-projecao-temporal-econometrica-var/SKILL.md"
+  },
+  {
+    "id": "skill-python-marshmallow",
+    "name": "Python Serialization - Marshmallow",
+    "trigger": "/skill-python-marshmallow",
+    "version": "1.0.0",
+    "techs": [
+      "Python",
+      "Marshmallow"
+    ],
+    "description": "Serializacao Python com Marshmallow",
+    "examples": [
+      "Projetos Flask sem Pydantic",
+      "Migração de código legado",
+      "Serialização para APIs REST",
+      "Validação de dados em background jobs",
+      "Quando Marshmallow já está no projeto"
+    ],
+    "commands": [
+      "/skill-python-marshmallow"
+    ],
+    "keywords": "skill-python-marshmallow serializacao python com marshmallow python marshmallow",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/skill-python-marshmallow/SKILL.md"
+  },
+  {
+    "id": "skill-python-pydantic",
+    "name": "Python Input Normalization - Pydantic",
+    "trigger": "/skill-python-pydantic",
+    "version": "1.0.0",
+    "techs": [
+      "Python",
+      "Pydantic v2"
+    ],
+    "description": "Normalizacao de input Python com Pydantic",
+    "examples": [
+      "Endpoints FastAPI/Flask",
+      "Scripts de ETL e ingestão",
+      "Processamento de arquivos (CSV, JSON, XML)",
+      "Integrações com APIs externas",
+      "Qualquer input externo em Python"
+    ],
+    "commands": [
+      "/skill-python-pydantic"
+    ],
+    "keywords": "skill-python-pydantic normalizacao de input python com pydantic python pydantic v2",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/skill-python-pydantic/SKILL.md"
+  },
+  {
+    "id": "skill-python-quality",
+    "name": "Python Code Quality - Ruff + Black",
+    "trigger": "/skill-python-quality",
+    "version": "1.0.0",
+    "techs": [
+      "Python",
+      "Ruff",
+      "Black",
+      "mypy"
+    ],
+    "description": "Qualidade de codigo Python com Ruff e Black",
+    "examples": [
+      "Revisão de PRs em projetos Python",
+      "Auditoria de qualidade de código",
+      "Verificação de CI gates",
+      "Setup inicial de projetos",
+      "Qualquer código Python"
+    ],
+    "commands": [
+      "/skill-python-quality"
+    ],
+    "keywords": "skill-python-quality qualidade de codigo python com ruff e black python ruff black mypy",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/skill-python-quality/SKILL.md"
+  },
+  {
+    "id": "skill-rag-ingestion",
+    "name": "RAG Ingestion - Data Lineage and PII",
+    "trigger": "/skill-rag-ingestion",
+    "version": "1.0.0",
+    "techs": [
+      "Python",
+      "LangChain",
+      "LlamaIndex",
+      "Supabase pgvector"
+    ],
+    "description": "Ingestao RAG com data lineage e PII",
+    "examples": [
+      "Criação de pipelines de ingestão",
+      "Modificação de chunking/embedding",
+      "Auditoria de dados indexados",
+      "Compliance LGPD/ISO 27701",
+      "PRs que modificam ETL para RAG"
+    ],
+    "commands": [
+      "/skill-rag-ingestion"
+    ],
+    "keywords": "skill-rag-ingestion ingestao rag com data lineage e pii python langchain llamaindex supabase pgvector",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/skill-rag-ingestion/SKILL.md"
+  },
+  {
+    "id": "skill-rag-retrieval",
+    "name": "RAG Retrieval - Access Control and Filtering",
+    "trigger": "/skill-rag-retrieval",
+    "version": "1.0.0",
+    "techs": [
+      "Python/TypeScript",
+      "pgvector",
+      "Supabase"
+    ],
+    "description": "Retrieval RAG com controle de acesso e filtragem",
+    "examples": [
+      "Implementação de busca vetorial",
+      "Montagem de contexto para LLM",
+      "Auditoria de acesso a dados",
+      "Proteção contra prompt injection",
+      "PRs que modificam retrieval"
+    ],
+    "commands": [
+      "/skill-rag-retrieval"
+    ],
+    "keywords": "skill-rag-retrieval retrieval rag com controle de acesso e filtragem python/typescript pgvector supabase",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/skill-rag-retrieval/SKILL.md"
+  },
+  {
+    "id": "skill-roteador-analise-temporal-espacial",
+    "name": "Roteador_Analise_Temporal_Espacial",
+    "trigger": "/skill-roteador-analise-temporal-espacial",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Roteador para analise temporal e espacial",
+    "examples": [
+      "Sempre que o pedido do usuario for ambiguo (projecao vs imputacao vs comparacao entre cidades)",
+      "Sempre que houver suspeita de buracos/NaNs ou necessidade de peer group",
+      "Quando o usuario nao sabe qual skill usar"
+    ],
+    "commands": [
+      "/skill-roteador-analise-temporal-espacial"
+    ],
+    "keywords": "skill-roteador-analise-temporal-espacial roteador para analise temporal e espacial",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/skill-roteador-analise-temporal-espacial/SKILL.md"
+  },
+  {
+    "id": "skill-sanitization-validator",
+    "name": "Sanitization - Strings com validator.js",
+    "trigger": "/skill-sanitization-validator",
+    "version": "1.0.0",
+    "techs": [
+      "validator.js",
+      "Node.js"
+    ],
+    "description": "Sanitizacao de strings com validator.js",
+    "examples": [
+      "Processamento de inputs de formulário",
+      "Armazenamento de dados em banco",
+      "Geração de logs de auditoria",
+      "Manipulação de headers HTTP",
+      "Qualquer string vinda de fonte externa"
+    ],
+    "commands": [
+      "/skill-sanitization-validator"
+    ],
+    "keywords": "skill-sanitization-validator sanitizacao de strings com validator.js validator.js node.js",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/skill-sanitization-validator/SKILL.md"
+  },
+  {
+    "id": "skill-ui-button",
+    "name": "UI Button Design System (Skill Global)",
+    "trigger": "/skill-ui-button",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Skill para criar botoes padronizados com altura identica ao textbox, bordas e texto com cor base, background claro derivado, hover com intensificacao tonal, e icone obrigatorio. Garante consistencia visual e WCAG AA.",
+    "examples": [],
+    "commands": [
+      "/skill-ui-button"
+    ],
+    "keywords": "skill-ui-button skill para criar botoes padronizados com altura identica ao textbox, bordas e texto com cor base, background claro derivado, hover com intensificacao tonal, e icone obrigatorio. garante consistencia visual e wcag aa.",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/skill-ui-button/SKILL.md"
+  },
+  {
+    "id": "SVGBody",
+    "name": "SKILL — SVG BODY (Anatomia Humana em SVG/PNG)",
+    "trigger": "/SVGBody",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Ilustracoes anatomicas SVG/PNG para projetos IconsAI — fonte Servier Medical Art (CC BY 4.0)",
+    "examples": [],
+    "commands": [
+      "/SVGBody"
+    ],
+    "keywords": "svgbody ilustracoes anatomicas svg/png para projetos iconsai — fonte servier medical art (cc by 4.0)",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/SVGBody/SKILL.md"
+  },
+  {
+    "id": "SVGDiagram",
+    "name": "SKILL — SVG DIAGRAM (Diagramas Programaticos Profissionais)",
+    "trigger": "/SVGDiagram",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Diagramas SVG programaticos profissionais — pipelines, comparativos, barras, fluxos, isometricos 3D. Auto-sizing, medicao de texto, simetria, gradientes, sombras.",
+    "examples": [],
+    "commands": [
+      "/SVGDiagram"
+    ],
+    "keywords": "svgdiagram diagramas svg programaticos profissionais — pipelines, comparativos, barras, fluxos, isometricos 3d. auto-sizing, medicao de texto, simetria, gradientes, sombras.",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/SVGDiagram/SKILL.md"
+  },
+  {
+    "id": "SVGMap",
+    "name": "SKILL — SVG MAP (Natural Earth 50m + Web Mercator)",
+    "trigger": "/SVGMap",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Mapas SVG com Natural Earth 50m (min 300 vertices) e projecao Web Mercator para GeoMap.tsx",
+    "examples": [],
+    "commands": [
+      "/SVGMap"
+    ],
+    "keywords": "svgmap mapas svg com natural earth 50m (min 300 vertices) e projecao web mercator para geomap.tsx",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/SVGMap/SKILL.md"
+  },
+  {
+    "id": "temporal",
+    "name": "Roteador_Analise_Temporal_Espacial",
+    "trigger": "/temporal",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Skill: Roteador_Analise_Temporal_Espacial",
+    "examples": [
+      "Sempre que o pedido do usuario for ambiguo (projecao vs imputacao vs comparacao entre cidades)",
+      "Sempre que houver suspeita de buracos/NaNs ou necessidade de peer group",
+      "Quando o usuario nao sabe qual skill usar"
+    ],
+    "commands": [
+      "/temporal"
+    ],
+    "keywords": "temporal skill: roteador_analise_temporal_espacial",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/temporal/SKILL.md"
+  },
+  {
+    "id": "typography-ait",
+    "name": "Tipografia \"ai.t\"",
+    "trigger": "/typography-ait",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Tipografia \"ai.t\"",
+    "examples": [
+      "Inline em textos onde \"Learn by ai.t tutor\" seria grande demais",
+      "Badges, tags e chips",
+      "Footers compactos",
+      "Atribuicao de autoria (ex: \"Gerado por ai.t\")",
+      "Qualquer contexto onde o logotipo tipografico minimo e necessario"
+    ],
+    "commands": [
+      "/typography-ait"
+    ],
+    "keywords": "typography-ait tipografia \"ai.t\"",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/typography-ait/SKILL.md"
+  },
+  {
+    "id": "typography-ait-tutor",
+    "name": "Tipografia \"Learn by ai.t tutor\"",
+    "trigger": "/typography-ait-tutor",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Tipografia \"Learn by ai.t tutor\"",
+    "examples": [],
+    "commands": [
+      "/typography-ait-tutor"
+    ],
+    "keywords": "typography-ait-tutor tipografia \"learn by ai.t tutor\"",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/typography-ait-tutor/SKILL.md"
+  },
+  {
+    "id": "warroom-design",
+    "name": "War Room Design (Painel Operacional)",
+    "trigger": "/warroom-design",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Skill: War Room Design (Painel Operacional)",
+    "examples": [
+      "Painéis com dados em tempo real (workers, jobs, métricas que mudam < 60s).",
+      "Dashboards operacionais densos (5+ KPIs simultâneos visíveis).",
+      "Sistemas de monitoramento (queues, schedulers, retries, health).",
+      "Logs/feeds live (terminais decorados, ticker de eventos).",
+      "Salas de comando / NOCs."
+    ],
+    "commands": [
+      "/warroom-design"
+    ],
+    "keywords": "warroom-design skill: war room design (painel operacional)",
+    "updatedAt": "2026-06-20",
+    "sourcePath": "skills/warroom-design/SKILL.md"
+  }
+]
