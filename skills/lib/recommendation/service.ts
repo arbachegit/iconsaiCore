@@ -165,9 +165,11 @@ export async function recommendSkills(
 ): Promise<RecommendationResponse> {
   const { system, user, allowedSkillIds } = buildSkillAdvisorPrompt(skills, situation)
   let providerResult: ProviderResult
+  let result: RecommendationResult
 
   try {
     providerResult = await callAnthropic(system, user)
+    result = validateRecommendation(providerResult.payload, allowedSkillIds)
   } catch (anthropicError) {
     console.warn('[skills-advisor] primary provider unavailable', {
       requestId,
@@ -175,9 +177,8 @@ export async function recommendSkills(
       reason: anthropicError instanceof Error ? anthropicError.name : 'unknown',
     })
     providerResult = await callOpenAi(system, user)
+    result = validateRecommendation(providerResult.payload, allowedSkillIds)
   }
-
-  const result = validateRecommendation(providerResult.payload, allowedSkillIds)
 
   console.info('[skills-advisor] recommendation completed', {
     requestId,
