@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useDeferredValue, useMemo, useState } from 'react'
+import { useCallback, useDeferredValue, useMemo, useRef, useState } from 'react'
 import {
   ArrowUpRight,
   Check,
@@ -66,6 +66,7 @@ export default function SkillsCatalog({
   const [activePhase, setActivePhase] = useState<string>('all')
   const [searchQuery, setSearchQuery] = useState('')
   const [modalSkillId, setModalSkillId] = useState<string | null>(null)
+  const catalogRef = useRef<HTMLElement>(null)
   const deferredQuery = useDeferredValue(searchQuery)
   const polling = useNewSkillsPolling(skills.length, contentHash)
 
@@ -89,6 +90,9 @@ export default function SkillsCatalog({
   const sections = useMemo(() => groupByPhase(visibleSkills), [visibleSkills])
   const isFiltering = activePhase !== 'all' || deferredQuery.trim().length >= 2
   const activePhaseData = PHASES.find((phase) => phase.number === activePhase)
+  const normalizedQuery = deferredQuery.trim().toLocaleLowerCase('pt-BR')
+  const hasSearchQuery = normalizedQuery.length >= 2
+  const quickResults = hasSearchQuery ? visibleSkills.slice(0, 6) : []
 
   const handleOpenSkill = useCallback((skillId: string) => {
     setModalSkillId(skillId)
@@ -97,6 +101,10 @@ export default function SkillsCatalog({
   const resetFilters = useCallback(() => {
     setSearchQuery('')
     setActivePhase('all')
+  }, [])
+
+  const showCatalogResults = useCallback(() => {
+    catalogRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }, [])
 
   return (
@@ -222,34 +230,72 @@ export default function SkillsCatalog({
                 </div>
               </div>
 
-              <div className={styles.searchBar}>
-                <Search aria-hidden="true" />
-                <label htmlFor="skill-search">Buscar no catálogo</label>
-                <input
-                  id="skill-search"
-                  type="search"
-                  value={searchQuery}
-                  onChange={(event) => setSearchQuery(event.target.value)}
-                  placeholder="Ex.: autenticação, Zod, RAG, deploy..."
-                  autoComplete="off"
-                />
-                {searchQuery && (
-                  <button
-                    type="button"
-                    className={styles.clearSearch}
-                    onClick={() => setSearchQuery('')}
-                    aria-label="Limpar busca"
-                  >
-                    <X aria-hidden="true" />
-                  </button>
+              <div className={styles.searchPanel}>
+                <div className={styles.searchBar}>
+                  <Search aria-hidden="true" />
+                  <label htmlFor="skill-search">Buscar no catálogo</label>
+                  <input
+                    id="skill-search"
+                    type="search"
+                    value={searchQuery}
+                    onChange={(event) => setSearchQuery(event.target.value)}
+                    placeholder="Ex.: autenticação, Zod, RAG, deploy..."
+                    autoComplete="off"
+                  />
+                  {searchQuery && (
+                    <button
+                      type="button"
+                      className={styles.clearSearch}
+                      onClick={() => setSearchQuery('')}
+                      aria-label="Limpar busca"
+                    >
+                      <X aria-hidden="true" />
+                    </button>
+                  )}
+                  <span className={styles.searchHint} aria-live="polite">
+                    {hasSearchQuery
+                      ? `${visibleSkills.length} ${visibleSkills.length === 1 ? 'resultado' : 'resultados'}`
+                      : 'mín. 2 caracteres'}
+                  </span>
+                </div>
+
+                {hasSearchQuery && (
+                  <div className={styles.searchResults} aria-label="Resultados rápidos da busca">
+                    {quickResults.length > 0 ? (
+                      <>
+                        <div className={styles.searchResultList}>
+                          {quickResults.map((skill) => (
+                            <button
+                              key={skill.id}
+                              type="button"
+                              onClick={() => handleOpenSkill(skill.id)}
+                            >
+                              <strong>{skill.name}</strong>
+                              <code>/{skill.id}</code>
+                              <span>Fase {skill.phase}</span>
+                            </button>
+                          ))}
+                        </div>
+                        <button
+                          type="button"
+                          className={styles.showCatalogResults}
+                          onClick={showCatalogResults}
+                        >
+                          Ver {visibleSkills.length === 1 ? 'resultado' : `todos os ${visibleSkills.length} resultados`}
+                          <ArrowUpRight aria-hidden="true" />
+                        </button>
+                      </>
+                    ) : (
+                      <span className={styles.searchEmpty}>Nenhuma skill corresponde a “{searchQuery.trim()}”.</span>
+                    )}
+                  </div>
                 )}
-                <span className={styles.searchHint}>mín. 2 caracteres</span>
               </div>
 
               <SkillAdvisor skills={skills} onOpenSkill={handleOpenSkill} />
             </section>
 
-            <section className={styles.catalog} aria-labelledby="catalog-title">
+            <section ref={catalogRef} className={styles.catalog} aria-labelledby="catalog-title">
               <div className={styles.catalogHeader}>
                 <div>
                   <span className={styles.catalogEyebrow}>

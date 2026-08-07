@@ -30,6 +30,10 @@ export const recommendationResponseSchema = recommendationResultSchema.extend({
   provider: z.enum(['anthropic', 'openai']),
 }).strict()
 
+export const recommendationErrorResponseSchema = z.object({
+  error: z.string().trim().min(1).max(240),
+  requestId: z.string().uuid().optional(),
+}).strict()
+
 export type RecommendationResult = z.infer<typeof recommendationResultSchema>
 export type RecommendationResponse = z.infer<typeof recommendationResponseSchema>
-

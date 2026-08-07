@@ -22,7 +22,9 @@ const checks = [
   ['tool de saída está em allowlist', files.service.includes("name: 'recommend_skills'")],
   ['tool possui JSON Schema', files.service.includes('input_schema:') && files.service.includes('additionalProperties: false')],
   ['IDs retornados são validados contra catálogo', files.service.includes('allowedSkillIds.has(recommendation.skillId)')],
-  ['frontend chama apenas API interna', files.component.includes("fetch('/skills/api/skills/recommend'")],
+  ['frontend chama apenas API interna', files.component.includes("buildSkillsApiUrl('/skills/api/skills/recommend')")],
+  ['frontend valida o contrato de resposta', files.component.includes('recommendationResponseSchema.safeParse(payload)')],
+  ['frontend trata resposta vazia sem expor erro técnico', files.component.includes('const responseText = await response.text()')],
   ['frontend não importa SDK de LLM', !/@anthropic-ai|openai\.com/.test(files.component)],
   ['resultado mantém contenção BI Density', /\.recommendationBody\s*\{[^}]*min-width:\s*0/s.test(files.css)],
 ]
@@ -43,4 +45,3 @@ if (failed > 0) {
 }
 
 console.log('  PASS\n')
-

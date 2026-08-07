@@ -12,7 +12,12 @@ import {
 
 import styles from '@/components/skills/skills.module.css'
 import type { Skill } from '@/lib/github/types'
-import type { RecommendationResponse } from '@/lib/recommendation/schema'
+import { buildSkillsApiUrl } from '@/lib/client/skills-api-url'
+import {
+  recommendationErrorResponseSchema,
+  recommendationResponseSchema,
+  type RecommendationResponse,
+} from '@/lib/recommendation/schema'
 
 const EXAMPLE_SITUATIONS = [
   'Vou iniciar um dashboard Next.js com autenticação e Supabase.',
@@ -23,6 +28,41 @@ const EXAMPLE_SITUATIONS = [
 interface SkillAdvisorProps {
   skills: Skill[]
   onOpenSkill: (skillId: string) => void
+}
+
+async function readRecommendationResponse(response: Response): Promise<RecommendationResponse> {
+  const responseText = await response.text()
+  let payload: unknown = null
+
+  if (responseText) {
+    try {
+      payload = JSON.parse(responseText)
+    } catch {
+      payload = null
+    }
+  }
+
+  if (response.redirected) {
+    throw new Error('Sua sessão expirou. Abra o catálogo novamente pelo Learn.')
+  }
+
+  if (!response.ok) {
+    const apiError = recommendationErrorResponseSchema.safeParse(payload)
+    if (apiError.success) throw new Error(apiError.data.error)
+
+    if (response.status === 401 || response.status === 403) {
+      throw new Error('Sua sessão expirou. Abra o catálogo novamente pelo Learn.')
+    }
+
+    throw new Error('O orientador não respondeu corretamente. Tente novamente em instantes.')
+  }
+
+  const recommendation = recommendationResponseSchema.safeParse(payload)
+  if (!recommendation.success) {
+    throw new Error('O orientador devolveu uma resposta incompleta. Tente novamente.')
+  }
+
+  return recommendation.data
 }
 
 export default function SkillAdvisor({ skills, onOpenSkill }: SkillAdvisorProps) {
@@ -44,18 +84,12 @@ export default function SkillAdvisor({ skills, onOpenSkill }: SkillAdvisorProps)
     setError('')
 
     try {
-      const response = await fetch('/skills/api/skills/recommend', {
+      const response = await fetch(buildSkillsApiUrl('/skills/api/skills/recommend'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ situation: normalizedSituation }),
       })
-      const payload = await response.json() as RecommendationResponse & { error?: string }
-
-      if (!response.ok) {
-        throw new Error(payload.error || 'Não foi possível gerar a recomendação.')
-      }
-
-      setResult(payload)
+      setResult(await readRecommendationResponse(response))
     } catch (requestError) {
       setError(
         requestError instanceof Error
@@ -198,4 +232,3 @@ export default function SkillAdvisor({ skills, onOpenSkill }: SkillAdvisorProps)
     </section>
   )
 }
-
