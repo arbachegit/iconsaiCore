@@ -5,48 +5,14 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { getSkillsWebhookSecret } from '@/lib/github/env'
 import { getContentHash } from '@/lib/github/skills'
+import {
+  normalizeSkillsSyncPayload,
+  skillsSyncQuerySchema,
+  skillsWebhookSignatureSchema,
+} from '@/lib/github/sync-schema'
 import type { SkillsSyncPayload } from '@/lib/github/types'
 
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null
-}
-
-function sanitizePayload(payload: unknown): SkillsSyncPayload | null {
-  if (!isRecord(payload)) {
-    return null
-  }
-
-  const repositoryValue = payload.repository
-  let repository: SkillsSyncPayload['repository']
-
-  if (typeof repositoryValue === 'string') {
-    repository = repositoryValue
-  } else if (isRecord(repositoryValue)) {
-    repository = {
-      name: typeof repositoryValue.name === 'string' ? repositoryValue.name : undefined,
-      full_name:
-        typeof repositoryValue.full_name === 'string' ? repositoryValue.full_name : undefined,
-    }
-  }
-
-  const changedFiles = Array.isArray(payload.changed_files)
-    ? payload.changed_files.filter((item): item is string => typeof item === 'string')
-    : undefined
-
-  return {
-    repository,
-    sha: typeof payload.sha === 'string' ? payload.sha : undefined,
-    ref: typeof payload.ref === 'string' ? payload.ref : undefined,
-    changed_files: changedFiles,
-    timestamp: typeof payload.timestamp === 'string' ? payload.timestamp : undefined,
-  }
-}
-
-function verifyGitHubSignature(body: string, signature: string | null, secret: string): boolean {
-  if (!signature || !signature.startsWith('sha256=')) {
-    return false
-  }
-
+function verifyGitHubSignature(body: string, signature: string, secret: string): boolean {
   const expected = 'sha256=' + createHmac('sha256', secret).update(body).digest('hex')
   const expectedBuffer = Buffer.from(expected)
   const receivedBuffer = Buffer.from(signature)
@@ -58,10 +24,18 @@ function verifyGitHubSignature(body: string, signature: string | null, secret: s
   return timingSafeEqual(expectedBuffer, receivedBuffer)
 }
 
-/** Health check — used by the webhook status button in the UI */
-export async function GET() {
+/** Health check — used by polling and the webhook status button in the UI */
+export async function GET(request: NextRequest) {
+  const query = skillsSyncQuerySchema.safeParse({
+    currentHash: request.nextUrl.searchParams.get('current_hash') ?? undefined,
+  })
+  if (!query.success) {
+    return NextResponse.json({ ok: false, error: 'Invalid content hash.' }, { status: 400 })
+  }
+
   const checks: Record<string, string> = {}
   let ok = true
+  let revalidated = false
 
   // 1. Check webhook secret
   try {
@@ -83,6 +57,11 @@ export async function GET() {
       checks.github = 'empty'
       ok = false
     }
+    if (query.data.currentHash && query.data.currentHash !== remote.hash) {
+      revalidateTag('skills')
+      revalidatePath('/')
+      revalidated = true
+    }
   } catch (error) {
     checks.github = 'unreachable'
     checks.skillCount = '0'
@@ -93,16 +72,34 @@ export async function GET() {
   return NextResponse.json({
     ok,
     checks,
+    revalidated,
     timestamp: new Date().toISOString(),
   })
 }
 
 export async function POST(request: NextRequest) {
-  const secret = getSkillsWebhookSecret()
   const body = await request.text()
-  const signature = request.headers.get('x-hub-signature-256')
+  if (body.length > 2_000_000) {
+    return NextResponse.json({ ok: false, error: 'Payload too large.' }, { status: 413 })
+  }
 
-  if (!verifyGitHubSignature(body, signature, secret)) {
+  const signature = skillsWebhookSignatureSchema.safeParse(
+    request.headers.get('x-hub-signature-256'),
+  )
+  if (!signature.success) {
+    console.warn('[skills-sync] webhook signature missing or invalid')
+    return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 })
+  }
+
+  let secret: string
+  try {
+    secret = getSkillsWebhookSecret()
+  } catch {
+    console.error('[skills-sync] webhook secret is not configured')
+    return NextResponse.json({ ok: false, error: 'Webhook unavailable.' }, { status: 503 })
+  }
+
+  if (!verifyGitHubSignature(body, signature.data, secret)) {
     console.warn('[skills-sync] unauthorized webhook attempt')
     return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 })
   }
@@ -110,7 +107,7 @@ export async function POST(request: NextRequest) {
   let payload: SkillsSyncPayload | null
 
   try {
-    payload = sanitizePayload(JSON.parse(body))
+    payload = normalizeSkillsSyncPayload(JSON.parse(body))
   } catch (error) {
     console.warn('[skills-sync] invalid JSON payload', error)
     return NextResponse.json({ ok: false, error: 'Invalid JSON payload' }, { status: 400 })

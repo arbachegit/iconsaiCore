@@ -5,11 +5,20 @@ import { useState, useCallback } from 'react'
 interface CopyButtonProps {
   text: string
   className?: string
-  children?: React.ReactNode
+  children?: React.ReactNode | ((copied: boolean) => React.ReactNode)
   onCopy?: () => void
+  title?: string
+  copiedTitle?: string
 }
 
-export default function CopyButton({ text, className, children, onCopy }: CopyButtonProps) {
+export default function CopyButton({
+  text,
+  className,
+  children,
+  onCopy,
+  title = 'Copiar',
+  copiedTitle = 'Copiado!',
+}: CopyButtonProps) {
   const [copied, setCopied] = useState(false)
 
   const handleCopy = useCallback(async () => {
@@ -33,9 +42,17 @@ export default function CopyButton({ text, className, children, onCopy }: CopyBu
     }
   }, [text, onCopy])
 
+  const content = typeof children === 'function' ? children(copied) : children
+
   return (
-    <button onClick={handleCopy} className={className} title={copied ? 'Copiado!' : 'Copiar'}>
-      {children ?? (
+    <button
+      type="button"
+      onClick={handleCopy}
+      className={className}
+      title={copied ? copiedTitle : title}
+      aria-label={copied ? copiedTitle : title}
+    >
+      {content ?? (
         copied ? (
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ width: 14, height: 14 }}>
             <polyline points="20 6 9 17 4 12" />

@@ -906,7 +906,7 @@
 
 .recommendationList > li {
   display: grid;
-  grid-template-columns: 34px minmax(0, 1fr) 34px;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
   align-items: center;
   min-width: 0;
   gap: 13px;
@@ -1009,6 +1009,52 @@
   border: 1px solid rgba(34, 211, 238, 0.18);
   border-radius: 9px;
   background: rgba(34, 211, 238, 0.05);
+}
+
+.recommendationActions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.recommendationCopy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 9px;
+  border: 1px solid currentColor;
+  border-radius: 9px;
+  font-family: var(--mono);
+  font-size: 0.57rem;
+  font-weight: 700;
+  transition: color 160ms ease, background 160ms ease, border-color 160ms ease;
+}
+
+.recommendationCopy svg {
+  width: 13px;
+  height: 13px;
+}
+
+.recommendationCopyCodex {
+  color: var(--cyan);
+  background: rgba(34, 211, 238, 0.055);
+}
+
+.recommendationCopyCodex:hover {
+  color: #031014;
+  background: var(--cyan);
+}
+
+.recommendationCopyClaude {
+  color: var(--amber);
+  background: rgba(250, 204, 21, 0.055);
+}
+
+.recommendationCopyClaude:hover {
+  color: #171204;
+  background: var(--amber);
 }
 
 .recommendationOpen:hover {
@@ -1875,9 +1921,23 @@
   }
 
   .recommendationList > li {
-    grid-template-columns: 26px minmax(0, 1fr) 32px;
+    grid-template-columns: 26px minmax(0, 1fr);
     gap: 8px;
     padding: 11px 9px;
+  }
+
+  .recommendationActions {
+    grid-column: 2;
+    justify-self: end;
+  }
+
+  .recommendationCopy span {
+    display: none;
+  }
+
+  .recommendationCopy {
+    width: 32px;
+    padding: 0;
   }
 
   .recommendationTitle {

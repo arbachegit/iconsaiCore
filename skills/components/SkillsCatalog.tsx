@@ -19,6 +19,8 @@ import SkillSection from '@/components/skills/skills-section'
 import styles from '@/components/skills/skills.module.css'
 import { PHASES, PHASE_COLOR_RAW } from '@/data/phases'
 import { useNewSkillsPolling } from '@/hooks/use-new-skills-polling'
+import { buildSkillsApiUrl } from '@/lib/client/skills-api-url'
+import { skillsSyncHealthResponseSchema } from '@/lib/github/sync-schema'
 import type { Skill } from '@/lib/github/types'
 
 interface SkillsCatalogProps {
@@ -398,15 +400,18 @@ function WebhookCheckButton({ renderedCount, renderedHash, polling }: WebhookChe
 
     setStatus('loading')
     try {
-      const response = await fetch('/skills/api/skills/sync', { cache: 'no-store' })
-      const payload = await response.json()
-      if (!payload.ok) {
+      const endpoint = buildSkillsApiUrl('/skills/api/skills/sync')
+      const url = new URL(endpoint, window.location.origin)
+      if (/^[a-f0-9]{12}$/.test(renderedHash)) {
+        url.searchParams.set('current_hash', renderedHash)
+      }
+      const response = await fetch(`${url.pathname}${url.search}`, { cache: 'no-store' })
+      const payload = skillsSyncHealthResponseSchema.safeParse(await response.json())
+      if (!response.ok || !payload.success || !payload.data.ok) {
         setStatus('error')
       } else {
-        const remoteCount = Number(payload.checks?.skillCount ?? 0)
-        const remoteHash = typeof payload.checks?.contentHash === 'string'
-          ? payload.checks.contentHash
-          : ''
+        const remoteCount = Number(payload.data.checks.skillCount)
+        const remoteHash = payload.data.checks.contentHash ?? ''
         setStatus(
           remoteCount !== renderedCount || (remoteHash && remoteHash !== renderedHash)
             ? 'warn'

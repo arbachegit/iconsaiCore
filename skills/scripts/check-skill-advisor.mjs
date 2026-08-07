@@ -25,6 +25,8 @@ const checks = [
   ['frontend chama apenas API interna', files.component.includes("buildSkillsApiUrl('/skills/api/skills/recommend')")],
   ['frontend valida o contrato de resposta', files.component.includes('recommendationResponseSchema.safeParse(payload)')],
   ['frontend trata resposta vazia sem expor erro técnico', files.component.includes('const responseText = await response.text()')],
+  ['recomendação copia comando para Codex', files.component.includes('text={`$${recommendation.skillId}`}')],
+  ['recomendação copia comando para Claude', files.component.includes('text={`/${recommendation.skillId}`}')],
   ['frontend não importa SDK de LLM', !/@anthropic-ai|openai\.com/.test(files.component)],
   ['resultado mantém contenção BI Density', /\.recommendationBody\s*\{[^}]*min-width:\s*0/s.test(files.css)],
 ]

@@ -4,13 +4,16 @@ import { FormEvent, useMemo, useState } from 'react'
 import {
   ArrowRight,
   BrainCircuit,
+  Check,
   CircleAlert,
+  Copy,
   LoaderCircle,
   RotateCcw,
   Sparkles,
 } from 'lucide-react'
 
 import styles from '@/components/skills/skills.module.css'
+import CopyButton from '@/components/CopyButton'
 import type { Skill } from '@/lib/github/types'
 import { buildSkillsApiUrl } from '@/lib/client/skills-api-url'
 import {
@@ -201,14 +204,42 @@ export default function SkillAdvisor({ skills, onOpenSkill }: SkillAdvisorProps)
                   <p>{recommendation.reason}</p>
                   <small>{recommendation.whenToUse}</small>
                 </div>
-                <button
-                  type="button"
-                  className={styles.recommendationOpen}
-                  onClick={() => onOpenSkill(recommendation.skillId)}
-                  aria-label={`Abrir documentação de ${recommendation.skillId}`}
-                >
-                  <ArrowRight aria-hidden="true" />
-                </button>
+                <div className={styles.recommendationActions}>
+                  <CopyButton
+                    text={`$${recommendation.skillId}`}
+                    className={`${styles.recommendationCopy} ${styles.recommendationCopyCodex}`}
+                    title={`Copiar $${recommendation.skillId} para o Codex`}
+                    copiedTitle="Comando do Codex copiado"
+                  >
+                    {(copied) => (
+                      <>
+                        {copied ? <Check aria-hidden="true" /> : <Copy aria-hidden="true" />}
+                        <span>Codex</span>
+                      </>
+                    )}
+                  </CopyButton>
+                  <CopyButton
+                    text={`/${recommendation.skillId}`}
+                    className={`${styles.recommendationCopy} ${styles.recommendationCopyClaude}`}
+                    title={`Copiar /${recommendation.skillId} para o Claude`}
+                    copiedTitle="Comando do Claude copiado"
+                  >
+                    {(copied) => (
+                      <>
+                        {copied ? <Check aria-hidden="true" /> : <Copy aria-hidden="true" />}
+                        <span>Claude</span>
+                      </>
+                    )}
+                  </CopyButton>
+                  <button
+                    type="button"
+                    className={styles.recommendationOpen}
+                    onClick={() => onOpenSkill(recommendation.skillId)}
+                    aria-label={`Abrir documentação de ${recommendation.skillId}`}
+                  >
+                    <ArrowRight aria-hidden="true" />
+                  </button>
+                </div>
               </li>
             ))}
           </ol>
