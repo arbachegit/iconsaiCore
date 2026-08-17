@@ -1049,25 +1049,6 @@
     "sourcePath": "skills/skill-dto-nest-classvalidator/SKILL.md"
   },
   {
-    "id": "skill-execucao-por-objetivo",
-    "name": "Execução por Objetivo",
-    "trigger": "/skill-execucao-por-objetivo",
-    "version": "1",
-    "techs": [
-      "Git",
-      "JSON",
-      "CI/CD"
-    ],
-    "description": "Mantém execução, evidências e conclusão vinculadas a um objetivo único e mensurável.",
-    "examples": [],
-    "commands": [
-      "/skill-execucao-por-objetivo"
-    ],
-    "keywords": "skill-execucao-por-objetivo mantém execução, evidências e conclusão vinculadas a um objetivo único e mensurável. git json ci/cd",
-    "updatedAt": "2026-08-17",
-    "sourcePath": "skills/skill-execucao-por-objetivo/SKILL.md"
-  },
-  {
     "id": "skill-frontend-normalization",
     "name": "Frontend Normalization - Next.js",
     "trigger": "/skill-frontend-normalization",
@@ -1173,25 +1154,6 @@
     "sourcePath": "skills/skill-mcp-guardrails/SKILL.md"
   },
   {
-    "id": "skill-mudanca-cirurgica",
-    "name": "Mudança Cirúrgica",
-    "trigger": "/skill-mudanca-cirurgica",
-    "version": "1",
-    "techs": [
-      "Git",
-      "JSON",
-      "CI/CD"
-    ],
-    "description": "Restringe o diff ao objetivo autorizado e protege caminhos, contratos e trabalho concorrente.",
-    "examples": [],
-    "commands": [
-      "/skill-mudanca-cirurgica"
-    ],
-    "keywords": "skill-mudanca-cirurgica restringe o diff ao objetivo autorizado e protege caminhos, contratos e trabalho concorrente. git json ci/cd",
-    "updatedAt": "2026-08-17",
-    "sourcePath": "skills/skill-mudanca-cirurgica/SKILL.md"
-  },
-  {
     "id": "skill-node-quality",
     "name": "Node Code Quality - ESLint + Prettier",
     "trigger": "/skill-node-quality",
@@ -1264,25 +1226,6 @@
     "keywords": "skill-normalize-identifiers normalizacao de identificadores (uuid, slug, codes) agnóstico (node.js python)",
     "updatedAt": "2026-06-20",
     "sourcePath": "skills/skill-normalize-identifiers/SKILL.md"
-  },
-  {
-    "id": "skill-pensar-antes-de-codar",
-    "name": "Pensar Antes de Codar",
-    "trigger": "/skill-pensar-antes-de-codar",
-    "version": "1",
-    "techs": [
-      "Git",
-      "JSON",
-      "CI/CD"
-    ],
-    "description": "Exige contexto, riscos, decisões e critérios verificáveis antes da primeira edição.",
-    "examples": [],
-    "commands": [
-      "/skill-pensar-antes-de-codar"
-    ],
-    "keywords": "skill-pensar-antes-de-codar exige contexto, riscos, decisões e critérios verificáveis antes da primeira edição. git json ci/cd",
-    "updatedAt": "2026-08-17",
-    "sourcePath": "skills/skill-pensar-antes-de-codar/SKILL.md"
   },
   {
     "id": "skill-playwright-massive-tester",
@@ -1496,25 +1439,6 @@
     "keywords": "skill-sanitization-validator sanitizacao de strings com validator.js validator.js node.js",
     "updatedAt": "2026-06-20",
     "sourcePath": "skills/skill-sanitization-validator/SKILL.md"
-  },
-  {
-    "id": "skill-simplicidade-primeiro",
-    "name": "Simplicidade Primeiro",
-    "trigger": "/skill-simplicidade-primeiro",
-    "version": "1",
-    "techs": [
-      "Git",
-      "Node.js",
-      "CI/CD"
-    ],
-    "description": "Impõe a menor solução completa, reutilizando o sistema antes de ampliar arquitetura ou dependências.",
-    "examples": [],
-    "commands": [
-      "/skill-simplicidade-primeiro"
-    ],
-    "keywords": "skill-simplicidade-primeiro impõe a menor solução completa, reutilizando o sistema antes de ampliar arquitetura ou dependências. git node.js ci/cd",
-    "updatedAt": "2026-08-17",
-    "sourcePath": "skills/skill-simplicidade-primeiro/SKILL.md"
   },
   {
     "id": "skill-ui-button",
