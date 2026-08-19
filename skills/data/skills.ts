@@ -178,6 +178,26 @@ const LEGACY_SKILLS: Skill[] = [
 
   // PHASE 2: DESIGN / ARQUITETURA
   {
+    id: 'skill-standalone',
+    name: 'Standalone Cinematográfica',
+    trigger: '/skill-standalone',
+    phase: '2',
+    phaseName: 'Design',
+    version: '1.0',
+    techs: ['Next.js', 'React', 'CSS', 'Web Audio'],
+    description: 'Impõe palco ocupado, contraste calculado, replay por scroll e simulações vivas em experiências standalone.',
+    examples: [
+      'Construir uma proposta interativa cinematográfica',
+      'Auditar landing page narrativa por scroll',
+      'Criar chat, radar e dashboard simulados',
+    ],
+    commands: ['/skill-standalone'],
+    isNew: true,
+    keywords: 'standalone landing proposta showcase scroll story vídeo typewriter áudio contraste ocupação palco radar simulação contador',
+    createdAt: '2026-08-19',
+    updatedAt: '2026-08-19',
+  },
+  {
     id: 'skill-floating-button',
     name: 'Floating Button Golden Rule',
     trigger: '/skill-floating-button',
