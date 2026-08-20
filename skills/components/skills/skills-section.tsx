@@ -5,10 +5,12 @@ import SkillCard from './skill-card'
 import styles from './skills.module.css'
 
 interface SkillSectionData {
+  id: string
   name: string
   number: string
   description: string
   subtitle: string
+  color: string
   skills: Skill[]
 }
 
@@ -18,12 +20,12 @@ interface SkillsSectionProps {
 }
 
 export default function SkillsSection({ section, onOpenModal }: SkillsSectionProps) {
-  const accent = PHASE_COLOR_RAW[section.number] || '#22d3ee'
+  const accent = section.color || PHASE_COLOR_RAW[section.number] || '#22d3ee'
 
   return (
     <section
       className={styles.section}
-      id={`fase-${section.number}`}
+      id={`categoria-${section.id}`}
       style={{ '--phase-color': accent } as React.CSSProperties}
     >
       <div className={styles.sectionIndex} aria-hidden="true">
@@ -48,6 +50,7 @@ export default function SkillsSection({ section, onOpenModal }: SkillsSectionPro
             <SkillCard
               key={skill.id}
               skill={skill}
+              accent={accent}
               onOpenModal={onOpenModal}
             />
           ))}

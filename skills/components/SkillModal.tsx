@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { X, Copy, Check } from 'lucide-react'
+import { ArrowLeft, Check, Copy, FileText, X } from 'lucide-react'
+import { getHubMembers } from '@/data/catalog-groups'
 import { PHASES, PHASE_COLOR_RAW } from '@/data/phases'
 import { useSkillDoc } from '@/lib/use-skill-doc'
 import MarkdownRenderer from '@/components/MarkdownRenderer'
@@ -11,14 +12,26 @@ interface SkillModalProps {
   skills: Skill[]
   skillId: string | null
   onClose: () => void
+  onNavigateSkill: (skillId: string) => void
 }
 
-export default function SkillModal({ skills, skillId, onClose }: SkillModalProps) {
+export default function SkillModal({ skills, skillId, onClose, onNavigateSkill }: SkillModalProps) {
   const [copied, setCopied] = useState(false)
+  const [viewMode, setViewMode] = useState<'summary' | 'complete'>('summary')
   const skill = skillId ? skills.find((s) => s.id === skillId) : null
   const phase = skill ? PHASES.find((p) => p.number === skill.phase) : null
   const color = skill ? PHASE_COLOR_RAW[skill.phase] || '#22d3ee' : '#22d3ee'
   const { doc: fullDoc, loading } = useSkillDoc(skillId)
+  const hubMembers = skillId
+    ? getHubMembers(skillId)
+      .map((memberId) => skills.find((candidate) => candidate.id === memberId))
+      .filter((member): member is Skill => Boolean(member))
+    : []
+
+  useEffect(() => {
+    setViewMode('summary')
+    setCopied(false)
+  }, [skillId])
 
   useEffect(() => {
     if (!skillId) return
@@ -36,7 +49,7 @@ export default function SkillModal({ skills, skillId, onClose }: SkillModalProps
   if (!skill) return null
 
   const handleCopy = async () => {
-    const text = fullDoc || skill.description
+    const text = viewMode === 'complete' && fullDoc ? fullDoc : skill.description
     await navigator.clipboard.writeText(text)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
@@ -77,6 +90,9 @@ export default function SkillModal({ skills, skillId, onClose }: SkillModalProps
               </span>
             </div>
             <h2 className="mt-1 text-lg font-bold text-[var(--t1)]">{skill.name}</h2>
+            <p className="mt-1 text-xs text-[var(--t3)]">
+              {viewMode === 'summary' ? 'Sumário da skill' : 'Versão completa do SKILL.md'}
+            </p>
           </div>
           <div className="flex items-center gap-2 shrink-0 ml-4">
             <button
@@ -119,7 +135,7 @@ export default function SkillModal({ skills, skillId, onClose }: SkillModalProps
 
         {/* Body */}
         <div className="p-5">
-          {/* Structured fields — always visible */}
+          {viewMode === 'summary' ? (
           <div className="space-y-5">
             {/* Description */}
             <div>
@@ -202,22 +218,62 @@ export default function SkillModal({ skills, skillId, onClose }: SkillModalProps
                 </p>
               </div>
             )}
-          </div>
 
-          {/* Full doc from SKILL.md — shown below structured fields */}
-          {loading ? (
+            {hubMembers.length > 0 && (
+              <div>
+                <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--t3)] mb-2">
+                  Skills contidas neste hub
+                </h3>
+                <div className="grid gap-2 sm:grid-cols-2">
+                  {hubMembers.map((member) => (
+                    <button
+                      key={member.id}
+                      type="button"
+                      onClick={() => onNavigateSkill(member.id)}
+                      className="flex min-w-0 items-center justify-between gap-3 rounded-lg border border-[var(--brd)] bg-[var(--bg-deep)] px-3 py-2.5 text-left transition-colors hover:border-[var(--cy)] hover:bg-[var(--bg-surface)] cursor-pointer"
+                    >
+                      <span className="min-w-0">
+                        <strong className="block truncate text-sm text-[var(--t1)]">{member.name}</strong>
+                        <code className="block truncate text-xs text-[var(--t3)]">{member.trigger}</code>
+                      </span>
+                      <FileText className="h-4 w-4 shrink-0 text-[var(--cy)]" aria-hidden="true" />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <button
+              type="button"
+              onClick={() => setViewMode('complete')}
+              className="flex w-full items-center justify-center gap-2 rounded-xl border border-[var(--cy)] bg-[var(--bg-deep)] px-4 py-3 text-sm font-bold text-[var(--cy)] transition-colors hover:bg-[var(--bg-surface)] cursor-pointer"
+            >
+              <FileText className="h-4 w-4" aria-hidden="true" />
+              Versão completa
+            </button>
+          </div>
+          ) : loading ? (
             <div className="flex items-center gap-3 py-8 justify-center text-[var(--t3)]">
               <span className="w-4 h-4 border-2 border-[var(--cy)] border-t-transparent rounded-full animate-spin" />
               <span className="text-sm">Carregando documentação completa...</span>
             </div>
           ) : fullDoc ? (
-            <div className="mt-6 pt-5 border-t border-[var(--brd)]">
-              <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--t3)] mb-3">
-                Documentação (SKILL.md)
-              </h3>
+            <div>
+              <button
+                type="button"
+                onClick={() => setViewMode('summary')}
+                className="mb-5 inline-flex items-center gap-2 rounded-lg border border-[var(--brd)] px-3 py-2 text-xs font-bold text-[var(--t2)] hover:border-[var(--cy)] hover:text-[var(--cy)] cursor-pointer"
+              >
+                <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+                Voltar ao sumário
+              </button>
               <MarkdownRenderer content={fullDoc} className="md-content" />
             </div>
-          ) : null}
+          ) : (
+            <div className="rounded-xl border border-red-400/30 bg-red-400/5 p-4 text-sm text-red-300">
+              O conteúdo completo desta skill não está disponível no snapshot atual.
+            </div>
+          )}
         </div>
       </div>
     </div>

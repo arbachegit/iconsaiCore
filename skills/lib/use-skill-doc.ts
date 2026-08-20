@@ -26,7 +26,7 @@ export function useSkillDoc(skillId: string | null): UseSkillDocResult {
     let cancelled = false
     setLoading(true)
 
-    fetch(`/skills/api/skills/${encodeURIComponent(skillId)}/doc`)
+    fetch(`/api/skills/${encodeURIComponent(skillId)}/doc`)
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (cancelled) return

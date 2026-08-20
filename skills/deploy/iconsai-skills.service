@@ -1,0 +1,16 @@
+[Unit]
+Description=IconsAI Skills catalog (Next.js standalone)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/skills/app
+ExecStart=/usr/bin/node server.js
+EnvironmentFile=/opt/skills/app/.env.production
+Environment=NODE_ENV=production
+Environment=HOSTNAME=127.0.0.1
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

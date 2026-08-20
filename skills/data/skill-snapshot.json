@@ -261,6 +261,20 @@
     "sourcePath": "skills/estimador-cobertura/SKILL.md"
   },
   {
+    "id": "execucao-por-objetivo",
+    "name": "Execucao Por Objetivo",
+    "trigger": "/execucao-por-objetivo",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Converte pedidos em criterios observaveis e conduz a implementacao ate provar o resultado real. Use quando uma tarefa puder ser confundida com atividade, checklist, sintoma isolado ou status de infraestrutura.",
+    "examples": [],
+    "commands": [
+      "/execucao-por-objetivo"
+    ],
+    "keywords": "execucao-por-objetivo converte pedidos em criterios observaveis e conduz a implementacao ate provar o resultado real. use quando uma tarefa puder ser confundida com atividade, checklist, sintoma isolado ou status de infraestrutura.",
+    "sourcePath": "skills/execucao-por-objetivo/SKILL.md"
+  },
+  {
     "id": "favicon",
     "name": "SKILL — FAVICON NUCLEAR IconsAI (i.ai)",
     "trigger": "/favicon",
@@ -336,6 +350,62 @@
     "sourcePath": "skills/frontend-design/SKILL.md"
   },
   {
+    "id": "harness-convergencia-de-padroes",
+    "name": "Harness de convergência de padrões",
+    "trigger": "/harness-convergencia-de-padroes",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Extrai padrões estruturais dos aplicativos já construídos, converge o que é consenso em regra candidata, e reporta cada divergência como exceção — sem nunca refatorar automaticamente. Use quando quiser descobrir qual é o padrão de fato de um portfólio de apps, padronizar aplicações novas contra o que já existe, medir aderência ao modelo canônico, ou quando o usuário falar em \"convergir padrões\", \"cada app fez do seu jeito\", \"extrair o padrão\", \"aderência ao modelo\" ou \"divergência entre aplicações\".",
+    "examples": [],
+    "commands": [
+      "/harness-convergencia-de-padroes"
+    ],
+    "keywords": "harness-convergencia-de-padroes extrai padrões estruturais dos aplicativos já construídos, converge o que é consenso em regra candidata, e reporta cada divergência como exceção — sem nunca refatorar automaticamente. use quando quiser descobrir qual é o padrão de fato de um portfólio de apps, padronizar aplicações novas contra o que já existe, medir aderência ao modelo canônico, ou quando o usuário falar em \"convergir padrões\", \"cada app fez do seu jeito\", \"extrair o padrão\", \"aderência ao modelo\" ou \"divergência entre aplicações\".",
+    "sourcePath": "skills/harness-convergencia-de-padroes/SKILL.md"
+  },
+  {
+    "id": "harness-determinismo",
+    "name": "Harness de determinismo",
+    "trigger": "/harness-determinismo",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Constrói o envelope determinístico em volta de uma chamada de LLM — entrada congelada e hasheada, replay por hash, e gate de invariantes na saída — para que tudo que cerca o modelo seja reprodutível e auditável. Use quando precisar que uma tarefa assistida por IA seja repetível, quando o mesmo pedido produzir resultados diferentes entre rodadas, ao levar geração por LLM para dentro de CI/deploy, ou quando o usuário falar em \"determinístico\", \"imutável\", \"reprodutível\", \"replay\", \"congelar o prompt\" ou \"por que deu diferente da última vez\".",
+    "examples": [],
+    "commands": [
+      "/harness-determinismo"
+    ],
+    "keywords": "harness-determinismo constrói o envelope determinístico em volta de uma chamada de llm — entrada congelada e hasheada, replay por hash, e gate de invariantes na saída — para que tudo que cerca o modelo seja reprodutível e auditável. use quando precisar que uma tarefa assistida por ia seja repetível, quando o mesmo pedido produzir resultados diferentes entre rodadas, ao levar geração por llm para dentro de ci/deploy, ou quando o usuário falar em \"determinístico\", \"imutável\", \"reprodutível\", \"replay\", \"congelar o prompt\" ou \"por que deu diferente da última vez\".",
+    "sourcePath": "skills/harness-determinismo/SKILL.md"
+  },
+  {
+    "id": "harness-inspecao",
+    "name": "Harness de inspeção",
+    "trigger": "/harness-inspecao",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Inspeciona sistematicamente a qualidade de um software pelos harness que ele já tem — inventaria primeiro o que existe, roda o runner canônico, e só então nomeia lacunas, sem jamais criar um caminho de verificação paralelo. Use antes de release, ao auditar a saúde de um repositório, quando perguntarem \"esse software está bom?\", \"o que não está coberto?\", \"quais gates temos\", \"inspecionar qualidade\", ou quando for propor um novo gate/teste/harness — inclusive para descobrir se ele já existe.",
+    "examples": [],
+    "commands": [
+      "/harness-inspecao"
+    ],
+    "keywords": "harness-inspecao inspeciona sistematicamente a qualidade de um software pelos harness que ele já tem — inventaria primeiro o que existe, roda o runner canônico, e só então nomeia lacunas, sem jamais criar um caminho de verificação paralelo. use antes de release, ao auditar a saúde de um repositório, quando perguntarem \"esse software está bom?\", \"o que não está coberto?\", \"quais gates temos\", \"inspecionar qualidade\", ou quando for propor um novo gate/teste/harness — inclusive para descobrir se ele já existe.",
+    "sourcePath": "skills/harness-inspecao/SKILL.md"
+  },
+  {
+    "id": "harness-metricas-evolutivas",
+    "name": "Harness de métricas evolutivas",
+    "trigger": "/harness-metricas-evolutivas",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Versiona os limiares de qualidade, grava em cada resultado qual limiar o julgou, e evolui os alvos com evidência acumulada — para que rodada antiga continue reinterpretável e ninguém afrouxe um limiar para deixar o vermelho verde. Use ao definir ou mudar qualquer threshold de qualidade, quando comparar rodadas de períodos diferentes, quando um limiar parecer folgado ou apertado demais, ou quando o usuário falar em \"métricas de qualidade\", \"limiar\", \"threshold\", \"SLO\", \"evoluir o alvo\" ou \"a régua mudou\".",
+    "examples": [],
+    "commands": [
+      "/harness-metricas-evolutivas"
+    ],
+    "keywords": "harness-metricas-evolutivas versiona os limiares de qualidade, grava em cada resultado qual limiar o julgou, e evolui os alvos com evidência acumulada — para que rodada antiga continue reinterpretável e ninguém afrouxe um limiar para deixar o vermelho verde. use ao definir ou mudar qualquer threshold de qualidade, quando comparar rodadas de períodos diferentes, quando um limiar parecer folgado ou apertado demais, ou quando o usuário falar em \"métricas de qualidade\", \"limiar\", \"threshold\", \"slo\", \"evoluir o alvo\" ou \"a régua mudou\".",
+    "sourcePath": "skills/harness-metricas-evolutivas/SKILL.md"
+  },
+  {
     "id": "header-hero",
     "name": "Header Hero Icons.ai",
     "trigger": "/header-hero",
@@ -394,6 +464,20 @@
     "keywords": "ia-simulacao-container ia agente de simulacao — camada 3 do pipeline de 3 ias",
     "updatedAt": "2026-06-20",
     "sourcePath": "skills/ia-simulacao-container/SKILL.md"
+  },
+  {
+    "id": "iniciar",
+    "name": "SKILL — INICIAR (bootstrap canônico IconsAI)",
+    "trigger": "/iniciar",
+    "version": "2.0 — renomeada para iniciar; foundation interna, harness condicionais e roteamento por superfície",
+    "techs": [],
+    "description": "Inicia projetos IconsAI com escopo, arquitetura, seguranca, frontend/backend, gates e deploy verificavel. Use para criar um projeto novo ou concluir um bootstrap ainda incompleto; nao use para mudancas pontuais em projetos maduros.",
+    "examples": [],
+    "commands": [
+      "/iniciar"
+    ],
+    "keywords": "iniciar inicia projetos iconsai com escopo, arquitetura, seguranca, frontend/backend, gates e deploy verificavel. use para criar um projeto novo ou concluir um bootstrap ainda incompleto; nao use para mudancas pontuais em projetos maduros.",
+    "sourcePath": "skills/iniciar/SKILL.md"
   },
   {
     "id": "injection-defense",
@@ -512,6 +596,20 @@
     "sourcePath": "skills/modal-info-builder/SKILL.md"
   },
   {
+    "id": "mudanca-cirurgica",
+    "name": "Mudanca Cirurgica",
+    "trigger": "/mudanca-cirurgica",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Executa correcoes estritamente localizadas, preservando tudo fora do alvo autorizado. Use em bugs, manutencao e ajustes pontuais onde regressao ou alteracao colateral seria especialmente custosa.",
+    "examples": [],
+    "commands": [
+      "/mudanca-cirurgica"
+    ],
+    "keywords": "mudanca-cirurgica executa correcoes estritamente localizadas, preservando tudo fora do alvo autorizado. use em bugs, manutencao e ajustes pontuais onde regressao ou alteracao colateral seria especialmente custosa.",
+    "sourcePath": "skills/mudanca-cirurgica/SKILL.md"
+  },
+  {
     "id": "normalize",
     "name": "Normalize Brazilian Codes - CPF, CNPJ, IBGE, CEP",
     "trigger": "/normalize",
@@ -570,6 +668,20 @@
     "sourcePath": "skills/pdf/SKILL.md"
   },
   {
+    "id": "pensar-antes-de-codar",
+    "name": "Pensar Antes De Codar",
+    "trigger": "/pensar-antes-de-codar",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Impoe uma analise curta e baseada em evidencias antes de editar codigo. Use em implementacoes, correcoes ou integracoes onde contratos locais, dependencias, autorizacao ou efeitos colaterais precisam ser entendidos primeiro.",
+    "examples": [],
+    "commands": [
+      "/pensar-antes-de-codar"
+    ],
+    "keywords": "pensar-antes-de-codar impoe uma analise curta e baseada em evidencias antes de editar codigo. use em implementacoes, correcoes ou integracoes onde contratos locais, dependencias, autorizacao ou efeitos colaterais precisam ser entendidos primeiro.",
+    "sourcePath": "skills/pensar-antes-de-codar/SKILL.md"
+  },
+  {
     "id": "prd-builder",
     "name": "PRD Builder — Workflow Completo para Empresas",
     "trigger": "/prd-builder",
@@ -583,21 +695,6 @@
     "keywords": "prd-builder prd builder — workflow completo para empresas",
     "updatedAt": "2026-06-20",
     "sourcePath": "skills/prd-builder/SKILL.md"
-  },
-  {
-    "id": "projeto-novo",
-    "name": "SKILL — PROJETO NOVO (bootstrap canônico IconsAI)",
-    "trigger": "/projeto-novo",
-    "version": "1.0",
-    "techs": [],
-    "description": "SKILL — PROJETO NOVO (bootstrap canônico IconsAI)",
-    "examples": [],
-    "commands": [
-      "/projeto-novo"
-    ],
-    "keywords": "projeto-novo skill — projeto novo (bootstrap canônico iconsai)",
-    "updatedAt": "2026-06-20",
-    "sourcePath": "skills/projeto-novo/SKILL.md"
   },
   {
     "id": "quality-finalizer",
@@ -681,6 +778,20 @@
     "keywords": "showcase showcase — padrão canônico de keynote interativo (skill global)",
     "updatedAt": "2026-06-20",
     "sourcePath": "skills/showcase/SKILL.md"
+  },
+  {
+    "id": "simplicidade-primeiro",
+    "name": "Simplicidade Primeiro",
+    "trigger": "/simplicidade-primeiro",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Reduz implementacoes e decisoes ao menor conjunto que satisfaz o pedido, preservando comportamento existente. Use ao criar, corrigir ou revisar codigo quando houver risco de complexidade acidental ou expansao de escopo.",
+    "examples": [],
+    "commands": [
+      "/simplicidade-primeiro"
+    ],
+    "keywords": "simplicidade-primeiro reduz implementacoes e decisoes ao menor conjunto que satisfaz o pedido, preservando comportamento existente. use ao criar, corrigir ou revisar codigo quando houver risco de complexidade acidental ou expansao de escopo.",
+    "sourcePath": "skills/simplicidade-primeiro/SKILL.md"
   },
   {
     "id": "skill_auth_fase_1_sem_role",
@@ -1049,25 +1160,6 @@
     "sourcePath": "skills/skill-dto-nest-classvalidator/SKILL.md"
   },
   {
-    "id": "skill-execucao-por-objetivo",
-    "name": "Execução por Objetivo",
-    "trigger": "/skill-execucao-por-objetivo",
-    "version": "1",
-    "techs": [
-      "Git",
-      "JSON",
-      "CI/CD"
-    ],
-    "description": "Mantém execução, evidências e conclusão vinculadas a um objetivo único e mensurável.",
-    "examples": [],
-    "commands": [
-      "/skill-execucao-por-objetivo"
-    ],
-    "keywords": "skill-execucao-por-objetivo mantém execução, evidências e conclusão vinculadas a um objetivo único e mensurável. git json ci/cd",
-    "updatedAt": "2026-08-17",
-    "sourcePath": "skills/skill-execucao-por-objetivo/SKILL.md"
-  },
-  {
     "id": "skill-frontend-normalization",
     "name": "Frontend Normalization - Next.js",
     "trigger": "/skill-frontend-normalization",
@@ -1173,25 +1265,6 @@
     "sourcePath": "skills/skill-mcp-guardrails/SKILL.md"
   },
   {
-    "id": "skill-mudanca-cirurgica",
-    "name": "Mudança Cirúrgica",
-    "trigger": "/skill-mudanca-cirurgica",
-    "version": "1",
-    "techs": [
-      "Git",
-      "JSON",
-      "CI/CD"
-    ],
-    "description": "Restringe o diff ao objetivo autorizado e protege caminhos, contratos e trabalho concorrente.",
-    "examples": [],
-    "commands": [
-      "/skill-mudanca-cirurgica"
-    ],
-    "keywords": "skill-mudanca-cirurgica restringe o diff ao objetivo autorizado e protege caminhos, contratos e trabalho concorrente. git json ci/cd",
-    "updatedAt": "2026-08-17",
-    "sourcePath": "skills/skill-mudanca-cirurgica/SKILL.md"
-  },
-  {
     "id": "skill-node-quality",
     "name": "Node Code Quality - ESLint + Prettier",
     "trigger": "/skill-node-quality",
@@ -1264,25 +1337,6 @@
     "keywords": "skill-normalize-identifiers normalizacao de identificadores (uuid, slug, codes) agnóstico (node.js python)",
     "updatedAt": "2026-06-20",
     "sourcePath": "skills/skill-normalize-identifiers/SKILL.md"
-  },
-  {
-    "id": "skill-pensar-antes-de-codar",
-    "name": "Pensar Antes de Codar",
-    "trigger": "/skill-pensar-antes-de-codar",
-    "version": "1",
-    "techs": [
-      "Git",
-      "JSON",
-      "CI/CD"
-    ],
-    "description": "Exige contexto, riscos, decisões e critérios verificáveis antes da primeira edição.",
-    "examples": [],
-    "commands": [
-      "/skill-pensar-antes-de-codar"
-    ],
-    "keywords": "skill-pensar-antes-de-codar exige contexto, riscos, decisões e critérios verificáveis antes da primeira edição. git json ci/cd",
-    "updatedAt": "2026-08-17",
-    "sourcePath": "skills/skill-pensar-antes-de-codar/SKILL.md"
   },
   {
     "id": "skill-playwright-massive-tester",
@@ -1498,23 +1552,19 @@
     "sourcePath": "skills/skill-sanitization-validator/SKILL.md"
   },
   {
-    "id": "skill-simplicidade-primeiro",
-    "name": "Simplicidade Primeiro",
-    "trigger": "/skill-simplicidade-primeiro",
-    "version": "1",
-    "techs": [
-      "Git",
-      "Node.js",
-      "CI/CD"
-    ],
-    "description": "Impõe a menor solução completa, reutilizando o sistema antes de ampliar arquitetura ou dependências.",
+    "id": "skill-standalone",
+    "name": "Standalone Cinematográfica",
+    "trigger": "/skill-standalone",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Constrói e audita experiências web standalone, propostas interativas e landing pages cinematográficas. Use automaticamente quando uma única rota contar uma narrativa por scroll, especialmente com cenas, vídeos, números grandes, chats, dashboards simulados, áudio ou preço; impõe ocupação mínima de palco, contraste calculado, replay por entrada e mobile próprio.",
     "examples": [],
     "commands": [
-      "/skill-simplicidade-primeiro"
+      "/skill-standalone"
     ],
-    "keywords": "skill-simplicidade-primeiro impõe a menor solução completa, reutilizando o sistema antes de ampliar arquitetura ou dependências. git node.js ci/cd",
-    "updatedAt": "2026-08-17",
-    "sourcePath": "skills/skill-simplicidade-primeiro/SKILL.md"
+    "keywords": "skill-standalone constrói e audita experiências web standalone, propostas interativas e landing pages cinematográficas. use automaticamente quando uma única rota contar uma narrativa por scroll, especialmente com cenas, vídeos, números grandes, chats, dashboards simulados, áudio ou preço; impõe ocupação mínima de palco, contraste calculado, replay por entrada e mobile próprio.",
+    "updatedAt": "2026-08-19",
+    "sourcePath": "skills/skill-standalone/SKILL.md"
   },
   {
     "id": "skill-ui-button",

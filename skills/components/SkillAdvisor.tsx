@@ -87,7 +87,7 @@ export default function SkillAdvisor({ skills, onOpenSkill }: SkillAdvisorProps)
     setError('')
 
     try {
-      const response = await fetch(buildSkillsApiUrl('/skills/api/skills/recommend'), {
+      const response = await fetch(buildSkillsApiUrl('/api/skills/recommend'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ situation: normalizedSituation }),

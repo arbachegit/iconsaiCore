@@ -11,11 +11,12 @@ import styles from './skills.module.css'
 interface SkillCardProps {
   skill: Skill
   onOpenModal?: (skillId: string) => void
+  accent?: string
 }
 
-export default function SkillCard({ skill, onOpenModal }: SkillCardProps) {
+export default function SkillCard({ skill, onOpenModal, accent: accentOverride }: SkillCardProps) {
   const [copied, setCopied] = useState(false)
-  const accent = PHASE_COLOR_RAW[skill.phase] || '#22d3ee'
+  const accent = accentOverride || PHASE_COLOR_RAW[skill.phase] || '#22d3ee'
   const visibleTechs = skill.techs.slice(0, 3)
 
   const handleCopy = async () => {
@@ -65,14 +66,23 @@ export default function SkillCard({ skill, onOpenModal }: SkillCardProps) {
 
       <div className={styles.cardFooter}>
         <code title={skill.trigger}>{skill.trigger}</code>
-        <button
-          type="button"
-          onClick={handleCopy}
-          aria-label={copied ? 'Comando copiado' : `Copiar ${skill.trigger}`}
-          title={copied ? 'Comando copiado' : 'Copiar comando'}
-        >
-          {copied ? <Check aria-hidden="true" /> : <Copy aria-hidden="true" />}
-        </button>
+        <div className={styles.cardActions}>
+          <button
+            type="button"
+            className={styles.showButton}
+            onClick={() => onOpenModal?.(skill.id)}
+          >
+            Mostrar
+          </button>
+          <button
+            type="button"
+            onClick={handleCopy}
+            aria-label={copied ? 'Comando copiado' : `Copiar ${skill.trigger}`}
+            title={copied ? 'Comando copiado' : 'Copiar comando'}
+          >
+            {copied ? <Check aria-hidden="true" /> : <Copy aria-hidden="true" />}
+          </button>
+        </div>
       </div>
     </article>
   )

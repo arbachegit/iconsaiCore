@@ -21,7 +21,7 @@ export function useNewSkillsPolling(renderedCount: number, renderedHash: string)
 
   const check = useCallback(async () => {
     try {
-      const endpoint = buildSkillsApiUrl('/skills/api/skills/sync')
+      const endpoint = buildSkillsApiUrl('/api/skills/sync')
       const url = new URL(endpoint, window.location.origin)
       if (/^[a-f0-9]{12}$/.test(renderedHash)) {
         url.searchParams.set('current_hash', renderedHash)

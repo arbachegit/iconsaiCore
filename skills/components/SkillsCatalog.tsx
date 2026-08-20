@@ -17,6 +17,7 @@ import SkillModal from '@/components/SkillModal'
 import SkillAdvisor from '@/components/SkillAdvisor'
 import SkillSection from '@/components/skills/skills-section'
 import styles from '@/components/skills/skills.module.css'
+import { CATALOG_GROUPS } from '@/data/catalog-groups'
 import { PHASES, PHASE_COLOR_RAW } from '@/data/phases'
 import { useNewSkillsPolling } from '@/hooks/use-new-skills-polling'
 import { buildSkillsApiUrl } from '@/lib/client/skills-api-url'
@@ -30,20 +31,38 @@ interface SkillsCatalogProps {
 }
 
 interface SkillSectionData {
+  id: string
   name: string
   number: string
   description: string
   subtitle: string
+  color: string
   skills: Skill[]
 }
 
 function groupByPhase(skills: Skill[]): SkillSectionData[] {
   return PHASES.map((phase) => ({
+    id: `fase-${phase.number}`,
     name: phase.name,
     number: phase.number,
     description: phase.description,
     subtitle: phase.subtitle,
+    color: PHASE_COLOR_RAW[phase.number],
     skills: skills.filter((skill) => skill.phase === phase.number),
+  })).filter((section) => section.skills.length > 0)
+}
+
+function groupByCatalog(skills: Skill[]): SkillSectionData[] {
+  return CATALOG_GROUPS.map((group, index) => ({
+    id: group.id,
+    name: group.name,
+    number: `C${index + 1}`,
+    description: group.description,
+    subtitle: group.subtitle,
+    color: group.color,
+    skills: group.skillIds
+      .map((id) => skills.find((skill) => skill.id === id))
+      .filter((skill): skill is Skill => Boolean(skill)),
   })).filter((section) => section.skills.length > 0)
 }
 
@@ -65,7 +84,7 @@ export default function SkillsCatalog({
   dataSource = 'fallback',
   contentHash = '',
 }: SkillsCatalogProps) {
-  const [activePhase, setActivePhase] = useState<string>('all')
+  const [activeFilter, setActiveFilter] = useState<string>('group:iniciar')
   const [searchQuery, setSearchQuery] = useState('')
   const [modalSkillId, setModalSkillId] = useState<string | null>(null)
   const catalogRef = useRef<HTMLElement>(null)
@@ -79,19 +98,40 @@ export default function SkillsCatalog({
     ])),
     [skills],
   )
+  const groupCounts = useMemo(
+    () => Object.fromEntries(CATALOG_GROUPS.map((group) => [
+      group.id,
+      group.skillIds.filter((id) => skills.some((skill) => skill.id === id)).length,
+    ])),
+    [skills],
+  )
 
   const visibleSkills = useMemo(() => {
     const normalizedQuery = deferredQuery.trim().toLocaleLowerCase('pt-BR')
     return skills.filter((skill) => {
-      const matchesPhase = activePhase === 'all' || skill.phase === activePhase
+      const activeGroup = activeFilter.startsWith('group:')
+        ? CATALOG_GROUPS.find((group) => `group:${group.id}` === activeFilter)
+        : null
+      const matchesFilter = activeFilter === 'all'
+        || (activeGroup ? activeGroup.skillIds.includes(skill.id) : skill.phase === activeFilter)
       const matchesQuery = normalizedQuery.length < 2 || matchesSearch(skill, normalizedQuery)
-      return matchesPhase && matchesQuery
+      return matchesFilter && matchesQuery
     })
-  }, [activePhase, deferredQuery, skills])
+  }, [activeFilter, deferredQuery, skills])
 
-  const sections = useMemo(() => groupByPhase(visibleSkills), [visibleSkills])
-  const isFiltering = activePhase !== 'all' || deferredQuery.trim().length >= 2
-  const activePhaseData = PHASES.find((phase) => phase.number === activePhase)
+  const sections = useMemo(() => {
+    const activeGroup = CATALOG_GROUPS.find((group) => `group:${group.id}` === activeFilter)
+    if (activeGroup) {
+      return groupByCatalog(visibleSkills).filter((section) => section.id === activeGroup.id)
+    }
+    if (activeFilter !== 'all' || deferredQuery.trim().length >= 2) {
+      return groupByPhase(visibleSkills)
+    }
+    return [...groupByCatalog(visibleSkills), ...groupByPhase(visibleSkills)]
+  }, [activeFilter, deferredQuery, visibleSkills])
+  const isFiltering = activeFilter !== 'all' || deferredQuery.trim().length >= 2
+  const activePhaseData = PHASES.find((phase) => phase.number === activeFilter)
+  const activeGroupData = CATALOG_GROUPS.find((group) => `group:${group.id}` === activeFilter)
   const normalizedQuery = deferredQuery.trim().toLocaleLowerCase('pt-BR')
   const hasSearchQuery = normalizedQuery.length >= 2
   const quickResults = hasSearchQuery ? visibleSkills.slice(0, 6) : []
@@ -102,7 +142,7 @@ export default function SkillsCatalog({
 
   const resetFilters = useCallback(() => {
     setSearchQuery('')
-    setActivePhase('all')
+    setActiveFilter('all')
   }, [])
 
   const showCatalogResults = useCallback(() => {
@@ -135,17 +175,40 @@ export default function SkillsCatalog({
         <div className={styles.atlas}>
           <aside className={styles.rail} aria-label="Fases do ciclo de desenvolvimento">
             <div className={styles.railHeading}>
-              <span>Mapa do ciclo</span>
-              <small>09 fases</small>
+              <span>Categorias e ciclo</span>
+              <small>12 visões</small>
             </div>
 
             <nav className={styles.phaseNav}>
+              {CATALOG_GROUPS.map((group, index) => {
+                const filterId = `group:${group.id}`
+                const isActive = activeFilter === filterId
+                return (
+                  <button
+                    key={group.id}
+                    type="button"
+                    className={styles.phaseButton}
+                    data-active={isActive}
+                    onClick={() => setActiveFilter(isActive ? 'all' : filterId)}
+                    aria-pressed={isActive}
+                    style={{ '--phase-color': group.color } as React.CSSProperties}
+                  >
+                    <span className={styles.phaseNumber}>C{index + 1}</span>
+                    <span className={styles.phaseCopy}>
+                      <strong>{group.name}</strong>
+                      <small>{group.subtitle}</small>
+                    </span>
+                    <span className={styles.phaseCount}>{groupCounts[group.id] ?? 0}</span>
+                  </button>
+                )
+              })}
+
               <button
                 type="button"
                 className={styles.phaseButton}
-                data-active={activePhase === 'all'}
-                onClick={() => setActivePhase('all')}
-                aria-pressed={activePhase === 'all'}
+                data-active={activeFilter === 'all'}
+                onClick={() => setActiveFilter('all')}
+                aria-pressed={activeFilter === 'all'}
               >
                 <span className={styles.phaseNumber}>00</span>
                 <span className={styles.phaseCopy}>
@@ -157,14 +220,14 @@ export default function SkillsCatalog({
 
               {PHASES.map((phase) => {
                 const count = phaseCounts[phase.number] ?? 0
-                const isActive = activePhase === phase.number
+                const isActive = activeFilter === phase.number
                 return (
                   <button
                     key={phase.number}
                     type="button"
                     className={styles.phaseButton}
                     data-active={isActive}
-                    onClick={() => setActivePhase(isActive ? 'all' : phase.number)}
+                    onClick={() => setActiveFilter(isActive ? 'all' : phase.number)}
                     aria-pressed={isActive}
                     style={{ '--phase-color': PHASE_COLOR_RAW[phase.number] } as React.CSSProperties}
                   >
@@ -304,10 +367,12 @@ export default function SkillsCatalog({
                     {isFiltering ? 'Recorte ativo' : 'Índice completo'}
                   </span>
                   <h2 id="catalog-title">
-                    {activePhaseData ? activePhaseData.name : 'Mapa completo de execução'}
+                    {activeGroupData?.name ?? activePhaseData?.name ?? 'Mapa completo de execução'}
                   </h2>
                   <p>
-                    {activePhaseData
+                    {activeGroupData
+                      ? activeGroupData.description
+                      : activePhaseData
                       ? activePhaseData.description
                       : 'Navegue por fase ou busque pelo problema, tecnologia ou comando.'}
                   </p>
@@ -345,7 +410,7 @@ export default function SkillsCatalog({
                 <div className={styles.sections}>
                   {sections.map((section) => (
                     <SkillSection
-                      key={section.number}
+                      key={section.id}
                       section={section}
                       onOpenModal={handleOpenSkill}
                     />
@@ -366,6 +431,7 @@ export default function SkillsCatalog({
       <SkillModal
         skills={skills}
         skillId={modalSkillId}
+        onNavigateSkill={handleOpenSkill}
         onClose={() => setModalSkillId(null)}
       />
     </>
@@ -400,7 +466,7 @@ function WebhookCheckButton({ renderedCount, renderedHash, polling }: WebhookChe
 
     setStatus('loading')
     try {
-      const endpoint = buildSkillsApiUrl('/skills/api/skills/sync')
+      const endpoint = buildSkillsApiUrl('/api/skills/sync')
       const url = new URL(endpoint, window.location.origin)
       if (/^[a-f0-9]{12}$/.test(renderedHash)) {
         url.searchParams.set('current_hash', renderedHash)

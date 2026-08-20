@@ -1,0 +1,23 @@
+skill.iconsai.ai {
+	reverse_proxy 127.0.0.1:{$SKILLS_PORT}
+	encode gzip zstd
+
+	header {
+		X-Content-Type-Options nosniff
+		X-Frame-Options SAMEORIGIN
+		Referrer-Policy strict-origin-when-cross-origin
+		Permissions-Policy "geolocation=(), microphone=(), camera=()"
+		Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+		-Server
+	}
+
+	@static path /_next/static/*
+	header @static Cache-Control "public, max-age=31536000, immutable"
+
+	@api path /api/*
+	header @api Cache-Control "no-store, no-cache, must-revalidate"
+}
+
+skills.iconsai.ai {
+	redir https://skill.iconsai.ai{uri} 308
+}

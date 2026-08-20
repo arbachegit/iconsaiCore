@@ -12,7 +12,7 @@ const checks = [
   ['payload do webhook usa Zod', files.route.includes('normalizeSkillsSyncPayload(JSON.parse(body))')],
   ['schema aceita o payload push do GitHub', files.schema.includes('commits: z.array(commitSchema)')],
   ['mudança invalida cache e página', files.route.includes("revalidateTag('skills')") && files.route.includes("revalidatePath('/')")],
-  ['polling preserva course_token', files.hook.includes("buildSkillsApiUrl('/skills/api/skills/sync')")],
+  ['polling preserva course_token', files.hook.includes("buildSkillsApiUrl('/api/skills/sync')")],
   ['resposta externa é validada', files.hook.includes('skillsSyncHealthResponseSchema.safeParse')],
   ['hash atual acompanha a consulta', files.hook.includes("url.searchParams.set('current_hash', renderedHash)")],
   ['catálogo atualiza automaticamente', files.hook.includes('window.location.reload(), 1_200')],

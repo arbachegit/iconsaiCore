@@ -1532,6 +1532,23 @@
   height: 13px;
 }
 
+.cardActions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cardFooter .showButton {
+  width: auto;
+  padding: 0 10px;
+  color: color-mix(in srgb, var(--phase-color) 82%, white);
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
 .emptyState,
 .errorState {
   display: flex;

@@ -11,7 +11,7 @@ export default function FloatingLogo() {
       }}
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/skills/favicon-float.png" alt="IconsAI" />
+      <img src="/favicon-float.png" alt="IconsAI" />
     </a>
   )
 }

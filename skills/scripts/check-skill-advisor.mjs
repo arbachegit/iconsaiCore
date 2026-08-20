@@ -22,7 +22,7 @@ const checks = [
   ['tool de saída está em allowlist', files.service.includes("name: 'recommend_skills'")],
   ['tool possui JSON Schema', files.service.includes('input_schema:') && files.service.includes('additionalProperties: false')],
   ['IDs retornados são validados contra catálogo', files.service.includes('allowedSkillIds.has(recommendation.skillId)')],
-  ['frontend chama apenas API interna', files.component.includes("buildSkillsApiUrl('/skills/api/skills/recommend')")],
+  ['frontend chama apenas API interna', files.component.includes("buildSkillsApiUrl('/api/skills/recommend')")],
   ['frontend valida o contrato de resposta', files.component.includes('recommendationResponseSchema.safeParse(payload)')],
   ['frontend trata resposta vazia sem expor erro técnico', files.component.includes('const responseText = await response.text()')],
   ['recomendação copia comando para Codex', files.component.includes('text={`$${recommendation.skillId}`}')],
