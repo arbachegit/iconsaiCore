@@ -1,0 +1,29 @@
+{
+  "project": "iconsai-skills",
+  "date": "2026-08-20",
+  "endpoints": [
+    { "route": "GET|HEAD /", "file": "middleware.ts", "policy": "tools:course_access:skills", "status": "PASS" },
+    { "route": "GET|HEAD /mobile", "file": "middleware.ts", "policy": "tools:course_access:skills", "status": "PASS" },
+    { "route": "GET /api/skills/[id]/doc", "file": "middleware.ts + app/api/skills/[id]/doc/route.ts", "policy": "tools:course_access:skills", "status": "PASS" },
+    { "route": "POST /api/skills/recommend", "file": "middleware.ts + app/api/skills/recommend/route.ts", "policy": "tools:course_access:skills", "status": "PASS" },
+    { "route": "GET /api/skills/sync", "file": "middleware.ts + app/api/skills/sync/route.ts", "policy": "tools:course_access:skills", "status": "PASS" },
+    { "route": "POST /api/skills/sync", "file": "middleware.ts + app/api/skills/sync/route.ts", "policy": "service:HMAC", "status": "PASS" },
+    { "route": "GET /build-info.txt", "file": "middleware.ts matcher", "policy": "public:deploy-health", "status": "PASS" },
+    { "route": "GET /_next/static/*|icons", "file": "middleware.ts matcher", "policy": "public:immutable-assets", "status": "PASS" }
+  ],
+  "database": {
+    "used_by_skills_app": false,
+    "rls_applicable": false
+  },
+  "controls": {
+    "default_open": false,
+    "token_signature_verified_by_tools": true,
+    "course_slug_allowlist": "skills",
+    "scope_allowlist": "course_access",
+    "token_removed_from_url": true,
+    "session_cookie_http_only": true,
+    "fail_closed": true
+  },
+  "verdict": "PASS",
+  "critical_count": 0
+}

@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useDeferredValue, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import {
   ArrowUpRight,
   Check,
@@ -23,7 +23,6 @@ import { useNewSkillsPolling } from '@/hooks/use-new-skills-polling'
 import { buildSkillsApiUrl } from '@/lib/client/skills-api-url'
 import {
   buildCatalogUrl,
-  DEFAULT_CATALOG_FILTER,
   readCatalogUrlState,
 } from '@/lib/client/catalog-url-state'
 import { skillsSyncHealthResponseSchema } from '@/lib/github/sync-schema'
@@ -33,6 +32,7 @@ interface SkillsCatalogProps {
   skills: Skill[]
   dataSource: 'github' | 'fallback'
   contentHash: string
+  initialSearch?: string
 }
 
 interface SkillSectionData {
@@ -88,13 +88,26 @@ export default function SkillsCatalog({
   skills = [],
   dataSource = 'fallback',
   contentHash = '',
+  initialSearch = '',
 }: SkillsCatalogProps) {
-  const [activeFilter, setActiveFilter] = useState<string>(DEFAULT_CATALOG_FILTER)
-  const [searchQuery, setSearchQuery] = useState('')
-  const [modalSkillId, setModalSkillId] = useState<string | null>(null)
+  const initialUrlState = readCatalogUrlState(initialSearch, skills)
+  const [activeFilter, setActiveFilter] = useState<string>(initialUrlState.activeFilter)
+  const [searchQuery, setSearchQuery] = useState(initialUrlState.searchQuery)
+  const [modalSkillId, setModalSkillId] = useState<string | null>(initialUrlState.skillId)
   const catalogRef = useRef<HTMLElement>(null)
   const deferredQuery = useDeferredValue(searchQuery)
   const polling = useNewSkillsPolling(skills.length, contentHash)
+
+  useLayoutEffect(() => {
+    const url = new URL(window.location.href)
+    if (!url.searchParams.has('course_token')) return
+    url.searchParams.delete('course_token')
+    window.history.replaceState(
+      window.history.state,
+      '',
+      `${url.pathname}${url.search}${url.hash}`,
+    )
+  }, [])
 
   const applyLocationState = useCallback(() => {
     const state = readCatalogUrlState(window.location.search, skills)

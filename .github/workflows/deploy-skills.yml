@@ -104,17 +104,38 @@ jobs:
       - name: Install service and Caddy host
         env:
           SKILLS_PORT: ${{ vars.SKILLS_PORT }}
+          SKILLS_PUBLIC_URL: ${{ vars.SKILLS_PUBLIC_URL }}
+          SKILLS_TOOLS_VERIFY_URL: ${{ vars.SKILLS_TOOLS_VERIFY_URL }}
+          SKILLS_TOOLS_ENTRY_URL: ${{ vars.SKILLS_TOOLS_ENTRY_URL }}
+          SKILLS_TOOLS_COURSE_SLUG: ${{ vars.SKILLS_TOOLS_COURSE_SLUG }}
         run: |
           test -n "$SKILLS_PORT"
+          test -n "$SKILLS_PUBLIC_URL"
+          test -n "$SKILLS_TOOLS_VERIFY_URL"
+          test -n "$SKILLS_TOOLS_ENTRY_URL"
+          test -n "$SKILLS_TOOLS_COURSE_SLUG"
+          {
+            printf 'SKILLS_PUBLIC_URL=%s\n' "$SKILLS_PUBLIC_URL"
+            printf 'SKILLS_TOOLS_VERIFY_URL=%s\n' "$SKILLS_TOOLS_VERIFY_URL"
+            printf 'SKILLS_TOOLS_ENTRY_URL=%s\n' "$SKILLS_TOOLS_ENTRY_URL"
+            printf 'SKILLS_TOOLS_COURSE_SLUG=%s\n' "$SKILLS_TOOLS_COURSE_SLUG"
+          } > /tmp/skills-runtime.env
           timeout 45s rsync -az -e ssh \
             skills/deploy/iconsai-skills.service \
             "skills-server:/tmp/iconsai-skills.service"
+          timeout 45s rsync -az -e ssh \
+            /tmp/skills-runtime.env \
+            "skills-server:/tmp/skills-runtime.env"
           sed "s/{\$SKILLS_PORT}/$SKILLS_PORT/g" skills/deploy/skills.caddy > /tmp/skills.caddy
           timeout 45s rsync -az -e ssh \
             /tmp/skills.caddy \
             "skills-server:/tmp/skills.caddy"
           timeout 60s ssh skills-server <<'REMOTE'
             set -e
+            touch /opt/skills/app/.env.production
+            sed -i '/^SKILLS_PUBLIC_URL=/d;/^SKILLS_TOOLS_VERIFY_URL=/d;/^SKILLS_TOOLS_ENTRY_URL=/d;/^SKILLS_TOOLS_COURSE_SLUG=/d' /opt/skills/app/.env.production
+            cat /tmp/skills-runtime.env >> /opt/skills/app/.env.production
+            chmod 600 /opt/skills/app/.env.production
             install -m 644 /tmp/iconsai-skills.service /etc/systemd/system/iconsai-skills.service
             install -m 644 /tmp/skills.caddy /etc/caddy/skills.caddy
             grep -qxF 'import /etc/caddy/skills.caddy' /etc/caddy/Caddyfile || \
@@ -134,18 +155,22 @@ jobs:
             actual=$("${curl_public[@]}" -fsS --retry 12 --retry-delay 2 --retry-all-errors \
               https://skill.iconsai.ai/build-info.txt)
             test "$actual" = "$EXPECTED"
-            html=$("${curl_public[@]}" -fsS https://skill.iconsai.ai/)
-            [[ "$html" == *'Skills que fazem'* ]]
-            paths=$(printf '%s' "$html" | grep -oE '/_next/static/[^" ]+\.(js|css)' | sort -u)
+            status=$("${curl_public[@]}" -sS -o /dev/null -w '%{http_code}' https://skill.iconsai.ai/)
+            test "$status" = '307'
+            paths=$(find /opt/skills/app/.next/static -type f \( -name '*.js' -o -name '*.css' \) \
+              | sed 's#^/opt/skills/app/.next/static#/_next/static#' | sort -u)
             test -n "$paths"
             while IFS= read -r path; do
               status=$("${curl_public[@]}" -sS -o /dev/null -w '%{http_code}' \
                 "https://skill.iconsai.ai$path")
               test "$status" = '200'
             done <<< "$paths"
+            api_status=$("${curl_public[@]}" -sS -o /dev/null -w '%{http_code}' \
+              https://skill.iconsai.ai/api/skills/finalizar/doc)
+            test "$api_status" = '401'
           REMOTE
 
       - if: always()
         run: |
           ssh -O exit skills-server 2>/dev/null || true
-          rm -f ~/.ssh/skills_key ~/.ssh/config /tmp/skills.caddy
+          rm -f ~/.ssh/skills_key ~/.ssh/config /tmp/skills.caddy /tmp/skills-runtime.env
