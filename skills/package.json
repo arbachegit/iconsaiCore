@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "sh -c 'HOST=${HOST:-127.0.0.1}; PORT=${PORT:-3003}; next dev -H \"$HOST\" -p \"$PORT\"'",
-    "prebuild": "npm run check:ui && npm run check:advisor && npm run check:sync && npm run check:catalog",
+    "prebuild": "npm run check:ui && npm run check:advisor && npm run check:sync && npm run check:catalog && npm run check:routing",
     "build": "next build",
     "start": "node .next/standalone/server.js",
     "lint": "next lint",
@@ -12,6 +12,7 @@
     "check:advisor": "node scripts/check-skill-advisor.mjs",
     "check:sync": "node scripts/check-skills-sync.mjs",
     "check:catalog": "node scripts/check-catalog-groups.mjs",
+    "check:routing": "node scripts/check-routing-security.mjs",
     "sync:skills": "node scripts/sync-skills-snapshot.mjs"
   },
   "dependencies": {

@@ -1,12 +1,12 @@
 'use client'
 
 import { useState, useMemo, useCallback, useEffect } from 'react'
+import BrandWordmark from '@/app/BrandWordmark'
 import CopyButton from '@/components/CopyButton'
-import Modal from '@/components/Modal'
-import MarkdownRenderer from '@/components/MarkdownRenderer'
+import SkillModal from '@/components/SkillModal'
 import { PHASES, PHASE_COLOR_RAW } from '@/data/phases'
 import type { Skill } from '@/lib/github/types'
-import { useSkillDoc } from '@/lib/use-skill-doc'
+import { buildCatalogUrl, readCatalogUrlState } from '@/lib/client/catalog-url-state'
 import s from '@/app/mobile/skills-mobile.module.css'
 
 const PHASE_CLASS: Record<string, string> = {
@@ -25,8 +25,6 @@ export default function SkillsMobileCatalog({ skills, dataSource }: SkillsMobile
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedPhase, setSelectedPhase] = useState('all')
   const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null)
-  const [pendingCatalogSkillId, setPendingCatalogSkillId] = useState<string | null>(null)
-  const [highlightedSkillId, setHighlightedSkillId] = useState<string | null>(null)
 
   const filteredSkills = useMemo(() => {
     const q = searchQuery.toLowerCase()
@@ -55,46 +53,85 @@ export default function SkillsMobileCatalog({ skills, dataSource }: SkillsMobile
     return m
   }, [skills])
 
-  const openSkill = useCallback((skill: Skill) => setSelectedSkill(skill), [])
-  const closeSkill = useCallback(() => setSelectedSkill(null), [])
-
-  const openSkillById = useCallback((id: string) => {
-    const sk = skills.find((s) => s.id === id)
-    if (sk) {
-      setSelectedSkill(null)
-      setSearchQuery('')
-      setSelectedPhase('all')
-      setActiveTab('catalog')
-      setPendingCatalogSkillId(sk.id)
-    }
+  const applyLocationState = useCallback(() => {
+    const state = readCatalogUrlState(window.location.search, skills)
+    const selected = state.skillId ? skills.find((skill) => skill.id === state.skillId) ?? null : null
+    setSelectedSkill(selected)
+    setSearchQuery(state.searchQuery)
+    setSelectedPhase(PHASES.some((phase) => phase.number === state.activeFilter) ? state.activeFilter : 'all')
+    if (selected) setActiveTab('catalog')
   }, [skills])
 
   useEffect(() => {
-    if (activeTab !== 'catalog' || !pendingCatalogSkillId) return
+    applyLocationState()
+    window.addEventListener('popstate', applyLocationState)
+    return () => window.removeEventListener('popstate', applyLocationState)
+  }, [applyLocationState])
 
-    const cardId = `mobile-catalog-skill-${pendingCatalogSkillId}`
-    const el = document.getElementById(cardId)
-    if (!el) return
+  const openSkill = useCallback((skill: Skill) => {
+    window.history.pushState(
+      { ...window.history.state, skillsModalEntry: true },
+      '',
+      buildCatalogUrl(window.location.href, { skillId: skill.id }),
+    )
+    setSelectedSkill(skill)
+  }, [])
 
-    el.scrollIntoView({ behavior: 'smooth', block: 'center' })
-    setHighlightedSkillId(pendingCatalogSkillId)
-    setPendingCatalogSkillId(null)
+  const closeSkill = useCallback(() => {
+    if (window.history.state?.skillsModalEntry) {
+      window.history.back()
+      return
+    }
+    window.history.replaceState(
+      { ...window.history.state, skillsModalEntry: false },
+      '',
+      buildCatalogUrl(window.location.href, { skillId: null }),
+    )
+    setSelectedSkill(null)
+  }, [])
 
-    const t = window.setTimeout(() => {
-      setHighlightedSkillId((curr) => (curr === pendingCatalogSkillId ? null : curr))
-    }, 1600)
+  const navigateSkill = useCallback((skillId: string) => {
+    const skill = skills.find((candidate) => candidate.id === skillId)
+    if (!skill) return
+    window.history.replaceState(
+      {
+        ...window.history.state,
+        skillsModalEntry: Boolean(window.history.state?.skillsModalEntry),
+      },
+      '',
+      buildCatalogUrl(window.location.href, { skillId }),
+    )
+    setSelectedSkill(skill)
+  }, [skills])
 
-    return () => window.clearTimeout(t)
-  }, [activeTab, pendingCatalogSkillId])
+  const openSkillById = useCallback((id: string) => {
+    const sk = skills.find((s) => s.id === id)
+    if (sk) openSkill(sk)
+  }, [openSkill, skills])
+
+  const handleSearchChange = useCallback((query: string) => {
+    setSearchQuery(query)
+    window.history.replaceState(
+      window.history.state,
+      '',
+      buildCatalogUrl(window.location.href, { searchQuery: query }),
+    )
+  }, [])
+
+  const handlePhaseChange = useCallback((phase: string) => {
+    setSelectedPhase(phase)
+    window.history.pushState(
+      { ...window.history.state, skillsModalEntry: false },
+      '',
+      buildCatalogUrl(window.location.href, { activeFilter: phase }),
+    )
+  }, [])
 
   return (
     <div className={s.root}>
       {/* Header */}
       <header className={s.header}>
-        <div className={s.logoWrap}>
-          <div className={s.logoIcon}>IC</div>
-          <div className={s.logoText}>Icons<span className={s.logoAccent}>AI</span> Skills</div>
-        </div>
+        <BrandWordmark className={`${s.logoWrap} logo-iconsai`} />
         <div className={s.headerStats}>
           <span><span className={s.statVal}>{skills.length}</span> skills</span>
           <span>v3.1</span>
@@ -198,7 +235,7 @@ export default function SkillsMobileCatalog({ skills, dataSource }: SkillsMobile
                 className={s.searchInput}
                 placeholder="Buscar skills..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => handleSearchChange(e.target.value)}
               />
             </div>
           </section>
@@ -208,7 +245,7 @@ export default function SkillsMobileCatalog({ skills, dataSource }: SkillsMobile
               <span className={s.filterLabel}>Fase:</span>
               <button
                 className={`${s.filterBtn} ${selectedPhase === 'all' ? s.filterBtnActive : ''}`}
-                onClick={() => setSelectedPhase('all')}
+                onClick={() => handlePhaseChange('all')}
               >
                 Todas <span className={s.filterCount}>{phaseCounts.all}</span>
               </button>
@@ -216,7 +253,7 @@ export default function SkillsMobileCatalog({ skills, dataSource }: SkillsMobile
                 <button
                   key={p.number}
                   className={`${s.filterBtn} ${selectedPhase === p.number ? s.filterBtnActive : ''}`}
-                  onClick={() => setSelectedPhase(p.number)}
+                  onClick={() => handlePhaseChange(p.number)}
                 >
                   {p.name.split(' /')[0].split(' ')[0]}{' '}
                   <span className={s.filterCount}>{phaseCounts[p.number]}</span>
@@ -234,8 +271,6 @@ export default function SkillsMobileCatalog({ skills, dataSource }: SkillsMobile
               <MobileSkillCard
                 key={sk.id}
                 skill={sk}
-                domId={`mobile-catalog-skill-${sk.id}`}
-                highlighted={highlightedSkillId === sk.id}
                 onOpen={openSkill}
               />
             ))}
@@ -253,10 +288,12 @@ export default function SkillsMobileCatalog({ skills, dataSource }: SkillsMobile
         </p>
       </footer>
 
-      {/* Skill Detail Modal */}
-      <Modal open={!!selectedSkill} onClose={closeSkill} overlayClassName={s.modalOverlay}>
-        {selectedSkill && <MobileSkillModal skill={selectedSkill} onClose={closeSkill} />}
-      </Modal>
+      <SkillModal
+        skills={skills}
+        skillId={selectedSkill?.id ?? null}
+        onClose={closeSkill}
+        onNavigateSkill={navigateSkill}
+      />
     </div>
   )
 }
@@ -264,13 +301,9 @@ export default function SkillsMobileCatalog({ skills, dataSource }: SkillsMobile
 /* ─── Skill Card (mobile) ─── */
 function MobileSkillCard({
   skill,
-  domId,
-  highlighted,
   onOpen,
 }: {
   skill: Skill
-  domId: string
-  highlighted: boolean
   onOpen: (s: Skill) => void
 }) {
   const phaseClass = PHASE_CLASS[skill.phase] ?? s.phase2
@@ -278,8 +311,7 @@ function MobileSkillCard({
 
   return (
     <article
-      id={domId}
-      className={`${s.skillCard} ${skill.isNew ? s.skillCardNew : ''} ${highlighted ? s.skillCardTarget : ''}`}
+      className={`${s.skillCard} ${skill.isNew ? s.skillCardNew : ''}`}
       style={{ '--card-accent': accent } as React.CSSProperties}
     >
       {skill.isNew && <span className={s.skillCardNewBadge}>NEW</span>}
@@ -328,99 +360,5 @@ function MobileSkillCard({
         </button>
       </div>
     </article>
-  )
-}
-
-/* ─── Skill Modal (mobile) ─── */
-function MobileSkillModal({ skill, onClose }: { skill: Skill; onClose: () => void }) {
-  const phaseClass = PHASE_CLASS[skill.phase] ?? s.phase2
-  const { doc: fullDoc, loading } = useSkillDoc(skill.id)
-  const copyText = fullDoc || skill.description
-
-  return (
-    <div className={s.modalBox}>
-      <div className={s.modalTopActions}>
-        <CopyButton text={copyText} className={s.modalActionBtn}>
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <rect x="9" y="9" width="13" height="13" rx="2" />
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-          </svg>
-        </CopyButton>
-        <button className={s.modalCloseBtn} onClick={onClose}>&#10005;</button>
-      </div>
-
-      <div className={s.modalHeaderRow}>
-        <span className={`${s.cardPhase} ${phaseClass}`}>{skill.phaseName}</span>
-        <span className={s.modalCommandInline}>{skill.trigger}</span>
-        <span className={s.modalStatusBadge} data-status={skill.isNew ? 'new' : 'active'}>
-          {skill.isNew ? 'new' : 'active'}
-        </span>
-      </div>
-
-      {/* Metadata bar */}
-      <div className={s.modalMeta}>
-        <span><span className={s.modalMetaLabel}>id:</span> {skill.id}</span>
-        <span><span className={s.modalMetaLabel}>version:</span> <span className={s.modalMetaAccent}>{skill.version}</span></span>
-        <span><span className={s.modalMetaLabel}>phase:</span> {skill.phase} — {skill.phaseName}</span>
-      </div>
-
-      {/* Structured fields — always visible */}
-      <h3 className={s.modalTitle}>{skill.name}</h3>
-      <p className={s.modalDesc}>{skill.description}</p>
-
-      <div className={s.modalTech}>
-        {skill.techs.map((t) => (
-          <span key={t} className={s.techTag}>{t}</span>
-        ))}
-      </div>
-
-      {skill.examples.length > 0 && (
-        <>
-          <div className={s.modalSectionTitle}>Quando usar</div>
-          <ul className={s.modalWhenList}>
-            {skill.examples.map((ex, i) => (
-              <li key={i} className={s.modalWhenItem}>{ex}</li>
-            ))}
-          </ul>
-        </>
-      )}
-
-      {skill.commands.length > 0 && (
-        <>
-          <div className={s.modalSectionTitle}>Comando</div>
-          {skill.commands.map((cmd, i) => (
-            <div key={i} className={s.modalCommand}>
-              <code>{cmd}</code>
-              <CopyButton text={cmd} className={s.copyBtn}>
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <rect x="9" y="9" width="13" height="13" rx="2" />
-                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                </svg>
-              </CopyButton>
-            </div>
-          ))}
-        </>
-      )}
-
-      {skill.keywords && (
-        <>
-          <div className={s.modalSectionTitle}>Keywords</div>
-          <p className={s.modalKeywords}>{skill.keywords}</p>
-        </>
-      )}
-
-      {/* Full doc from SKILL.md — shown below structured fields */}
-      {loading ? (
-        <div className={s.modalLoading}>
-          <span className={s.modalSpinner} />
-          <span>Carregando documentação completa...</span>
-        </div>
-      ) : fullDoc ? (
-        <div className={s.modalDocSection}>
-          <div className={s.modalSectionTitle}>Documentação (SKILL.md)</div>
-          <MarkdownRenderer content={fullDoc} className={s.mdContent} />
-        </div>
-      ) : null}
-    </div>
   )
 }

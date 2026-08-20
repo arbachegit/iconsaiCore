@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useDeferredValue, useMemo, useRef, useState } from 'react'
+import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react'
 import {
   ArrowUpRight,
   Check,
@@ -21,6 +21,11 @@ import { CATALOG_GROUPS } from '@/data/catalog-groups'
 import { PHASES, PHASE_COLOR_RAW } from '@/data/phases'
 import { useNewSkillsPolling } from '@/hooks/use-new-skills-polling'
 import { buildSkillsApiUrl } from '@/lib/client/skills-api-url'
+import {
+  buildCatalogUrl,
+  DEFAULT_CATALOG_FILTER,
+  readCatalogUrlState,
+} from '@/lib/client/catalog-url-state'
 import { skillsSyncHealthResponseSchema } from '@/lib/github/sync-schema'
 import type { Skill } from '@/lib/github/types'
 
@@ -84,12 +89,34 @@ export default function SkillsCatalog({
   dataSource = 'fallback',
   contentHash = '',
 }: SkillsCatalogProps) {
-  const [activeFilter, setActiveFilter] = useState<string>('group:iniciar')
+  const [activeFilter, setActiveFilter] = useState<string>(DEFAULT_CATALOG_FILTER)
   const [searchQuery, setSearchQuery] = useState('')
   const [modalSkillId, setModalSkillId] = useState<string | null>(null)
   const catalogRef = useRef<HTMLElement>(null)
   const deferredQuery = useDeferredValue(searchQuery)
   const polling = useNewSkillsPolling(skills.length, contentHash)
+
+  const applyLocationState = useCallback(() => {
+    const state = readCatalogUrlState(window.location.search, skills)
+    const canonicalUrl = buildCatalogUrl(window.location.href, {
+      activeFilter: state.activeFilter,
+      searchQuery: state.searchQuery,
+      skillId: state.skillId,
+    })
+    const currentUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`
+    if (canonicalUrl !== currentUrl) {
+      window.history.replaceState(window.history.state, '', canonicalUrl)
+    }
+    setActiveFilter(state.activeFilter)
+    setSearchQuery(state.searchQuery)
+    setModalSkillId(state.skillId)
+  }, [skills])
+
+  useEffect(() => {
+    applyLocationState()
+    window.addEventListener('popstate', applyLocationState)
+    return () => window.removeEventListener('popstate', applyLocationState)
+  }, [applyLocationState])
 
   const phaseCounts = useMemo(
     () => Object.fromEntries(PHASES.map((phase) => [
@@ -137,12 +164,60 @@ export default function SkillsCatalog({
   const quickResults = hasSearchQuery ? visibleSkills.slice(0, 6) : []
 
   const handleOpenSkill = useCallback((skillId: string) => {
+    const nextUrl = buildCatalogUrl(window.location.href, { skillId })
+    const modalAlreadyOpen = modalSkillId !== null
+    window.history[modalAlreadyOpen ? 'replaceState' : 'pushState'](
+      {
+        ...window.history.state,
+        skillsModalEntry: modalAlreadyOpen
+          ? Boolean(window.history.state?.skillsModalEntry)
+          : true,
+      },
+      '',
+      nextUrl,
+    )
     setModalSkillId(skillId)
+  }, [modalSkillId])
+
+  const handleCloseSkill = useCallback(() => {
+    if (window.history.state?.skillsModalEntry) {
+      window.history.back()
+      return
+    }
+    window.history.replaceState(
+      { ...window.history.state, skillsModalEntry: false },
+      '',
+      buildCatalogUrl(window.location.href, { skillId: null }),
+    )
+    setModalSkillId(null)
+  }, [])
+
+  const handleFilterChange = useCallback((nextFilter: string) => {
+    setActiveFilter(nextFilter)
+    window.history.pushState(
+      { ...window.history.state, skillsModalEntry: false },
+      '',
+      buildCatalogUrl(window.location.href, { activeFilter: nextFilter }),
+    )
+  }, [])
+
+  const handleSearchChange = useCallback((query: string) => {
+    setSearchQuery(query)
+    window.history.replaceState(
+      { ...window.history.state, skillsModalEntry: false },
+      '',
+      buildCatalogUrl(window.location.href, { searchQuery: query }),
+    )
   }, [])
 
   const resetFilters = useCallback(() => {
     setSearchQuery('')
     setActiveFilter('all')
+    window.history.pushState(
+      { ...window.history.state, skillsModalEntry: false },
+      '',
+      buildCatalogUrl(window.location.href, { activeFilter: 'all', searchQuery: '' }),
+    )
   }, [])
 
   const showCatalogResults = useCallback(() => {
@@ -189,7 +264,7 @@ export default function SkillsCatalog({
                     type="button"
                     className={styles.phaseButton}
                     data-active={isActive}
-                    onClick={() => setActiveFilter(isActive ? 'all' : filterId)}
+                    onClick={() => handleFilterChange(isActive ? 'all' : filterId)}
                     aria-pressed={isActive}
                     style={{ '--phase-color': group.color } as React.CSSProperties}
                   >
@@ -207,7 +282,7 @@ export default function SkillsCatalog({
                 type="button"
                 className={styles.phaseButton}
                 data-active={activeFilter === 'all'}
-                onClick={() => setActiveFilter('all')}
+                onClick={() => handleFilterChange('all')}
                 aria-pressed={activeFilter === 'all'}
               >
                 <span className={styles.phaseNumber}>00</span>
@@ -227,7 +302,7 @@ export default function SkillsCatalog({
                     type="button"
                     className={styles.phaseButton}
                     data-active={isActive}
-                    onClick={() => setActiveFilter(isActive ? 'all' : phase.number)}
+                    onClick={() => handleFilterChange(isActive ? 'all' : phase.number)}
                     aria-pressed={isActive}
                     style={{ '--phase-color': PHASE_COLOR_RAW[phase.number] } as React.CSSProperties}
                   >
@@ -245,16 +320,16 @@ export default function SkillsCatalog({
             <div className={styles.sourceCard}>
               <div className={styles.sourceCardTop}>
                 <GitBranch aria-hidden="true" />
-                <span>Fonte canônica</span>
+              <span>Fonte global</span>
               </div>
-              <strong>iconsaiConfig / skills</strong>
-              <p>Arquivos SKILL.md lidos do repositório central.</p>
+              <strong>~/.claude/skills</strong>
+              <p>Skills globais, transportadas pelo espelho versionado iconsaiConfig.</p>
               <a
                 href="https://github.com/arbachegit/iconsaiConfig/tree/main/skills"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Abrir repositório
+                Abrir espelho versionado
                 <ArrowUpRight aria-hidden="true" />
               </a>
             </div>
@@ -303,7 +378,7 @@ export default function SkillsCatalog({
                     id="skill-search"
                     type="search"
                     value={searchQuery}
-                    onChange={(event) => setSearchQuery(event.target.value)}
+                    onChange={(event) => handleSearchChange(event.target.value)}
                     placeholder="Ex.: autenticação, Zod, RAG, deploy..."
                     autoComplete="off"
                   />
@@ -311,7 +386,7 @@ export default function SkillsCatalog({
                     <button
                       type="button"
                       className={styles.clearSearch}
-                      onClick={() => setSearchQuery('')}
+                      onClick={() => handleSearchChange('')}
                       aria-label="Limpar busca"
                     >
                       <X aria-hidden="true" />
@@ -432,7 +507,7 @@ export default function SkillsCatalog({
         skills={skills}
         skillId={modalSkillId}
         onNavigateSkill={handleOpenSkill}
-        onClose={() => setModalSkillId(null)}
+        onClose={handleCloseSkill}
       />
     </>
   )
@@ -443,7 +518,7 @@ function SourceStatus({ source }: { source: 'github' | 'fallback' }) {
   return (
     <span className={styles.sourceStatus} data-live={isLive}>
       <span className={styles.statusDot} />
-      {isLive ? 'GitHub sincronizado' : 'Snapshot local'}
+      {isLive ? 'Global sincronizado' : 'Snapshot global'}
     </span>
   )
 }

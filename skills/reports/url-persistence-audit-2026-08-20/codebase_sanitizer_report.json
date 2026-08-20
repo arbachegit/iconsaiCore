@@ -1,0 +1,71 @@
+{
+  "repo": {
+    "pwd": "/Users/arbache/projects/config/Core/skills",
+    "git_root": "/Users/arbache/projects/config/Core",
+    "branch": "main",
+    "base_commit": "bb8dd5e8"
+  },
+  "stack_identified": {
+    "primary_language": "TypeScript",
+    "frontend_framework": "Next.js 15 App Router + React 19",
+    "backend_framework": "Next.js route handlers",
+    "database": "not_applicable",
+    "architecture_pattern": "standalone modular Next.js"
+  },
+  "analysis": {
+    "total_files_scanned": 88,
+    "dead_code": {
+      "orphan_files": [],
+      "unused_imports": [],
+      "unused_variables": [],
+      "unused_functions": [],
+      "empty_try_catch": [],
+      "unhandled_promises": []
+    },
+    "security": {
+      "hardcoded_secrets": [],
+      "sql_injection_risks": [],
+      "xss_risks": [],
+      "dependency_vulnerabilities": { "critical": 0, "high": 0, "moderate": 0, "low": 0 }
+    },
+    "api_contracts": {
+      "orphan_endpoints_backend": [],
+      "orphan_endpoints_frontend": [],
+      "type_divergences": [],
+      "missing_validation": []
+    },
+    "database": { "status": "not_applicable" }
+  },
+  "fixes_applied": {
+    "fix_mode": "fix_and_report",
+    "critical_fixes": [],
+    "high_fixes": [
+      "persistent URL/deep-link contract on desktop and mobile",
+      "prompt delimiter escaping"
+    ],
+    "medium_fixes": [
+      "Zod and Object.hasOwn on document route",
+      "request cancellation and response validation",
+      "bounded centralized rate limiting",
+      "CRLF-safe structured logging",
+      "CSP and security headers",
+      "global ~/.claude/skills synchronization"
+    ],
+    "low_fixes": ["removed transient mobile navigation state"]
+  },
+  "validation": {
+    "build": { "command": "npm run build", "exit_code": 0, "ok": true },
+    "tests": { "command": "npm run check:ui && check:advisor && check:sync && check:catalog && check:routing", "exit_code": 0, "ok": true },
+    "lint": { "command": "npm run lint", "exit_code": 0, "ok": true },
+    "typecheck": { "command": "npx tsc --noEmit", "exit_code": 0, "ok": true }
+  },
+  "metrics": {
+    "integrity_level": 98,
+    "consistency_level": 96,
+    "security_score": 96,
+    "functional_impact_risk": 2
+  },
+  "decision": "PASS",
+  "failure_reasons": [],
+  "next_actions": []
+}

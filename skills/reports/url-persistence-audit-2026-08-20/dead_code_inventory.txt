@@ -1,0 +1,18 @@
+DEAD CODE INVENTORY
+DATE: 2026-08-20
+
+Confirmed orphan files: 0
+Confirmed unused imports: 0
+Confirmed unused variables: 0
+Confirmed unused exported functions: 0
+Empty catch blocks: 0
+Abandoned TODO/FIXME/HACK markers: 0
+
+Removed during sanitization:
+- pendingCatalogSkillId state: mobile-only intermediate navigation state replaced by canonical URL state.
+- highlightedSkillId state: depended exclusively on pendingCatalogSkillId and no longer had a caller.
+- MobileSkillCard domId/highlighted props: used only by the removed transient scroll path.
+- MobileSkillModal component: duplicate detail renderer replaced by the canonical SkillModal.
+- Route-local unbounded rate-limit Map: replaced by the bounded shared server module.
+
+Evidence: TypeScript strict, ESLint and production build pass after removal.

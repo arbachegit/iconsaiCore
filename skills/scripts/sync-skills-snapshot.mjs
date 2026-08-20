@@ -1,5 +1,6 @@
 import { execFileSync } from 'node:child_process'
-import { readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs'
+import { realpathSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs'
+import { homedir } from 'node:os'
 import { basename, dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -7,8 +8,16 @@ import { load } from 'js-yaml'
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const APP_ROOT = resolve(SCRIPT_DIR, '..')
-const DEFAULT_SOURCE_DIR = resolve(APP_ROOT, '../../iconsaiConfig/skills')
+const DEFAULT_SOURCE_DIR = resolve(homedir(), '.claude/skills')
 const SOURCE_DIR = resolve(process.env.SKILLS_SOURCE_DIR || DEFAULT_SOURCE_DIR)
+const TRUSTED_SOURCE_DIRS = [
+  DEFAULT_SOURCE_DIR,
+  resolve(APP_ROOT, '../../iconsaiConfig/skills'),
+].map((directory) => realpathSync(directory))
+
+if (!TRUSTED_SOURCE_DIRS.includes(realpathSync(SOURCE_DIR))) {
+  throw new Error(`SKILLS_SOURCE_DIR fora das raízes confiáveis: ${SOURCE_DIR}`)
+}
 
 function parseFrontmatter(content) {
   if (!content.startsWith('---')) return {}

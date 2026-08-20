@@ -1,0 +1,52 @@
+{
+  "version": "1.0.0",
+  "orchestrator": "security",
+  "date": "2026-08-20",
+  "category": "Standalone",
+  "context": {
+    "project_root": "/Users/arbache/projects/config/Core/skills",
+    "stack": "node",
+    "has_db": false,
+    "has_llm": true,
+    "has_frontend": true,
+    "has_auth": false,
+    "auth_phase": "none",
+    "has_mcp": false
+  },
+  "skills_selected": [
+    "injection-defense",
+    "cors-headers-security",
+    "skill-sanitization-validator"
+  ],
+  "skills_skipped_optional": [
+    "skill-llm-prompt-safety",
+    "skill-mcp-guardrails",
+    "secrets-hygiene",
+    "skill-dependency-governance"
+  ],
+  "skills_skipped_na": [
+    "skill_auth_fase_1_sem_role",
+    "skill_auth_fase_2_com_role",
+    "skill_auth_fase_3_com_role_multi_tenant",
+    "lgpd-pii-mapper",
+    "authz-policy-audit"
+  ],
+  "results": {
+    "injection-defense": { "status": "PASS", "fixed_findings": 4 },
+    "cors-headers-security": { "status": "PASS", "missing_headers": [], "rate_limit_ok": true },
+    "skill-sanitization-validator": { "status": "PASS", "xss_findings": 0, "log_injection_findings": 0 }
+  },
+  "dependency_scan": {
+    "status": "PASS",
+    "production_vulnerabilities": 0,
+    "all_dependency_vulnerabilities": 0,
+    "fixed": ["nanoid 3.3.17 -> 3.3.18"]
+  },
+  "summary": {
+    "executed": 3,
+    "passed": 3,
+    "failed": 0
+  },
+  "verdict": "PASS",
+  "blockers": []
+}

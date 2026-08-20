@@ -7,17 +7,19 @@ const files = {
   schema: readFileSync('lib/recommendation/schema.ts', 'utf8'),
   component: readFileSync('components/SkillAdvisor.tsx', 'utf8'),
   css: readFileSync('components/skills/skills.module.css', 'utf8'),
+  rateLimit: readFileSync('lib/server/rate-limit.ts', 'utf8'),
 }
 
 const checks = [
   ['request usa Zod antes da lógica', files.route.includes('recommendationRequestSchema.safeParse(body)')],
   ['schema de entrada é estrito', files.schema.includes('}).strict()')],
-  ['rota pública possui rate limit', files.route.includes('RATE_LIMIT_MAX_REQUESTS')],
+  ['rota pública possui rate limit', files.route.includes('isRateLimited(clientIdentifier') && files.rateLimit.includes('MAX_RATE_LIMIT_ENTRIES')],
   ['Anthropic é o provedor primário', /try\s*\{\s*providerResult = await callAnthropic/.test(files.service)],
   ['OpenAI é fallback explícito', files.service.includes('providerResult = await callOpenAi')],
   ['prompt possui versão rastreável', files.prompt.includes('SKILL_ADVISOR_PROMPT_VERSION')],
   ['prompt possui hash rastreável', files.prompt.includes('SKILL_ADVISOR_PROMPT_HASH')],
   ['contexto e pedido estão delimitados', files.prompt.includes('<catalogo_de_skills>') && files.prompt.includes('<situacao_do_usuario>')],
+  ['conteúdo dos delimitadores é escapado', files.prompt.includes('escapeXml(JSON.stringify(catalog))') && files.prompt.includes('escapeXml(redactedSituation)')],
   ['PII é minimizado antes do provedor', files.prompt.includes('redactPii(situation)')],
   ['tool de saída está em allowlist', files.service.includes("name: 'recommend_skills'")],
   ['tool possui JSON Schema', files.service.includes('input_schema:') && files.service.includes('additionalProperties: false')],

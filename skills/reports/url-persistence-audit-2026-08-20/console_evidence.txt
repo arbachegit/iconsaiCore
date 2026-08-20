@@ -1,0 +1,91 @@
+AUDIT: skill.iconsai.ai URL persistence, frontend, backend and security
+DATE: 2026-08-20
+PROJECT_ROOT: /Users/arbache/projects/config/Core/skills
+GIT_ROOT: /Users/arbache/projects/config/Core
+BRANCH: main
+BASE_HEAD: bb8dd5e8 fix: add didactic skill summaries
+STACK: Next.js 15.5.23, React 19.2.4, TypeScript strict, Node.js route handlers
+DATABASE: not_applicable
+GLOBAL_SKILLS_SOURCE: /Users/arbache/.claude/skills -> /Users/arbache/projects/config/iconsaiConfig/skills
+
+REPRODUCTION BEFORE FIX
+command: Chrome production navigation C2 Harness -> harness-determinismo -> reload
+opened.url: https://skill.iconsai.ai/?audit=route
+opened.modal: true
+opened.active: C2 Harness
+reload.url: https://skill.iconsai.ai/?audit=route
+reload.modal: false
+reload.active: C1 Iniciar
+result: FAIL reproduced. Skill and filter existed only in React state.
+
+SOURCE CONSISTENCY BEFORE FIX
+~/.claude/skills: regular directory, stale
+stale entries: projeto-novo
+missing required entries: iniciar, harness-inspecao, harness-determinismo,
+  harness-convergencia-de-padroes, harness-metricas-evolutivas
+result: FAIL
+
+SOURCE CONSISTENCY AFTER FIX
+~/.claude/skills symlink target: /Users/arbache/projects/config/iconsaiConfig/skills
+backup: /Users/arbache/.claude/backup_skills_20260820_url_audit
+iniciar: present
+four Harness skills: present
+projeto-novo: absent
+result: PASS
+
+LOCAL FUNCTIONAL TEST AFTER FIX
+opened.url: http://localhost:3403/?category=harness&skill=harness-determinismo
+opened.modal: true
+opened.active: C2 Harness
+reload.url: http://localhost:3403/?skill=harness-determinismo&category=harness
+reload.modal: true
+reload.skill: Harness de determinismo
+reload.active: C2 Harness
+invalid.input: /?skill=__proto__&category=garbage&q=%20%20
+invalid.canonical_url: http://localhost:3403/
+invalid.modal: false
+invalid.active: C1 Iniciar
+result: PASS
+
+BACKEND ROUTE TEST
+GET /api/skills/finalizar/doc: 200 application/json
+GET /api/skills/__proto__/doc: 404 application/json {"doc":null}
+GET /api/skills/constructor/doc: 404 application/json {"doc":null}
+GET /api/skills/%2e%2e/doc: 404 text/html
+result: PASS
+
+SECURITY HEADERS LOCAL
+Content-Security-Policy: present
+Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+X-Frame-Options: DENY
+X-Content-Type-Options: nosniff
+Referrer-Policy: strict-origin-when-cross-origin
+Permissions-Policy: camera=(), microphone=(), geolocation=()
+X-Powered-By: absent
+result: PASS
+
+STATIC AND BUILD VALIDATION
+./valida-skill.sh: PASS
+npm run check:ui: PASS (12/12)
+npm run check:advisor: PASS (20/20)
+npm run check:sync: PASS (9/9)
+npm run check:catalog: PASS (14/14)
+npm run check:routing: PASS (13/13)
+npm run lint: PASS, 0 warnings/errors
+npx tsc --noEmit: PASS
+npm run build: PASS, 11/11 static pages generated
+
+DEPENDENCY AUDIT
+npm audit --omit=dev before: 1 high (nanoid 3.3.17)
+npm audit --omit=dev after: 0 vulnerabilities (nanoid 3.3.18)
+npm audit after: 0 vulnerabilities
+
+CODE SCAN
+files scanned excluding node_modules/.next/.git: 88
+SQL/NoSQL sinks: 0
+shell execution with external input: 0
+hardcoded secrets: 0
+database access: 0
+dangerouslySetInnerHTML: 1, content escapes &, < and > before rendering
+orphan files proven: 0
+unused imports/types: 0 (TypeScript and ESLint)

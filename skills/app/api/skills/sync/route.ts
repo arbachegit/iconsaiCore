@@ -11,6 +11,8 @@ import {
   skillsWebhookSignatureSchema,
 } from '@/lib/github/sync-schema'
 import type { SkillsSyncPayload } from '@/lib/github/types'
+import { getClientIdentifier, isRateLimited } from '@/lib/server/rate-limit'
+import { safeErrorName, safeLogText } from '@/lib/server/safe-log'
 
 function verifyGitHubSignature(body: string, signature: string, secret: string): boolean {
   const expected = 'sha256=' + createHmac('sha256', secret).update(body).digest('hex')
@@ -26,6 +28,17 @@ function verifyGitHubSignature(body: string, signature: string, secret: string):
 
 /** Health check — used by polling and the webhook status button in the UI */
 export async function GET(request: NextRequest) {
+  if (isRateLimited(getClientIdentifier(request), {
+    scope: 'skills-sync-health',
+    limit: 30,
+    windowMs: 60_000,
+  })) {
+    return NextResponse.json(
+      { ok: false, error: 'Too many requests.' },
+      { status: 429, headers: { 'Retry-After': '60' } },
+    )
+  }
+
   const query = skillsSyncQuerySchema.safeParse({
     currentHash: request.nextUrl.searchParams.get('current_hash') ?? undefined,
   })
@@ -78,6 +91,22 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  if (isRateLimited(getClientIdentifier(request), {
+    scope: 'skills-sync-webhook',
+    limit: 60,
+    windowMs: 60_000,
+  })) {
+    return NextResponse.json(
+      { ok: false, error: 'Too many requests.' },
+      { status: 429, headers: { 'Retry-After': '60' } },
+    )
+  }
+
+  const contentLength = Number(request.headers.get('content-length') ?? '0')
+  if (Number.isFinite(contentLength) && contentLength > 2_000_000) {
+    return NextResponse.json({ ok: false, error: 'Payload too large.' }, { status: 413 })
+  }
+
   const body = await request.text()
   if (body.length > 2_000_000) {
     return NextResponse.json({ ok: false, error: 'Payload too large.' }, { status: 413 })
@@ -109,7 +138,7 @@ export async function POST(request: NextRequest) {
   try {
     payload = normalizeSkillsSyncPayload(JSON.parse(body))
   } catch (error) {
-    console.warn('[skills-sync] invalid JSON payload', error)
+    console.warn('[skills-sync] invalid JSON payload', { reason: safeErrorName(error) })
     return NextResponse.json({ ok: false, error: 'Invalid JSON payload' }, { status: 400 })
   }
 
@@ -123,11 +152,13 @@ export async function POST(request: NextRequest) {
 
     console.info('[skills-sync] revalidated skills page', {
       repository:
-        typeof payload.repository === 'string' ? payload.repository : payload.repository?.full_name,
-      sha: payload.sha,
-      ref: payload.ref,
+        typeof payload.repository === 'string'
+          ? safeLogText(payload.repository)
+          : safeLogText(payload.repository?.full_name),
+      sha: safeLogText(payload.sha, 120),
+      ref: safeLogText(payload.ref, 200),
       changedFiles: payload.changed_files?.length ?? 0,
-      timestamp: payload.timestamp,
+      timestamp: safeLogText(payload.timestamp, 120),
     })
 
     return NextResponse.json({
@@ -136,7 +167,7 @@ export async function POST(request: NextRequest) {
       changedFilesCount: payload.changed_files?.length ?? 0,
     })
   } catch (error) {
-    console.error('[skills-sync] failed to revalidate skills page', error)
+    console.error('[skills-sync] failed to revalidate skills page', { reason: safeErrorName(error) })
     return NextResponse.json({ ok: false, error: 'Failed to revalidate' }, { status: 500 })
   }
 }

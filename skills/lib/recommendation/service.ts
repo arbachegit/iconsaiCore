@@ -163,7 +163,13 @@ export async function recommendSkills(
   situation: string,
   requestId: string,
 ): Promise<RecommendationResponse> {
-  const { system, user, allowedSkillIds } = buildSkillAdvisorPrompt(skills, situation)
+  const {
+    system,
+    user,
+    allowedSkillIds,
+    inputHash,
+    delimiterAttempt,
+  } = buildSkillAdvisorPrompt(skills, situation)
   let providerResult: ProviderResult
   let result: RecommendationResult
 
@@ -186,6 +192,8 @@ export async function recommendSkills(
     promptHash: SKILL_ADVISOR_PROMPT_HASH,
     provider: providerResult.provider,
     situationLength: situation.length,
+    inputHash,
+    delimiterAttempt,
     recommendations: result.recommendations.length,
   })
 

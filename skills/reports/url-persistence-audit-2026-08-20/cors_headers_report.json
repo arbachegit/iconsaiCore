@@ -1,0 +1,24 @@
+{
+  "headers": {
+    "Content-Security-Policy": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'",
+    "X-Frame-Options": "DENY",
+    "X-Content-Type-Options": "nosniff",
+    "HSTS": "max-age=63072000; includeSubDomains; preload",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+    "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+    "X-Powered-By": "removed",
+    "missing": []
+  },
+  "cors": {
+    "policy": "same-origin",
+    "wildcard_with_credentials": false,
+    "status": "PASS"
+  },
+  "rate_limits": [
+    { "endpoint": "POST /api/skills/recommend", "limit": "6/min/IP", "status": "PASS" },
+    { "endpoint": "GET /api/skills/[id]/doc", "limit": "60/min/IP", "status": "PASS" },
+    { "endpoint": "GET /api/skills/sync", "limit": "30/min/IP", "status": "PASS" },
+    { "endpoint": "POST /api/skills/sync", "limit": "60/min/IP + HMAC", "status": "PASS" }
+  ],
+  "verdict": "PASS"
+}

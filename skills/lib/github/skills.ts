@@ -6,6 +6,7 @@ import { load } from 'js-yaml'
 
 import { PHASES } from '@/data/phases'
 import { getGitHubEnv } from './env'
+import { safeErrorName, safeLogText } from '@/lib/server/safe-log'
 import type { GitHubContentFile, GitHubContentItem, RawSkillYaml, Skill } from './types'
 
 const GITHUB_API_BASE_URL = 'https://api.github.com'
@@ -328,7 +329,10 @@ async function fetchGitHubJson(path: string, skipCache = false): Promise<unknown
     `${GITHUB_API_BASE_URL}/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/${path}`,
     fetchOptions,
   ).catch((error: unknown) => {
-    console.error('[skills-github] request failed', { path, error })
+    console.error('[skills-github] request failed', {
+      path: safeLogText(path),
+      reason: safeErrorName(error),
+    })
     throw new GitHubSkillsError(
       'Falha de rede ao acessar a API do GitHub para ler as skills.',
       500,
@@ -368,7 +372,11 @@ async function fetchGitHubJson(path: string, skipCache = false): Promise<unknown
         : 'Acesso negado ao repositório de skills. Se o repo for privado, configure GITHUB_TOKEN.'
     }
 
-    console.error('[skills-github] api error', { path, status: response.status, message })
+    console.error('[skills-github] api error', {
+      path: safeLogText(path),
+      status: response.status,
+      message: safeLogText(message),
+    })
     throw new GitHubSkillsError(message, response.status, code)
   }
 
@@ -423,8 +431,8 @@ async function walkSkillsDirectory(path: string, skipCache = false): Promise<str
         sourceFiles.push(...(await walkSkillsDirectory(item.path, skipCache)))
       } catch (error) {
         console.error('[skills-github] failed to read nested directory', {
-          path: item.path,
-          error,
+          path: safeLogText(item.path),
+          reason: safeErrorName(error),
         })
       }
       continue
@@ -451,20 +459,23 @@ async function loadSkillFromFile(path: string, skipCache = false): Promise<Skill
     const parsed = load(fileContents)
 
     if (!isRecord(parsed)) {
-      console.warn('[skills-github] ignoring yaml without object root', { path })
+      console.warn('[skills-github] ignoring yaml without object root', { path: safeLogText(path) })
       return null
     }
 
     const skill = normalizeSkill(parsed as RawSkillYaml, path)
 
     if (!skill) {
-      console.warn('[skills-github] ignoring yaml without valid skill metadata', { path })
+      console.warn('[skills-github] ignoring yaml without valid skill metadata', { path: safeLogText(path) })
       return null
     }
 
     return skill
   } catch (error) {
-    console.error('[skills-github] failed to load skill file', { path, error })
+    console.error('[skills-github] failed to load skill file', {
+      path: safeLogText(path),
+      reason: safeErrorName(error),
+    })
     return null
   }
 }
@@ -482,7 +493,9 @@ export async function getAllSkills(skipCache = false): Promise<Skill[]> {
     }
 
     if (result.status === 'rejected') {
-      console.error('[skills-github] unexpected promise rejection while loading skill', result.reason)
+      console.error('[skills-github] unexpected promise rejection while loading skill', {
+        reason: safeErrorName(result.reason),
+      })
     }
   }
 
@@ -509,6 +522,10 @@ export async function getAllSkills(skipCache = false): Promise<Skill[]> {
     if (phaseA !== phaseB) return phaseA - phaseB
     return a.name.localeCompare(b.name, 'pt-BR', { sensitivity: 'base' })
   })
+}
+
+export async function getSkillDocument(skillId: string, skipCache = false): Promise<string> {
+  return readFile(`${SKILLS_ROOT}/${skillId}/SKILL.md`, skipCache)
 }
 
 export function computeSkillsHash(skills: Skill[]): string {

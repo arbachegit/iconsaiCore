@@ -1,0 +1,30 @@
+{
+  "version": "1.0.0",
+  "scope": "skill.iconsai.ai standalone catalog",
+  "surfaces": {
+    "sql": { "matches": 0, "status": "PASS" },
+    "nosql": { "matches": 0, "status": "PASS" },
+    "command_shell": { "matches": 0, "status": "PASS" },
+    "path_traversal": { "matches": 0, "status": "PASS" },
+    "crlf_log": {
+      "matches_before": 2,
+      "matches_after": 0,
+      "status": "PASS",
+      "fix": "safeLogText/safeErrorName centralizam NFC, remoção de controles e limites"
+    },
+    "prompt_injection": {
+      "matches_before": 1,
+      "matches_after": 0,
+      "status": "PASS",
+      "fix": "catálogo e situação são escapados antes de entrar nos delimitadores XML"
+    },
+    "ssrf": { "matches": 0, "status": "PASS" },
+    "prototype_property_access": {
+      "matches_before": 1,
+      "matches_after": 0,
+      "status": "PASS",
+      "fix": "Zod skillIdSchema + Object.hasOwn"
+    }
+  },
+  "verdict": "PASS"
+}

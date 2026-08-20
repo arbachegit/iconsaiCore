@@ -8,40 +8,23 @@ import {
   recommendationRequestSchema,
   recommendationResponseSchema,
 } from '@/lib/recommendation/schema'
+import { getClientIdentifier, isRateLimited } from '@/lib/server/rate-limit'
+import { safeErrorName } from '@/lib/server/safe-log'
 
 export const runtime = 'nodejs'
-
-const RATE_LIMIT_WINDOW_MS = 60_000
-const RATE_LIMIT_MAX_REQUESTS = 6
-const rateLimitStore = new Map<string, { count: number; resetAt: number }>()
-
-function getClientIdentifier(request: NextRequest): string {
-  return request.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
-    || request.headers.get('x-real-ip')?.trim()
-    || 'unknown'
-}
-
-function isRateLimited(identifier: string): boolean {
-  const now = Date.now()
-  const current = rateLimitStore.get(identifier)
-
-  if (!current || current.resetAt <= now) {
-    rateLimitStore.set(identifier, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS })
-    return false
-  }
-
-  current.count += 1
-  return current.count > RATE_LIMIT_MAX_REQUESTS
-}
 
 export async function POST(request: NextRequest) {
   const requestId = randomUUID()
   const clientIdentifier = getClientIdentifier(request)
 
-  if (isRateLimited(clientIdentifier)) {
+  if (isRateLimited(clientIdentifier, {
+    scope: 'skill-recommendation',
+    limit: 6,
+    windowMs: 60_000,
+  })) {
     return NextResponse.json(
       { error: 'Muitas consultas em sequência. Aguarde um minuto.', requestId },
-      { status: 429 },
+      { status: 429, headers: { 'Retry-After': '60' } },
     )
   }
 
@@ -74,7 +57,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('[skills-advisor] recommendation failed', {
       requestId,
-      reason: error instanceof Error ? error.name : 'unknown',
+      reason: safeErrorName(error),
     })
     return NextResponse.json(
       {

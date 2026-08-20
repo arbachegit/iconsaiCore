@@ -1,0 +1,36 @@
+{
+  "version": "2.0.0",
+  "canonical_front": "Next.js App Router",
+  "architecture": "standalone modular Next.js application",
+  "database": "not_applicable",
+  "source_of_skills": {
+    "runtime_global": "~/.claude/skills",
+    "versioned_transport": "arbachegit/iconsaiConfig/skills",
+    "fallback": "build snapshot generated from ~/.claude/skills"
+  },
+  "frontend": {
+    "url_is_source_of_navigation_state": true,
+    "desktop_deep_link": true,
+    "mobile_deep_link": true,
+    "reload_persists_skill": true,
+    "back_forward_supported": true,
+    "invalid_params_use_allowlist": true,
+    "previous_document_race_fixed": true
+  },
+  "backend": {
+    "route_handlers": 3,
+    "zod_at_external_boundaries": true,
+    "inherited_object_properties_blocked": true,
+    "response_contract_validated_in_client": true,
+    "rate_limit_present": true,
+    "database_access": false
+  },
+  "next_compliance": {
+    "single_next_config": true,
+    "conflicting_bundlers": false,
+    "standalone_output": true,
+    "typescript_strict": true,
+    "build_ok": true
+  },
+  "decision": "PASS"
+}
