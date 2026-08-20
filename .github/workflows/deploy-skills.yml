@@ -77,28 +77,43 @@ jobs:
           printf '%s\n' "${{ secrets.SKILLS_SSH_PRIVATE_KEY }}" > ~/.ssh/skills_key
           chmod 600 ~/.ssh/skills_key
           ssh-keyscan -H "${{ secrets.SKILLS_SERVER_HOST }}" >> ~/.ssh/known_hosts
+          cat > ~/.ssh/config <<'SSH_CONFIG'
+          Host skills-server
+            HostName ${{ secrets.SKILLS_SERVER_HOST }}
+            User ${{ secrets.SKILLS_SERVER_USER }}
+            IdentityFile ~/.ssh/skills_key
+            ControlMaster auto
+            ControlPath /tmp/skills-ssh-%C
+            ControlPersist 10m
+            ConnectTimeout 15
+          SSH_CONFIG
+          chmod 600 ~/.ssh/config
+          for attempt in 1 2 3 4 5; do
+            ssh -MNf skills-server && exit 0
+            sleep 10
+          done
+          exit 1
 
       - name: Publish standalone with static assets
         run: |
           rsync -az --delete --exclude='.env.production' \
-            -e "ssh -i ~/.ssh/skills_key" \
+            -e ssh \
             build/ \
-            "${{ secrets.SKILLS_SERVER_USER }}@${{ secrets.SKILLS_SERVER_HOST }}:${{ env.DEPLOY_PATH }}/"
+            "skills-server:${{ env.DEPLOY_PATH }}/"
 
       - name: Install service and Caddy host
         env:
           SKILLS_PORT: ${{ vars.SKILLS_PORT }}
         run: |
           test -n "$SKILLS_PORT"
-          timeout 45s rsync -az -e "ssh -i ~/.ssh/skills_key -o ConnectTimeout=15" \
+          timeout 45s rsync -az -e ssh \
             skills/deploy/iconsai-skills.service \
-            "${{ secrets.SKILLS_SERVER_USER }}@${{ secrets.SKILLS_SERVER_HOST }}:/tmp/iconsai-skills.service"
+            "skills-server:/tmp/iconsai-skills.service"
           sed "s/{\$SKILLS_PORT}/$SKILLS_PORT/g" skills/deploy/skills.caddy > /tmp/skills.caddy
-          timeout 45s rsync -az -e "ssh -i ~/.ssh/skills_key -o ConnectTimeout=15" \
+          timeout 45s rsync -az -e ssh \
             /tmp/skills.caddy \
-            "${{ secrets.SKILLS_SERVER_USER }}@${{ secrets.SKILLS_SERVER_HOST }}:/tmp/skills.caddy"
-          timeout 60s ssh -i ~/.ssh/skills_key -o ConnectTimeout=15 \
-            "${{ secrets.SKILLS_SERVER_USER }}@${{ secrets.SKILLS_SERVER_HOST }}" <<'REMOTE'
+            "skills-server:/tmp/skills.caddy"
+          timeout 60s ssh skills-server <<'REMOTE'
             set -e
             install -m 644 /tmp/iconsai-skills.service /etc/systemd/system/iconsai-skills.service
             install -m 644 /tmp/skills.caddy /etc/caddy/skills.caddy
@@ -126,4 +141,6 @@ jobs:
           done <<< "$paths"
 
       - if: always()
-        run: rm -f ~/.ssh/skills_key /tmp/skills.caddy
+        run: |
+          ssh -O exit skills-server 2>/dev/null || true
+          rm -f ~/.ssh/skills_key ~/.ssh/config /tmp/skills.caddy
