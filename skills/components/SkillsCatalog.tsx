@@ -251,7 +251,7 @@ export default function SkillsCatalog({
 
           <a
             className={styles.toolsLink}
-            href="https://icon.iconsai.ai/tools"
+            href="https://iconsai.ai/icon/tools"
             target="_blank"
             rel="noopener noreferrer"
           >
