@@ -90,12 +90,15 @@ jobs:
           SKILLS_PORT: ${{ vars.SKILLS_PORT }}
         run: |
           test -n "$SKILLS_PORT"
-          scp -i ~/.ssh/skills_key skills/deploy/iconsai-skills.service \
+          timeout 45s rsync -az -e "ssh -i ~/.ssh/skills_key -o ConnectTimeout=15" \
+            skills/deploy/iconsai-skills.service \
             "${{ secrets.SKILLS_SERVER_USER }}@${{ secrets.SKILLS_SERVER_HOST }}:/tmp/iconsai-skills.service"
           sed "s/{\$SKILLS_PORT}/$SKILLS_PORT/g" skills/deploy/skills.caddy > /tmp/skills.caddy
-          scp -i ~/.ssh/skills_key /tmp/skills.caddy \
+          timeout 45s rsync -az -e "ssh -i ~/.ssh/skills_key -o ConnectTimeout=15" \
+            /tmp/skills.caddy \
             "${{ secrets.SKILLS_SERVER_USER }}@${{ secrets.SKILLS_SERVER_HOST }}:/tmp/skills.caddy"
-          ssh -i ~/.ssh/skills_key "${{ secrets.SKILLS_SERVER_USER }}@${{ secrets.SKILLS_SERVER_HOST }}" <<'REMOTE'
+          timeout 60s ssh -i ~/.ssh/skills_key -o ConnectTimeout=15 \
+            "${{ secrets.SKILLS_SERVER_USER }}@${{ secrets.SKILLS_SERVER_HOST }}" <<'REMOTE'
             set -e
             install -m 644 /tmp/iconsai-skills.service /etc/systemd/system/iconsai-skills.service
             install -m 644 /tmp/skills.caddy /etc/caddy/skills.caddy
