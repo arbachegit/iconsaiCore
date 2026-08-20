@@ -129,14 +129,17 @@ jobs:
       - name: Verify public build and assets
         run: |
           expected="${{ github.sha }}"
-          actual=$(curl -fsS --retry 12 --retry-delay 5 https://skill.iconsai.ai/build-info.txt)
+          actual=$(curl -fsS --connect-timeout 10 --max-time 30 \
+            --retry 5 --retry-delay 5 --retry-all-errors \
+            https://skill.iconsai.ai/build-info.txt)
           test "$actual" = "$expected"
-          html=$(curl -fsS https://skill.iconsai.ai/)
-          printf '%s' "$html" | grep -q 'Skills que fazem'
+          html=$(curl -fsS --connect-timeout 10 --max-time 30 https://skill.iconsai.ai/)
+          [[ "$html" == *'Skills que fazem'* ]]
           paths=$(printf '%s' "$html" | grep -oE '/_next/static/[^" ]+\.(js|css)' | sort -u)
           test -n "$paths"
           while IFS= read -r path; do
-            status=$(curl -sS -o /dev/null -w '%{http_code}' "https://skill.iconsai.ai$path")
+            status=$(curl -sS --connect-timeout 10 --max-time 20 \
+              -o /dev/null -w '%{http_code}' "https://skill.iconsai.ai$path")
             test "$status" = '200'
           done <<< "$paths"
 
