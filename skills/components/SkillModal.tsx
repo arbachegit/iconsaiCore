@@ -1,10 +1,11 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { ArrowLeft, Check, Copy, FileText, X } from 'lucide-react'
+import { ArrowLeft, Check, Copy, FileText, ListChecks, Sparkles, Target, X } from 'lucide-react'
 import { getHubMembers } from '@/data/catalog-groups'
 import { PHASES, PHASE_COLOR_RAW } from '@/data/phases'
 import { useSkillDoc } from '@/lib/use-skill-doc'
+import { buildSkillSummary, formatSkillSummary } from '@/lib/skill-summary'
 import MarkdownRenderer from '@/components/MarkdownRenderer'
 import type { Skill } from '@/lib/github/types'
 
@@ -48,8 +49,10 @@ export default function SkillModal({ skills, skillId, onClose, onNavigateSkill }
 
   if (!skill) return null
 
+  const summary = buildSkillSummary(skill, fullDoc)
+
   const handleCopy = async () => {
-    const text = viewMode === 'complete' && fullDoc ? fullDoc : skill.description
+    const text = viewMode === 'complete' && fullDoc ? fullDoc : formatSkillSummary(summary)
     await navigator.clipboard.writeText(text)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
@@ -136,16 +139,80 @@ export default function SkillModal({ skills, skillId, onClose, onNavigateSkill }
         {/* Body */}
         <div className="p-5">
           {viewMode === 'summary' ? (
-          <div className="space-y-5">
-            {/* Description */}
-            <div>
-              <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--t3)] mb-2">
-                Descricao
-              </h3>
-              <p className="text-sm text-[var(--t2)] leading-relaxed">
-                {skill.description}
-              </p>
+          loading && !fullDoc ? (
+            <div className="flex items-center justify-center gap-3 py-12 text-[var(--t3)]">
+              <span className="h-4 w-4 animate-spin rounded-full border-2 border-[var(--cy)] border-t-transparent" />
+              <span className="text-sm">Preparando um sumário didático...</span>
             </div>
+          ) : (
+          <div className="space-y-6">
+            <section className="rounded-xl border border-[var(--brd)] bg-[var(--bg-deep)] p-4">
+              <div className="mb-2 flex items-center gap-2">
+                <Sparkles className="h-4 w-4" style={{ color }} aria-hidden="true" />
+                <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--t3)]">
+                  Em poucas palavras
+                </h3>
+              </div>
+              <p className="text-[15px] text-[var(--t1)] leading-7">
+                {summary.explanation}
+              </p>
+            </section>
+
+            {(summary.howItWorks.length > 0 || summary.whenToUse.length > 0) && (
+              <div className="grid gap-5 sm:grid-cols-2">
+                {summary.howItWorks.length > 0 && (
+                  <section>
+                    <div className="mb-3 flex items-center gap-2">
+                      <ListChecks className="h-4 w-4" style={{ color }} aria-hidden="true" />
+                      <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--t3)]">
+                        Como funciona
+                      </h3>
+                    </div>
+                    <ol className="space-y-2.5">
+                      {summary.howItWorks.map((item, index) => (
+                        <li key={item} className="flex items-start gap-2.5 text-sm leading-6 text-[var(--t2)]">
+                          <span
+                            className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold font-mono"
+                            style={{ backgroundColor: `${color}18`, color, border: `1px solid ${color}35` }}
+                          >
+                            {index + 1}
+                          </span>
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ol>
+                  </section>
+                )}
+
+                {summary.whenToUse.length > 0 && (
+                  <section>
+                    <div className="mb-3 flex items-center gap-2">
+                      <Target className="h-4 w-4" style={{ color }} aria-hidden="true" />
+                      <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--t3)]">
+                        Quando usar
+                      </h3>
+                    </div>
+                    <ul className="space-y-2.5">
+                      {summary.whenToUse.map((item) => (
+                        <li key={item} className="flex items-start gap-2.5 text-sm leading-6 text-[var(--t2)]">
+                          <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full" style={{ backgroundColor: color }} />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+                )}
+              </div>
+            )}
+
+            {summary.outcome && (
+              <section className="border-l-2 pl-4" style={{ borderColor: color }}>
+                <h3 className="mb-2 text-xs font-mono uppercase tracking-wider text-[var(--t3)]">
+                  O que entrega
+                </h3>
+                <p className="text-sm leading-6 text-[var(--t2)]">{summary.outcome}</p>
+              </section>
+            )}
 
             {/* Techs */}
             {skill.techs.length > 0 && (
@@ -171,23 +238,6 @@ export default function SkillModal({ skills, skillId, onClose, onNavigateSkill }
               </div>
             )}
 
-            {/* Examples */}
-            {skill.examples.length > 0 && (
-              <div>
-                <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--t3)] mb-2">
-                  Quando usar
-                </h3>
-                <ul className="space-y-1.5">
-                  {skill.examples.map((ex, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-[var(--t2)]">
-                      <span className="mt-1.5 w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: color }} />
-                      {ex}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
             {/* Commands */}
             {skill.commands.length > 0 && (
               <div>
@@ -204,18 +254,6 @@ export default function SkillModal({ skills, skillId, onClose, onNavigateSkill }
                     </code>
                   ))}
                 </div>
-              </div>
-            )}
-
-            {/* Keywords */}
-            {skill.keywords && (
-              <div>
-                <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--t3)] mb-2">
-                  Keywords
-                </h3>
-                <p className="text-xs font-mono text-[var(--t3)] leading-relaxed">
-                  {skill.keywords}
-                </p>
               </div>
             )}
 
@@ -252,6 +290,7 @@ export default function SkillModal({ skills, skillId, onClose, onNavigateSkill }
               Versão completa
             </button>
           </div>
+          )
           ) : loading ? (
             <div className="flex items-center gap-3 py-8 justify-center text-[var(--t3)]">
               <span className="w-4 h-4 border-2 border-[var(--cy)] border-t-transparent rounded-full animate-spin" />
