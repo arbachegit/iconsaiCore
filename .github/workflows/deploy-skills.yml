@@ -151,7 +151,7 @@ jobs:
         run: |
           ssh skills-server "EXPECTED='${{ github.sha }}' bash -s" <<'REMOTE'
             set -euo pipefail
-            curl_public=(curl --resolve skill.iconsai.ai:443:127.0.0.1 --connect-timeout 5 --max-time 20)
+            curl_public=(curl --globoff --resolve skill.iconsai.ai:443:127.0.0.1 --connect-timeout 5 --max-time 20)
             actual=$("${curl_public[@]}" -fsS --retry 12 --retry-delay 2 --retry-all-errors \
               https://skill.iconsai.ai/build-info.txt)
             test "$actual" = "$EXPECTED"
