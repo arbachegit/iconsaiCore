@@ -1,0 +1,336 @@
+<title>DoD do Skills</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@600;700&display=swap">
+<style>
+:root{
+  --ground:#f6f8f9; --surface:#ffffff; --surface-2:#eef2f4;
+  --ink:#10222a; --ink-2:#3c565f; --muted:#6b838c; --line:#dae2e6;
+  --accent:#0e7490; --accent-soft:#e0f2f7;
+  --ok:#0f766e; --ok-bg:#dcf3ef;
+  --parcial:#a2620b; --parcial-bg:#fbeecf;
+  --bloq:#a4342c; --bloq-bg:#fbe3e1;
+  --nao:#5a6b73; --nao-bg:#e6ecef;
+  --ok-tint:#f1faf7; --bloq-tint:#fdf4f3;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0b1417; --surface:#111e23; --surface-2:#16272d;
+    --ink:#e6eef1; --ink-2:#b3c6cd; --muted:#84a0a9; --line:#22383f;
+    --accent:#4dd0e8; --accent-soft:#12333c;
+    --ok:#6fdcc4; --ok-bg:#0f3630;
+    --parcial:#f0c069; --parcial-bg:#3a2c10;
+    --bloq:#f2938a; --bloq-bg:#3d1c19;
+    --nao:#93a8b0; --nao-bg:#1d2f35;
+    --ok-tint:#0c2320; --bloq-tint:#2a1613;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0b1417; --surface:#111e23; --surface-2:#16272d;
+  --ink:#e6eef1; --ink-2:#b3c6cd; --muted:#84a0a9; --line:#22383f;
+  --accent:#4dd0e8; --accent-soft:#12333c;
+  --ok:#6fdcc4; --ok-bg:#0f3630;
+  --parcial:#f0c069; --parcial-bg:#3a2c10;
+  --bloq:#f2938a; --bloq-bg:#3d1c19;
+  --nao:#93a8b0; --nao-bg:#1d2f35;
+    --ok-tint:#0c2320; --bloq-tint:#2a1613;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,sans-serif; font-size:15px; line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1120px; margin:0 auto; padding:48px 24px 96px; display:flex; flex-direction:column; gap:40px}
+header{display:flex; flex-direction:column; gap:10px; border-bottom:2px solid var(--line); padding-bottom:24px}
+.eyebrow{
+  font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--accent); font-weight:600;
+}
+h1{
+  font-family:"IBM Plex Serif",Georgia,serif; font-weight:700; font-size:34px;
+  margin:0; letter-spacing:-.015em; text-wrap:balance;
+}
+.lede{margin:0; color:var(--ink-2); max-width:64ch}
+.stamp{
+  font-family:"IBM Plex Mono",monospace; font-size:12.5px; color:var(--muted);
+  display:flex; flex-wrap:wrap; gap:6px 18px; margin-top:4px;
+}
+.stamp b{color:var(--ink-2); font-weight:500}
+
+.placar{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px}
+.tile{
+  background:var(--surface); border:1px solid var(--line); border-radius:3px;
+  padding:14px 16px; display:flex; flex-direction:column; gap:2px;
+}
+.tile .n{
+  font-family:"IBM Plex Mono",monospace; font-size:27px; font-weight:600;
+  font-variant-numeric:tabular-nums; line-height:1.1;
+}
+.tile .r{font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.07em}
+.tile.f .n{color:var(--ok)} .tile.p .n{color:var(--parcial)}
+.tile.b .n{color:var(--bloq)} .tile.n .n{color:var(--nao)}
+
+section{display:flex; flex-direction:column; gap:14px}
+h2{
+  font-family:"IBM Plex Serif",Georgia,serif; font-size:20px; font-weight:600;
+  margin:0; letter-spacing:-.01em;
+}
+h2 .conta{
+  font-family:"IBM Plex Mono",monospace; font-size:12px; font-weight:400;
+  color:var(--muted); margin-left:10px; letter-spacing:0;
+}
+.nota{margin:0; color:var(--ink-2); font-size:14px; max-width:70ch}
+
+.rolar{overflow-x:auto; border:1px solid var(--line); border-radius:3px; background:var(--surface)}
+table{border-collapse:collapse; width:100%; min-width:720px}
+th{
+  text-align:left; font-size:11px; letter-spacing:.09em; text-transform:uppercase;
+  color:var(--muted); font-weight:600; padding:11px 14px;
+  border-bottom:1px solid var(--line); background:var(--surface-2); white-space:nowrap;
+}
+td{padding:13px 14px; border-bottom:1px solid var(--line); vertical-align:top}
+tr:last-child td{border-bottom:none}
+td.num{
+  font-family:"IBM Plex Mono",monospace; color:var(--muted); font-size:12.5px;
+  font-variant-numeric:tabular-nums; white-space:nowrap; width:1%;
+}
+td.pedido{min-width:230px}
+td.prova{
+  font-family:"IBM Plex Mono",monospace; font-size:12.5px; color:var(--ink-2);
+  line-height:1.55; min-width:280px;
+}
+td.prova em{font-style:normal; color:var(--accent); font-weight:500}
+
+.pill{
+  display:inline-block; font-family:"IBM Plex Mono",monospace; font-size:11px;
+  font-weight:600; letter-spacing:.05em; text-transform:uppercase;
+  padding:3px 9px; border-radius:2px; white-space:nowrap;
+}
+.pill.f{color:var(--ok); background:var(--ok-bg)}
+.pill.p{color:var(--parcial); background:var(--parcial-bg)}
+.pill.b{color:var(--bloq); background:var(--bloq-bg)}
+.pill.n{color:var(--nao); background:var(--nao-bg)}
+
+.caixa{
+  border:1px solid var(--line); border-left:3px solid var(--accent);
+  background:var(--surface); border-radius:3px; padding:18px 20px;
+  display:flex; flex-direction:column; gap:10px;
+}
+.caixa h3{
+  font-family:"IBM Plex Sans",sans-serif; font-size:14px; font-weight:600;
+  margin:0; letter-spacing:.01em;
+}
+.caixa p{margin:0; color:var(--ink-2); font-size:14px}
+.caixa ol{margin:0; padding-left:20px; color:var(--ink-2); font-size:14px; display:flex; flex-direction:column; gap:8px}
+.caixa code{font-family:"IBM Plex Mono",monospace; font-size:12.5px; color:var(--ink); background:var(--surface-2); padding:1px 5px; border-radius:2px}
+
+footer{
+  border-top:1px solid var(--line); padding-top:20px; color:var(--muted);
+  font-size:13px; display:flex; flex-direction:column; gap:6px;
+}
+footer code{font-family:"IBM Plex Mono",monospace; font-size:12.5px}
+
+/* Decisão do dono — em toda linha cujo estado é "com você". O clique altera o
+   DOM, e é isso que a capacidade `artifact` grava como versão nova e devolve
+   à sessão. */
+.decisao{display:flex; gap:6px; align-items:center; flex-wrap:wrap}
+.decisao button{
+  font-family:"IBM Plex Mono",monospace; font-size:11px; font-weight:600;
+  letter-spacing:.05em; text-transform:uppercase; cursor:pointer; line-height:1.5;
+  padding:4px 13px; border-radius:2px; border:1px solid var(--line);
+  background:var(--surface-2); color:var(--muted);
+}
+.decisao button:hover{border-color:var(--accent); color:var(--ink-2)}
+.decisao button:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.decisao button[data-v="sim"][aria-pressed="true"]{background:var(--ok-bg); color:var(--ok); border-color:var(--ok)}
+.decisao button[data-v="nao"][aria-pressed="true"]{background:var(--bloq-bg); color:var(--bloq); border-color:var(--bloq)}
+tr[data-decisao="sim"] td{background:var(--ok-tint)}
+tr[data-decisao="nao"] td{background:var(--bloq-tint)}
+td.dec{width:1%; white-space:nowrap}
+@media (prefers-reduced-motion: no-preference){.decisao button{transition:background .12s ease, border-color .12s ease, color .12s ease}}
+
+.aviso-decisao{
+  display:flex; gap:10px; align-items:flex-start; margin:0;
+  border:1px solid var(--bloq); border-left:3px solid var(--bloq);
+  background:var(--bloq-bg); color:var(--bloq);
+  border-radius:3px; padding:12px 14px; font-size:13.5px; line-height:1.5;
+}
+.aviso-decisao b{font-weight:600}
+.aviso-decisao[hidden]{display:none}
+.decisao[data-inerte="1"] button{opacity:.45; cursor:not-allowed}
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">Definition of Done · reformulação do Skills</span>
+    <h1>DoD do Skills</h1>
+    <p class="lede">
+      Cada item repete o que foi pedido, declara o estado e traz a medição que o sustenta.
+      Item sem prova não é <em>feito</em> — é afirmação.
+    </p>
+    <div class="stamp">
+      <span><b>produção</b> 046e95b010707b791a93e6db20a823592ed9afbe</span>
+      <span><b>HEAD</b> 046e95b0</span>
+      <span><b>deploy</b> success · runs 32654701804 + 32654822433</span>
+      <span><b>suíte</b> 5 gates + build standalone</span>
+      <span><b>medido em</b> 2026-08-23 14:28 BRT</span>
+    </div>
+  </header>
+
+  <div class="placar">
+    <div class="tile f"><span class="n">4</span><span class="r">feito</span></div>
+    <div class="tile p"><span class="n">0</span><span class="r">parcial</span></div>
+    <div class="tile b"><span class="n">0</span><span class="r">com você</span></div>
+    <div class="tile n"><span class="n">0</span><span class="r">não feito</span></div>
+  </div>
+
+  <section>
+    <h2>Reformulação funcional<span class="conta">“fazer uma reformulação do design do /admin/”</span></h2>
+    <p class="nota">O hub autenticado foi refeito como central operacional, preservando a porta de login e o gestor de sessão.</p>
+    <div class="rolar">
+      <table>
+        <thead><tr><th>#</th><th>o que foi pedido</th><th>estado</th><th>prova</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="num">1</td>
+            <td class="pedido">Reformular o design de <code>https://tools.iconsai.ai/admin/</code>, que estava ruim por falta de funcionalidade.</td>
+            <td><span class="pill f">feito</span></td>
+            <td class="prova"><code>npm run build</code> → 8/8 páginas; <code>npm run test:e2e:login</code> → login completo, sessão, três áreas, busca, estado vazio e restauração verdes em dois viewports. Produção: HTML 200, favicon 200 e <em>10/10 assets</em> JS/CSS 200 com MIME correto.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Nova área Skills<span class="conta">“Inserir mais uma área que é https://skill.iconsai.ai”</span></h2>
+    <p class="nota">A área está no registro único, no hub e no topo compartilhado; o destino público está protegido pelo gate de acesso.</p>
+    <div class="rolar">
+      <table>
+        <thead><tr><th>#</th><th>o que foi pedido</th><th>estado</th><th>prova</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="num">2</td>
+            <td class="pedido">Inserir <code>https://skill.iconsai.ai</code> como nova área.</td>
+            <td><span class="pill f">feito</span></td>
+            <td class="prova"><code>./valida-skill.sh</code>, cinco gates de <code>npm run prebuild</code> e <code>NEXT_PUBLIC_TOOLS_ORIGIN=https://tools.iconsai.ai/admin npm run build</code> passaram. CI run <code>32654822433</code> publicou o build com assets estáticos.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Com você<span class="conta">bloqueadas, não esquecidas</span></h2>
+    <p class="aviso-decisao" id="aviso-decisao" hidden>
+      <span aria-hidden="true">⚠</span>
+      <span><b>Os botões estão desligados nesta publicação.</b> Ela foi publicada sem
+      <code>capabilities: {artifact: {}}</code>, então um clique mudaria a cor e
+      <b>não gravaria nada</b> — a decisão se perderia no recarregamento e nenhuma sessão
+      seria avisada. Republique com a capability para ligá-los.</span>
+    </p>
+    <div class="rolar">
+      <table>
+        <thead><tr><th>#</th><th>o que está parado</th><th>estado</th><th>o que destrava</th><th>aprovado</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="num">3</td>
+            <td class="pedido">Reformular as páginas internas e o painel de detalhe das Skills.</td>
+            <td><span class="pill f">feito</span></td>
+            <td class="prova">O modal interno recebeu painel de protocolo, metadados, estado mobile, contraste e leitura do documento completo. <code>npm run check:catalog</code> → 14/14 e <code>npm run check:routing</code> → 21/21.</td>
+            <td class="dec"><span class="decisao">
+              <button type="button" data-v="sim" aria-pressed="false" aria-label="Aprovar: item 3">sim</button>
+              <button type="button" data-v="nao" aria-pressed="false" aria-label="Recusar: item 3">não</button>
+            </span></td>
+          </tr>
+          <tr>
+            <td class="num">4</td>
+            <td class="pedido">Corrigir o retorno de “Ferramentas” para o hub correto.</td>
+            <td><span class="pill f">feito</span></td>
+            <td class="prova"><code>SKILLS_TOOLS_ENTRY_URL</code> foi corrigida para <code>https://tools.iconsai.ai/admin</code>; após o redeploy, <code>curl -sSI https://skill.iconsai.ai/</code> → <em>307 Location: https://tools.iconsai.ai/admin</em>, e o destino responde HTTP 200.</td>
+            <td class="dec"><span class="decisao">
+              <button type="button" data-v="sim" aria-pressed="false" aria-label="Aprovar: item 4">sim</button>
+              <button type="button" data-v="nao" aria-pressed="false" aria-label="Recusar: item 4">não</button>
+            </span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>O que eu errei<span class="conta">registrado, não omitido</span></h2>
+    <div class="caixa">
+      <h3>O middleware ainda usava a entrada externa obsoleta</h3>
+      <p>A variável <code>SKILLS_TOOLS_ENTRY_URL</code> apontava para <code>iconsai.ai/icon/tools</code>, que retornava 404 após o redirect. O efeito medido era o erro reportado ao clicar em Ferramentas.</p>
+      <p><strong>Método adotado:</strong> listar variáveis de produção com <code>gh variable list --env production</code>, corrigir a variável e rerodar o deploy; a prova final foi HTTP 307 para <code>tools.iconsai.ai/admin</code> e HTTP 200 no destino.</p>
+    </div>
+    <div class="caixa">
+      <h3>Erros do background do Chrome foram confundidos com a aplicação</h3>
+      <p><code>FrameDoesNotExistError</code>, <code>strURL is not defined</code> e <code>Unchecked runtime.lastError</code> vieram de <code>chrome-extension://.../background.js</code>, não do bundle Skills.</p>
+      <p><strong>Método adotado:</strong> separar erros de extensão dos requests da aplicação e validar o deploy via <code>build-info.txt</code>, MIME dos assets e headers públicos.</p>
+    </div>
+    <div class="caixa">
+      <h3>Build local encontrou o snapshot remoto indisponível</h3>
+      <p>Durante a geração estática, a API GitHub respondeu 404 para <code>contents/skills</code> e o aplicativo usou o fallback versionado. Isso não impediu a publicação nem alterou o contrato da tela.</p>
+      <p><strong>Método adotado:</strong> aceitar o fallback já previsto, confirmar os cinco gates e repetir a prova no CI, que publicou e verificou os assets.</p>
+    </div>
+    <div class="caixa">
+      <h3>Os 401 de OTP não pertencem ao catálogo Skills</h3>
+      <p>Os requests <code>api/access/otp/start</code> e <code>verify</code> retornaram 401 por ausência de sessão/token válido. O fluxo de autenticação está fora do escopo da reformulação das páginas internas.</p>
+      <p><strong>Método adotado:</strong> manter o diagnóstico separado da UI e não mascarar o 401 com fallback visual.</p>
+    </div>
+  </section>
+
+  <footer>
+    <span>Publicado em <code>046e95b0</code> · produção confirmada por <code>build-info.txt</code> com SHA completo.</span>
+    <span>Contagens medidas no disco, nos CI <code>32654701804</code>/<code>32654822433</code> e em produção em 2026-08-23 14:28 BRT.</span>
+  </footer>
+</div>
+
+<script>
+/* Aprovação do dono na seção "Com você".
+   A capacidade `artifact` grava como versão nova o que um GESTO do visualizador
+   muda no DOM — por isso a decisão é escrita aqui, no handler do clique, e não
+   em carregamento, timer ou fetch. Clicar de novo no mesmo botão desmarca. */
+document.addEventListener("click", function (ev) {
+  var alvo = ev.target instanceof Element ? ev.target.closest(".decisao button") : null;
+  if (!alvo) return;
+  var celula = alvo.closest(".decisao");
+  var linha = alvo.closest("tr");
+  if (!celula || !linha) return;
+  var jaEstava = alvo.getAttribute("aria-pressed") === "true";
+  var irmaos = celula.querySelectorAll("button");
+  for (var i = 0; i < irmaos.length; i++) irmaos[i].setAttribute("aria-pressed", "false");
+  if (jaEstava) {
+    linha.removeAttribute("data-decisao");
+  } else {
+    alvo.setAttribute("aria-pressed", "true");
+    linha.setAttribute("data-decisao", alvo.getAttribute("data-v"));
+  }
+});
+</script>
+
+<script>
+/* O botão NÃO PODE MENTIR.
+   Sem a capability `artifact`, o clique muda o DOM no navegador de quem vê e
+   NADA é salvo nem notificado — a peça fica verde e a decisão se perde no reload.
+   Esta checagem roda no CARREGAMENTO, de propósito: mudança sem gesto não é
+   gravada, então o aviso nunca suja o documento salvo. */
+(async function () {
+  var vivo = false;
+  try { vivo = (await window.claude?.use?.("artifact")) != null; } catch (e) { vivo = false; }
+  if (vivo) return;
+  var aviso = document.getElementById("aviso-decisao");
+  if (aviso) aviso.hidden = false;
+  document.querySelectorAll(".decisao").forEach(function (c) {
+    c.setAttribute("data-inerte", "1");
+    c.querySelectorAll("button").forEach(function (b) {
+      b.disabled = true;
+      b.setAttribute("aria-disabled", "true");
+      b.title = "Gravação desligada nesta publicação";
+    });
+  });
+})();
+</script>
