@@ -43,6 +43,7 @@ jobs:
       - name: Build standalone app
         run: npm run build
         env:
+          NEXT_PUBLIC_TOOLS_ORIGIN: https://tools.iconsai.ai/admin
           GITHUB_OWNER: arbachegit
           GITHUB_REPO: iconsaiConfig
           GITHUB_TOKEN: ${{ secrets.SKILLS_GITHUB_TOKEN }}

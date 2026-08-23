@@ -8,6 +8,7 @@ import { useSkillDoc } from '@/lib/use-skill-doc'
 import { buildSkillSummary, formatSkillSummary } from '@/lib/skill-summary'
 import MarkdownRenderer from '@/components/MarkdownRenderer'
 import type { Skill } from '@/lib/github/types'
+import styles from './SkillModal.module.css'
 
 interface SkillModalProps {
   skills: Skill[]
@@ -62,18 +63,20 @@ export default function SkillModal({ skills, skillId, onClose, onNavigateSkill }
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      className={`${styles.modalRoot} fixed inset-0 z-50 flex items-center justify-center p-4`}
+      data-skill-modal="true"
       onClick={onClose}
     >
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
+      <div className={`${styles.modalBackdrop} absolute inset-0`} />
       <div
-        className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-2xl border border-[var(--brd)] bg-[var(--bg-card)] shadow-2xl"
+        className={`${styles.modalShell} relative w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-2xl border border-[var(--brd)] bg-[var(--bg-card)] shadow-2xl`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Sticky header */}
-        <div className="sticky top-0 z-10 flex items-center justify-between p-5 pb-4 bg-[var(--bg-card)] border-b border-[var(--brd)]">
+        <div className={`${styles.modalHeader} sticky top-0 z-10 flex items-center justify-between p-5 pb-4 bg-[var(--bg-card)] border-b border-[var(--brd)]`}>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-3 flex-wrap">
+              <span className={styles.modalEyebrow}>protocolo interno</span>
               <p
                 className="text-xs font-mono uppercase tracking-wider"
                 style={{ color }}
@@ -92,7 +95,7 @@ export default function SkillModal({ skills, skillId, onClose, onNavigateSkill }
                 {status}
               </span>
             </div>
-            <h2 className="mt-1 text-lg font-bold text-[var(--t1)]">{skill.name}</h2>
+            <h2 className={`${styles.modalTitle} mt-1 text-lg font-bold text-[var(--t1)]`}>{skill.name}</h2>
             <p className="mt-1 text-xs text-[var(--t3)]">
               {viewMode === 'summary' ? 'Sumário da skill' : 'Versão completa do SKILL.md'}
             </p>
@@ -119,7 +122,7 @@ export default function SkillModal({ skills, skillId, onClose, onNavigateSkill }
         </div>
 
         {/* Metadata bar */}
-        <div className="px-5 py-3 border-b border-[var(--brd)] bg-[var(--bg-deep)]">
+        <div className={`${styles.modalMeta} px-5 py-3 border-b border-[var(--brd)] bg-[var(--bg-deep)]`}>
           <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs font-mono text-[var(--t3)]">
             <span>
               <span className="text-[var(--t3)] opacity-60">id:</span>{' '}
@@ -137,7 +140,7 @@ export default function SkillModal({ skills, skillId, onClose, onNavigateSkill }
         </div>
 
         {/* Body */}
-        <div className="p-5">
+        <div className={`${styles.modalBody} p-5`}>
           {viewMode === 'summary' ? (
           loading && !fullDoc ? (
             <div className="flex items-center justify-center gap-3 py-12 text-[var(--t3)]">

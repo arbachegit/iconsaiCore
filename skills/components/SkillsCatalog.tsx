@@ -26,6 +26,7 @@ import {
   readCatalogUrlState,
 } from '@/lib/client/catalog-url-state'
 import { skillsSyncHealthResponseSchema } from '@/lib/github/sync-schema'
+import { readPublicOrigin } from '@/lib/client/public-origins'
 import type { Skill } from '@/lib/github/types'
 
 interface SkillsCatalogProps {
@@ -90,6 +91,7 @@ export default function SkillsCatalog({
   contentHash = '',
   initialSearch = '',
 }: SkillsCatalogProps) {
+  const toolsOrigin = readPublicOrigin(process.env.NEXT_PUBLIC_TOOLS_ORIGIN)
   const initialUrlState = readCatalogUrlState(initialSearch, skills)
   const [activeFilter, setActiveFilter] = useState<string>(initialUrlState.activeFilter)
   const [searchQuery, setSearchQuery] = useState(initialUrlState.searchQuery)
@@ -249,15 +251,18 @@ export default function SkillsCatalog({
             <strong>skills</strong>
           </div>
 
-          <a
-            className={styles.toolsLink}
-            href="https://iconsai.ai/icon/tools"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Ferramentas
-            <ArrowUpRight aria-hidden="true" />
-          </a>
+          {toolsOrigin && (
+            <a
+              className={styles.toolsLink}
+              href={toolsOrigin}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Abrir o hub de ferramentas IconsAI"
+            >
+              Ferramentas
+              <ArrowUpRight aria-hidden="true" />
+            </a>
+          )}
         </header>
 
         <div className={styles.atlas}>
