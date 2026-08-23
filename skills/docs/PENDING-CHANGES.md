@@ -1,6 +1,6 @@
 # Pending Changes for Skills App
 
-Changes planned for the Skills Navigator at `icon.iconsai.ai/skills`.
+Changes planned for the Skills Navigator at `https://skill.iconsai.ai`.
 Source code: `~/Projects/iconsaiSkills/skills/`
 
 ---
