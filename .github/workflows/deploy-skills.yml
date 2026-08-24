@@ -115,6 +115,10 @@ jobs:
           test -n "$SKILLS_TOOLS_VERIFY_URL"
           test -n "$SKILLS_TOOLS_ENTRY_URL"
           test -n "$SKILLS_TOOLS_COURSE_SLUG"
+          case "$SKILLS_TOOLS_VERIFY_URL" in
+            https://*/api/tools-auth/verify) ;;
+            *) echo 'SKILLS_TOOLS_VERIFY_URL precisa apontar para /api/tools-auth/verify'; exit 1 ;;
+          esac
           {
             printf 'SKILLS_PUBLIC_URL=%s\n' "$SKILLS_PUBLIC_URL"
             printf 'SKILLS_TOOLS_VERIFY_URL=%s\n' "$SKILLS_TOOLS_VERIFY_URL"
