@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 const ACCESS_COOKIE = 'skills_tools_access'
+const CANONICAL_SESSION_COOKIE = 'iconsai_superadmin_jwt'
 const COURSE_TOKEN_PARAM = 'course_token'
 const COURSE_TOKEN_PATTERN = /^[A-Za-z0-9_-]{16,4096}\.[A-Za-z0-9_-]{16,256}$/
 const VERIFY_TIMEOUT_MS = 5_000
@@ -88,6 +89,34 @@ async function verifyToolsToken(
   }
 }
 
+async function verifyCanonicalSession(
+  request: NextRequest,
+  config: ToolsRuntimeConfig,
+): Promise<boolean> {
+  const session = request.cookies.get(CANONICAL_SESSION_COOKIE)?.value
+  if (!session) return false
+
+  try {
+    const response = await fetch(config.verifyUrl, {
+      cache: 'no-store',
+      redirect: 'manual',
+      signal: AbortSignal.timeout(VERIFY_TIMEOUT_MS),
+      headers: {
+        accept: 'text/plain',
+        cookie: `${CANONICAL_SESSION_COOKIE}=${encodeURIComponent(session)}`,
+        'user-agent': request.headers.get('user-agent') ?? 'iconsai-skills-middleware',
+        'x-forwarded-for': request.headers.get('x-forwarded-for') ?? '',
+      },
+    })
+
+    return response.status === 200
+      && response.headers.get('x-tools-auth') === 'valid-canonical-session'
+      && response.headers.get('x-tools-scope') === 'superadmin'
+  } catch {
+    return false
+  }
+}
+
 function unauthorized(request: NextRequest, config: ToolsRuntimeConfig | null): NextResponse {
   if (request.nextUrl.pathname.startsWith('/api/')) {
     return NextResponse.json(
@@ -116,7 +145,9 @@ export async function middleware(request: NextRequest) {
   const queryToken = request.nextUrl.searchParams.get(COURSE_TOKEN_PARAM)?.trim() ?? ''
   const cookieToken = request.cookies.get(ACCESS_COOKIE)?.value ?? ''
   const token = queryToken || cookieToken
-  const isValid = await verifyToolsToken(token, request, config)
+  const isValid = token
+    ? await verifyToolsToken(token, request, config)
+    : await verifyCanonicalSession(request, config)
 
   if (!isValid) return unauthorized(request, config)
 

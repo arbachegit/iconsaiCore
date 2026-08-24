@@ -29,6 +29,7 @@ const checks = [
   ['CSP e fingerprinting protegidos', nextConfig.includes('Content-Security-Policy') && nextConfig.includes('poweredByHeader: false')],
   ['Snapshot nasce de ~/.claude/skills', snapshotSync.includes("resolve(homedir(), '.claude/skills')")],
   ['Middleware exige token Tools', middleware.includes('verifyToolsToken(token, request, config)')],
+  ['Middleware aceita sessão canônica do super-admin', middleware.includes("iconsai_superadmin_jwt") && middleware.includes('verifyCanonicalSession') && middleware.includes("valid-canonical-session")],
   ['Middleware valida slug e escopo', middleware.includes("x-tools-course-slug") && middleware.includes("x-tools-scope")],
   ['Token é trocado por cookie HttpOnly', middleware.includes('httpOnly: true')],
   ['Token sai da URL antes do primeiro paint', desktop.includes('useLayoutEffect') && desktop.includes("url.searchParams.delete('course_token')")],
