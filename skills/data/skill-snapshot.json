@@ -561,14 +561,14 @@
     "id": "login",
     "name": "Login",
     "trigger": "/login",
-    "version": "1.0.0",
+    "version": "2.1.1",
     "techs": [],
-    "description": "Implementa, refatora ou audita o único login canônico IconsAI. Use quando o pedido mencionar login, autenticação, CPF, CNPJ, escolha de canal, OTP, superadmin, tela de acesso ou remoção de cadastro local. Governa somente os fluxos CNPJ→CPF→CANAIS→OTP→CONTEÚDO e CPF→CANAIS→OTP→CONTEÚDO, com dados no Supabase rzgkwuqvhpvqmjegckih e Fiscal como referência correta; Rotas é antipadrão.",
+    "description": "Implementa, refatora ou audita o único login canônico IconsAI. Use quando o pedido mencionar login, autenticação, CPF, CNPJ, escolha de canal, OTP, superadmin, tela de acesso ou remoção de cadastro local. Governa somente os fluxos CNPJ→CPF→CANAIS→OTP→CONTEÚDO e CPF→CANAIS→OTP→CONTEÚDO, com usuário comum no Identity Hub e superadmin no banco break-glass; Fiscal é a referência correta e Rotas é antipadrão.",
     "examples": [],
     "commands": [
       "/login"
     ],
-    "keywords": "login implementa, refatora ou audita o único login canônico iconsai. use quando o pedido mencionar login, autenticação, cpf, cnpj, escolha de canal, otp, superadmin, tela de acesso ou remoção de cadastro local. governa somente os fluxos cnpj→cpf→canais→otp→conteúdo e cpf→canais→otp→conteúdo, com dados no supabase rzgkwuqvhpvqmjegckih e fiscal como referência correta; rotas é antipadrão.",
+    "keywords": "login implementa, refatora ou audita o único login canônico iconsai. use quando o pedido mencionar login, autenticação, cpf, cnpj, escolha de canal, otp, superadmin, tela de acesso ou remoção de cadastro local. governa somente os fluxos cnpj→cpf→canais→otp→conteúdo e cpf→canais→otp→conteúdo, com usuário comum no identity hub e superadmin no banco break-glass; fiscal é a referência correta e rotas é antipadrão.",
     "sourcePath": "skills/login/SKILL.md"
   },
   {
@@ -778,25 +778,6 @@
     ],
     "keywords": "security-finalizer system prompt — security_finalizer v1.0",
     "sourcePath": "skills/security-finalizer/SKILL.md"
-  },
-  {
-    "id": "sessao-sem-cookie",
-    "name": "SKILL — SESSÃO SEM COOKIE (portador trocável, autoridade no banco)",
-    "trigger": "/sessao-sem-cookie",
-    "version": "1.0.0",
-    "techs": [],
-    "description": "Sessao gerenciada pelo banco com portador trocavel — porta canonica, flow-contract declarado, superadmin_sessions como autoridade de prazo e revogacao, e a matriz honesta de portadores sem cookie e sem cache. Use quando uma area logada precisar tirar a autoridade da sessao de dentro do token, trocar o portador do browser, ou mover a porta de acesso para /admin ou /superadmin.",
-    "examples": [
-      "Área logada cujo prazo está congelado dentro de um JWT auto-contido.",
-      "Pedido de revogação, \"sair de todos os aparelhos\" ou prazo deslizante.",
-      "Porta de acesso fora de /admin / /superadmin (§−1.6).",
-      "Decisão de trocar o portador do browser."
-    ],
-    "commands": [
-      "/sessao-sem-cookie"
-    ],
-    "keywords": "sessao-sem-cookie sessao gerenciada pelo banco com portador trocavel — porta canonica, flow-contract declarado, superadmin_sessions como autoridade de prazo e revogacao, e a matriz honesta de portadores sem cookie e sem cache. use quando uma area logada precisar tirar a autoridade da sessao de dentro do token, trocar o portador do browser, ou mover a porta de acesso para /admin ou /superadmin.",
-    "sourcePath": "skills/sessao-sem-cookie/SKILL.md"
   },
   {
     "id": "showcase",

@@ -8,6 +8,15 @@ const docs = readFileSync('data/skill-docs.ts', 'utf8')
 const summaryBuilder = readFileSync('lib/skill-summary.ts', 'utf8')
 
 const skillIds = new Set(snapshot.map((skill) => skill.id))
+const legacyLoginIds = [
+  'auth',
+  'design-login',
+  'sessao-sem-cookie',
+  'skill-design-login-iconsai',
+  'skill_auth_fase_1_sem_role',
+  'skill_auth_fase_2_com_role',
+  'skill_auth_fase_3_com_role_multi_tenant',
+]
 const harnessIds = [
   'harness-inspecao',
   'harness-determinismo',
@@ -24,6 +33,7 @@ const checks = [
   ['As quatro skills Harness existem no snapshot', harnessIds.every((id) => skillIds.has(id))],
   ['A skill iniciar existe no snapshot', skillIds.has('iniciar')],
   ['A skill projeto-novo não existe mais', !skillIds.has('projeto-novo')],
+  ['Login é a única skill que governa autenticação', skillIds.has('login') && legacyLoginIds.every((id) => !skillIds.has(id))],
   ['Todos os cards oferecem Mostrar', card.includes('Mostrar') && card.includes('onOpenModal?.(skill.id)')],
   ['Modal abre em Sumário', modal.includes("useState<'summary' | 'complete'>('summary')")],
   ['Sumário contém explicação didática', modal.includes('Em poucas palavras') && modal.includes('Como funciona') && modal.includes('Quando usar')],

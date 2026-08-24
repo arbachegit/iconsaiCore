@@ -5,6 +5,8 @@ description: Implementa, refatora ou audita o único login canônico IconsAI. Us
 
 # Login
 
+**Versão:** 2.1.1
+
 Esta é a única skill que governa login no ecossistema. Skills de CPF, SMS, secrets e autorização são auxiliares; não podem definir fluxo, sessão ou tela de login.
 
 ## Entrada obrigatória

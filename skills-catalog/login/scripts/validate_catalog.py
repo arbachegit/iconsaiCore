@@ -12,7 +12,19 @@ ROOTS = (
     Path.home() / ".claude/skills",
     Path(__file__).resolve().parents[2],
 )
-FORBIDDEN = {"auth", "authsuper", "design-login", "login-cnpj-otp", "skill_auth_fase_1_sem_role", "skill_auth_fase_2_com_role", "skill_auth_fase_3_com_role_multi_tenant", "skill-identity-onboarding", "skill-superadmin-consumer-pattern", "skill-design-login-iconsai"}
+FORBIDDEN = {
+    "auth",
+    "authsuper",
+    "design-login",
+    "login-cnpj-otp",
+    "sessao-sem-cookie",
+    "skill_auth_fase_1_sem_role",
+    "skill_auth_fase_2_com_role",
+    "skill_auth_fase_3_com_role_multi_tenant",
+    "skill-identity-onboarding",
+    "skill-superadmin-consumer-pattern",
+    "skill-design-login-iconsai",
+}
 
 
 def main() -> int:
@@ -20,7 +32,9 @@ def main() -> int:
     login_count = 0
     existing = [root for root in ROOTS if root.is_dir()]
     for root in existing:
-        for skill_file in root.glob("*/SKILL.md"):
+        for skill_file in root.glob("*/*"):
+            if skill_file.name.casefold() != "skill.md" or not skill_file.is_file():
+                continue
             name = skill_file.parent.name
             if name == "login":
                 login_count += 1

@@ -3,7 +3,7 @@ name: login
 trigger: /login
 phase: integracao
 phaseName: Integração & Identidade
-version: "2.1.0"
+version: "2.1.1"
 techs: [nextjs, supabase, zod, otp, infobip, resend]
 description: "Único contrato de login IconsAI: CPF/CNPJ, canais, OTP e conteúdo, com Identity Hub comum isolado do superadmin break-glass."
 examples: []
