@@ -32,6 +32,11 @@ Exceções:
 
 - centralizar usuários comuns e grants no Identity Hub do Scraping;
 - manter somente o superadmin break-glass no banco rzgkw;
+- manter o portador opaco somente em memória e validar seu hash no banco a cada chamada;
+- exigir novo login após reload ou fechamento da página;
+- responder autenticação com `Cache-Control: no-store`;
+- diagnosticar o login legado e persistir a prova em `/erros` antes da primeira edição;
+- coletar a conversa integral redigida em `/conversas` e provar o id persistido;
 - usar somente um contrato de login;
 - preservar usuários existentes por upsert idempotente;
 - desativar, em vez de apagar, quando há histórico referencial;
@@ -44,6 +49,8 @@ Exceções:
 - não usar banco local do aplicativo para emitir identidade ou sessão;
 - não copiar usuário comum para o banco break-glass;
 - não criar outra skill, helper ou ferramenta que governe login;
+- não usar cookie, localStorage, sessionStorage, IndexedDB, Cache API, service worker ou cache de processo em autenticação;
+- não restaurar sessão silenciosamente depois de reload;
 - não pular a escolha de canal;
 - não emitir sessão no navegador;
 - não guardar CPF, OTP ou token em claro em logs;
@@ -51,3 +58,5 @@ Exceções:
 - não criar superadmin pela tela de usuários;
 - não apagar pessoas, vínculos ou logs antes de conciliar a migração;
 - não alegar “100% das atividades” quando algum aplicativo ainda não envia eventos.
+- não iniciar mudança em legado sem o diagnóstico aceito pela ponte de erros;
+- não enviar conversa, logs, CPF, OTP ou credencial sem mascaramento na origem.

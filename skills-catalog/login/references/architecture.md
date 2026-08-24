@@ -26,16 +26,21 @@ Omitir `organization` é a única diferença permitida.
 
 - Usuário comum: Identity Hub no Scraping `redivrmeajmktenwshmn`.
 - Superadmin: mini break-glass exclusivo `rzgkwuqvhpvqmjegckih`.
-- O mesmo fluxo visual não significa misturar identidades, cookies ou claims.
+- O mesmo fluxo visual não significa misturar identidades ou sessões.
 - Cliente `service_role`: somente em route handler/server module.
 - Frontend: renderiza estado, captura input e chama API; não consulta Supabase.
 - Entrada: Zod no Node; strings sanitizadas; CPF/CNPJ normalizados server-side.
 - OTP: hash no banco, TTL explícito, limite de tentativas, consumo atômico e rate limit.
 - Canal: SMS por Infobip como primeiro fator obrigatório do superadmin. E-mail via Resend ou TOTP só pode ser segundo fator opt-in. Usuário comum segue os canais liberados pelo Identity Hub.
-- Sessão de usuário comum: JWT autocontido de 15 minutos e refresh token device-bound de 90 dias, ambos emitidos exclusivamente pelo Identity Hub.
-- Sessão de superadmin: JWT customizado no cookie `iconsai_superadmin_jwt`, com audiência `superadmin`, claim `is_super_admin: true` e `jti` confirmado contra a sessão revogável no banco break-glass.
-- Cookie: `Secure`, `HttpOnly`, `SameSite=Lax`, domínio configurável `.iconsai.ai`.
+- Sessão de usuário comum: segredo opaco aleatório emitido exclusivamente pelo Identity Hub; somente o hash fica no banco.
+- Sessão de superadmin: segredo opaco aleatório emitido pelo break-glass; somente o hash fica na sessão revogável do banco dedicado.
+- Transporte: `Authorization: Bearer <segredo>` mantido somente em memória volátil do documento. Cada chamada confirma a sessão no banco.
+- Recarregar ou fechar perde o portador e exige novo OTP. Não existe refresh persistente, SSO por cookie ou restauração silenciosa.
+- Respostas de login, sessão e logout enviam `Cache-Control: no-store`.
+- Cookie, `localStorage`, `sessionStorage`, IndexedDB, Cache API, service worker e cache de processo são proibidos em autenticação, inclusive como marcador auxiliar ou fallback.
 - Auditoria: append-only para organização resolvida, identidade resolvida, canal escolhido, OTP emitido/validado/falho, sessão criada/revogada e acesso ao conteúdo. Nunca logar CPF, OTP, token ou destino sem máscara.
+- Diagnóstico pré-migração: antes de editar legado, registrar a medição em `superadmin.iconsai.ai/erros`; falha de persistência bloqueia a mudança.
+- Conversas operacionais: registrar envelopes completos pós-mascaramento em `superadmin.iconsai.ai/conversas`; segredo e PII nunca saem da origem em claro.
 - RLS continua ativa. Superadmin é privilégio da aplicação, não bypass de banco.
 
 ## Superadmin e usuários gerenciados

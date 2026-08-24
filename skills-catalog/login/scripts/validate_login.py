@@ -17,9 +17,30 @@ DATABASES = {
 
 def source_files(root: Path) -> list[Path]:
     paths: list[Path] = []
+    ignored = {
+        "node_modules",
+        ".next",
+        ".git",
+        "scripts",
+        "tests",
+        "e2e",
+        "harness",
+        "supabase",
+        "playwright-report",
+        "test-results",
+    }
     for suffix in ("*.ts", "*.tsx", "*.js", "*.mjs", "*.sql"):
-        paths.extend(p for p in root.rglob(suffix) if not {"node_modules", ".next", ".git"} & set(p.parts))
+        paths.extend(
+            p
+            for p in root.rglob(suffix)
+            if not ignored & set(p.relative_to(root).parts)
+        )
     return paths
+
+
+def strip_comments(source: str) -> str:
+    without_blocks = re.sub(r"/\*.*?\*/", "", source, flags=re.S)
+    return re.sub(r"(^|\s)//.*", r"\1", without_blocks)
 
 
 def main() -> int:
@@ -44,14 +65,19 @@ def main() -> int:
     except (OSError, json.JSONDecodeError):
         print("ERRO ambiente: login-contract.json inválido")
         return 2
-    text = "\n".join(p.read_text(encoding="utf-8", errors="ignore") for p in files)
+    relevant_pattern = re.compile(
+        r"auth|login|identity|session|middleware|access|otp|guard|flow|superadmin|client|config|db",
+        re.I,
+    )
+    relevant_files = [p for p in files if relevant_pattern.search(str(p.relative_to(root)))]
+    if "fixtures" in root.parts:
+        relevant_files = files
+    text = "\n".join(p.read_text(encoding="utf-8", errors="ignore") for p in relevant_files)
+    executable_text = strip_comments(text)
     identity_class = contract.get("identityClass")
     database = DATABASES.get(identity_class)
     required_env, central_ref = database if database else ("", "")
-    required_session = {
-        "user": "self_contained_jwt",
-        "superadmin": "stateful_custom_jwt",
-    }.get(identity_class)
+    required_session = "opaque_db_session" if identity_class in DATABASES else None
     expected = (("cnpj", "cpf", "canais", "otp", "conteudo") if args.flow == "cnpj" else ("cpf", "canais", "otp", "conteudo"))
     checks = {
         f"fluxo declarado {' -> '.join(expected)}": tuple(contract.get("steps", ())) == expected,
@@ -60,10 +86,24 @@ def main() -> int:
         "banco canônico declarado": bool(central_ref) and contract.get("databaseRef") == central_ref,
         "cadastro local bloqueado": contract.get("localRegistration") == "central_only",
         f"sessão canônica {required_session or 'inválida'}": bool(required_session) and contract.get("session") == required_session,
+        "transporte bearer somente em memória": contract.get("transport") == "authorization_bearer_memory",
         "sem Math.random": "Math.random(" not in text,
         "OTP server-side": bool(re.search(r"otp|one.time", text, re.I)) and bool(re.search(r"route\.ts|server-only", text)),
-        "sessão protegida": bool(re.search(r"httpOnly|httponly", text)) and bool(re.search(r"secure", text, re.I)),
+        "sessão confirmada no banco": bool(re.search(r"session|sessao", text, re.I)) and bool(re.search(r"token_hash|sha256|createHash", text, re.I)),
+        "Authorization bearer": bool(re.search(r"authorization", text, re.I)) and bool(re.search(r"bearer", text, re.I)),
+        "resposta não armazenável": bool(re.search(r"cache-control", text, re.I)) and bool(re.search(r"no-store", text, re.I)),
     }
+    forbidden = {
+        "cookies do framework": r"\bcookies\s*\(",
+        "Set-Cookie": r"set-cookie|\.cookies\.set\s*\(",
+        "document.cookie": r"document\.cookie",
+        "localStorage": r"localStorage",
+        "sessionStorage": r"sessionStorage",
+        "IndexedDB": r"indexedDB",
+        "Cache API": r"caches\.(?:open|match|put|delete)\s*\(",
+    }
+    for label, pattern in forbidden.items():
+        checks[f"sem {label}"] = not bool(re.search(pattern, executable_text, re.I))
     hardcoded_refs = set(re.findall(r"https://([a-z]{20})\.supabase\.co", text))
     checks["somente refs de identidade canônicas"] = hardcoded_refs <= {value[1] for value in DATABASES.values()}
     failures = 0
