@@ -1,0 +1,4 @@
+interface:
+  display_name: "Login"
+  short_description: "Implementa o login canônico determinístico IconsAI"
+  default_prompt: "Use $login para implementar o fluxo canônico de acesso. Pergunte primeiro CPF ou CNPJ e depois qual empresa."

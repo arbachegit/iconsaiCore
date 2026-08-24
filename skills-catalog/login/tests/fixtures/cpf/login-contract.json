@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "identityClass": "user",
+  "steps": ["cpf", "canais", "otp", "conteudo"],
+  "databaseRef": "redivrmeajmktenwshmn",
+  "databaseEnv": "SCRAPING_SUPABASE_URL",
+  "session": "self_contained_jwt",
+  "localRegistration": "central_only"
+}

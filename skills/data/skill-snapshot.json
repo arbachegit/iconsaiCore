@@ -22,7 +22,6 @@
       "/api-test-audit"
     ],
     "keywords": "api-test-audit auditoria de cobertura e qualidade de testes de api jest vitest supertest pytest httpx",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/api-test-audit/SKILL.md"
   },
   {
@@ -40,7 +39,6 @@
       "/arquitetura"
     ],
     "keywords": "arquitetura system prompt — architecture_mother_normalizer v1.0 next.js monorepo",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/arquitetura/SKILL.md"
   },
   {
@@ -55,27 +53,7 @@
       "/audito"
     ],
     "keywords": "audito system prompt — audito v1.0",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/audito/SKILL.md"
-  },
-  {
-    "id": "auth",
-    "name": "Skill — AUTH OTP (Skill Global)",
-    "trigger": "/auth",
-    "version": "1.0.0",
-    "techs": [],
-    "description": "Autenticacao OTP com escolha de canal (SMS Infobip / Email Resend) — padrao canonico IconsAI (Skill Global)",
-    "examples": [
-      "Implementar login/retomada via OTP em qualquer app IconsAI",
-      "Adicionar verificacao de identidade (CPF, email, telefone) a um projeto",
-      "Construir fluxo de confirmacao de posse de dispositivo"
-    ],
-    "commands": [
-      "/auth"
-    ],
-    "keywords": "auth autenticacao otp com escolha de canal (sms infobip / email resend) — padrao canonico iconsai (skill global)",
-    "updatedAt": "2026-06-20",
-    "sourcePath": "skills/auth/SKILL.md"
   },
   {
     "id": "authz-policy-audit",
@@ -100,7 +78,6 @@
       "/authz-policy-audit"
     ],
     "keywords": "authz-policy-audit skill: authz policy audit fastapi express next.js nestjs supabase rls",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/authz-policy-audit/SKILL.md"
   },
   {
@@ -121,7 +98,6 @@
       "/bi-design"
     ],
     "keywords": "bi-design skill: bi design (database explorer + analytics admin)",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/bi-design/SKILL.md"
   },
   {
@@ -142,7 +118,6 @@
       "/brand"
     ],
     "keywords": "brand skill: brand iconsai - normalizacao tipografica",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/brand/SKILL.md"
   },
   {
@@ -157,8 +132,21 @@
       "/builder"
     ],
     "keywords": "builder skill builder v2 — gerador de skills iconsai",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/builder/SKILL.md"
+  },
+  {
+    "id": "cores",
+    "name": "SKILL — CORES (composição, contraste e derivação)",
+    "trigger": "/cores",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Gestão de composição de cores — contraste medido par a par nas camadas empilhadas, estratégias de derivação, e o harness que reprova o que o olho aprova. Use ao escolher, derivar ou empilhar qualquer cor em e-mail, tela ou documento; ao pintar header, plaquinha, botão ou chip; e sempre que dois elementos coloridos ficarem um sobre o outro.",
+    "examples": [],
+    "commands": [
+      "/cores"
+    ],
+    "keywords": "cores gestão de composição de cores — contraste medido par a par nas camadas empilhadas, estratégias de derivação, e o harness que reprova o que o olho aprova. use ao escolher, derivar ou empilhar qualquer cor em e-mail, tela ou documento; ao pintar header, plaquinha, botão ou chip; e sempre que dois elementos coloridos ficarem um sobre o outro.",
+    "sourcePath": "skills/cores/SKILL.md"
   },
   {
     "id": "cors-headers-security",
@@ -182,7 +170,6 @@
       "/cors-headers-security"
     ],
     "keywords": "cors-headers-security skill: cors, headers & rate limit next.js express fastapi caddy/nginx",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/cors-headers-security/SKILL.md"
   },
   {
@@ -197,7 +184,6 @@
       "/deploy"
     ],
     "keywords": "deploy skill — deploy (pipeline único iconsai)",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/deploy/SKILL.md"
   },
   {
@@ -212,23 +198,7 @@
       "/design"
     ],
     "keywords": "design system prompt — design v1.0",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/design/SKILL.md"
-  },
-  {
-    "id": "design-login",
-    "name": "DESIGN SKILL OFICIAL - LOGIN PADRAO ICONSAI",
-    "trigger": "/design-login",
-    "version": "1.0.0",
-    "techs": [],
-    "description": "DESIGN SKILL OFICIAL - LOGIN PADRAO ICONSAI",
-    "examples": [],
-    "commands": [
-      "/design-login"
-    ],
-    "keywords": "design-login design skill oficial - login padrao iconsai",
-    "updatedAt": "2026-06-20",
-    "sourcePath": "skills/design-login/SKILL.md"
   },
   {
     "id": "dev-design",
@@ -242,8 +212,49 @@
       "/dev-design"
     ],
     "keywords": "dev-design dev design tools builder",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/dev-design/SKILL.md"
+  },
+  {
+    "id": "dod",
+    "name": "DoD — formato canônico de publicação",
+    "trigger": "/dod",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Formato canônico de publicação do Definition of Done do ecossistema IconsAI — artefato HTML publicado, com placar, tabela de itens (# · o que foi pedido · estado · prova) e a seção obrigatória 'O que eu errei'. Use SEMPRE que for fechar uma entrega, responder um prompt com mais de um pedido, ou quando CLAUDE.md §−1.10 exigir DoD. Vale para Claude Code e para Codex.",
+    "examples": [],
+    "commands": [
+      "/dod"
+    ],
+    "keywords": "dod formato canônico de publicação do definition of done do ecossistema iconsai — artefato html publicado, com placar, tabela de itens (# · o que foi pedido · estado · prova) e a seção obrigatória 'o que eu errei'. use sempre que for fechar uma entrega, responder um prompt com mais de um pedido, ou quando claude.md §−1.10 exigir dod. vale para claude code e para codex.",
+    "sourcePath": "skills/dod/SKILL.md"
+  },
+  {
+    "id": "e2e-navegador",
+    "name": "E2E em navegador real — a skill do laço até verde",
+    "trigger": "/e2e-navegador",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Teste E2E em navegador real (Playwright) contra o build que vai a produção, com laço até 100% verde. Use SEMPRE antes de qualquer deploy, e sempre que uma entrega tocar tela — CLAUDE.md §−1.9 torna obrigatório. Cobre o mínimo exigido (porta abre, URL canônica, rota protegida, console limpo) e o padrão de laço que impede entregar item vermelho.",
+    "examples": [],
+    "commands": [
+      "/e2e-navegador"
+    ],
+    "keywords": "e2e-navegador teste e2e em navegador real (playwright) contra o build que vai a produção, com laço até 100% verde. use sempre antes de qualquer deploy, e sempre que uma entrega tocar tela — claude.md §−1.9 torna obrigatório. cobre o mínimo exigido (porta abre, url canônica, rota protegida, console limpo) e o padrão de laço que impede entregar item vermelho.",
+    "sourcePath": "skills/e2e-navegador/SKILL.md"
+  },
+  {
+    "id": "email",
+    "name": "SKILL — E-MAIL (formatação canônica IconsAI)",
+    "trigger": "/email",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Formatacao canonica do e-mail transacional IconsAI — layout moderno em tabela, bloco de codigo OTP em destaque com selecao de um toque, envelope de envio (remetente, assunto, texto alternativo, sandbox, supressao) e os tipos de aviso futuros. Use ao criar ou corrigir qualquer e-mail enviado pelo produto: OTP, convite, aviso operacional ou alerta.",
+    "examples": [],
+    "commands": [
+      "/email"
+    ],
+    "keywords": "email formatacao canonica do e-mail transacional iconsai — layout moderno em tabela, bloco de codigo otp em destaque com selecao de um toque, envelope de envio (remetente, assunto, texto alternativo, sandbox, supressao) e os tipos de aviso futuros. use ao criar ou corrigir qualquer e-mail enviado pelo produto: otp, convite, aviso operacional ou alerta.",
+    "sourcePath": "skills/email/SKILL.md"
   },
   {
     "id": "estimador-cobertura",
@@ -257,7 +268,6 @@
       "/estimador-cobertura"
     ],
     "keywords": "estimador-cobertura skill: estimador de cobertura financeira municipal (ecfm)",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/estimador-cobertura/SKILL.md"
   },
   {
@@ -286,7 +296,6 @@
       "/favicon"
     ],
     "keywords": "favicon skill — favicon nuclear iconsai (i.ai)",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/favicon/SKILL.md"
   },
   {
@@ -301,7 +310,6 @@
       "/favicon-guide"
     ],
     "keywords": "favicon-guide guia completo para configuracao de favicon com fundo transparente no next.js app router, incluindo conversao automatica para svg vetorial",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/favicon-guide/SKILL.md"
   },
   {
@@ -316,7 +324,6 @@
       "/finalizar"
     ],
     "keywords": "finalizar system prompt — finalize_orchestrator v1.0",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/finalizar/SKILL.md"
   },
   {
@@ -331,7 +338,6 @@
       "/floating-button"
     ],
     "keywords": "floating-button floating button - regra de ouro (skill global)",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/floating-button/SKILL.md"
   },
   {
@@ -346,8 +352,21 @@
       "/frontend-design"
     ],
     "keywords": "frontend-design skill frontend-design",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/frontend-design/SKILL.md"
+  },
+  {
+    "id": "gestor_sessao",
+    "name": "SKILL — GESTOR DE SESSÃO (Skill Global)",
+    "trigger": "/gestor_sessao",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Gestor de sessão canônico IconsAI — barra com recarregar, Sair, duração em horas, interruptor e contagem regressiva, mais o log de tudo no banco. Obrigatório em TODA área logada.",
+    "examples": [],
+    "commands": [
+      "/gestor_sessao"
+    ],
+    "keywords": "gestor_sessao gestor de sessão canônico iconsai — barra com recarregar, sair, duração em horas, interruptor e contagem regressiva, mais o log de tudo no banco. obrigatório em toda área logada.",
+    "sourcePath": "skills/gestor_sessao/SKILL.md"
   },
   {
     "id": "harness-convergencia-de-padroes",
@@ -417,7 +436,6 @@
       "/header-hero"
     ],
     "keywords": "header-hero header hero icons.ai",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/header-hero/SKILL.md"
   },
   {
@@ -432,7 +450,6 @@
       "/ia-contexto-container"
     ],
     "keywords": "ia-contexto-container ia de contexto e conteiner — pipeline de orquestracao v4",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/ia-contexto-container/SKILL.md"
   },
   {
@@ -447,7 +464,6 @@
       "/ia-contextual"
     ],
     "keywords": "ia-contextual ia contextual — extracao e implantacao de metadados (camada 1 do pipeline de 3 ias)",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/ia-contextual/SKILL.md"
   },
   {
@@ -462,7 +478,6 @@
       "/ia-simulacao-container"
     ],
     "keywords": "ia-simulacao-container ia agente de simulacao — camada 3 do pipeline de 3 ias",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/ia-simulacao-container/SKILL.md"
   },
   {
@@ -504,7 +519,6 @@
       "/injection-defense"
     ],
     "keywords": "injection-defense skill: injection defense — textfields & external inputs agnóstica (node.js typescript python sql mongodb llm)",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/injection-defense/SKILL.md"
   },
   {
@@ -519,7 +533,6 @@
       "/legacy-killer"
     ],
     "keywords": "legacy-killer system prompt — legacy_killer v1.0",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/legacy-killer/SKILL.md"
   },
   {
@@ -542,8 +555,21 @@
       "/lgpd-pii-mapper"
     ],
     "keywords": "lgpd-pii-mapper skill: lgpd pii mapper agnostica",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/lgpd-pii-mapper/SKILL.md"
+  },
+  {
+    "id": "login",
+    "name": "Login",
+    "trigger": "/login",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Implementa, refatora ou audita o único login canônico IconsAI. Use quando o pedido mencionar login, autenticação, CPF, CNPJ, escolha de canal, OTP, superadmin, tela de acesso ou remoção de cadastro local. Governa somente os fluxos CNPJ→CPF→CANAIS→OTP→CONTEÚDO e CPF→CANAIS→OTP→CONTEÚDO, com dados no Supabase rzgkwuqvhpvqmjegckih e Fiscal como referência correta; Rotas é antipadrão.",
+    "examples": [],
+    "commands": [
+      "/login"
+    ],
+    "keywords": "login implementa, refatora ou audita o único login canônico iconsai. use quando o pedido mencionar login, autenticação, cpf, cnpj, escolha de canal, otp, superadmin, tela de acesso ou remoção de cadastro local. governa somente os fluxos cnpj→cpf→canais→otp→conteúdo e cpf→canais→otp→conteúdo, com dados no supabase rzgkwuqvhpvqmjegckih e fiscal como referência correta; rotas é antipadrão.",
+    "sourcePath": "skills/login/SKILL.md"
   },
   {
     "id": "logo",
@@ -557,7 +583,6 @@
       "/logo"
     ],
     "keywords": "logo especificacao deterministica e imutavel do wordmark icons.ai — tipografia, cores, fontes, css e validacao",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/logo/SKILL.md"
   },
   {
@@ -577,7 +602,6 @@
       "/magazine-design"
     ],
     "keywords": "magazine-design skill: magazine design (editorial / long-form)",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/magazine-design/SKILL.md"
   },
   {
@@ -592,7 +616,6 @@
       "/modal-info-builder"
     ],
     "keywords": "modal-info-builder modal info builder",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/modal-info-builder/SKILL.md"
   },
   {
@@ -630,7 +653,6 @@
       "/normalize"
     ],
     "keywords": "normalize skill: normalize brazilian codes - cpf, cnpj, ibge, cep agnóstico (node.js python)",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/normalize/SKILL.md"
   },
   {
@@ -649,7 +671,6 @@
       "/obsidian"
     ],
     "keywords": "obsidian obsidian → skills sync",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/obsidian/SKILL.md"
   },
   {
@@ -664,7 +685,6 @@
       "/pdf"
     ],
     "keywords": "pdf regras canônicas de geração de pdf no ecossistema iconsai — dois modelos (print-based showcase via pdfdocument.tsx, script-based standalone via md_to_pdf.py). identidade visual, estrutura de página a4, localização, @media print, gates f29-f32, proibições. motor editorial completo com tipografia profissional, design system, diagramas svg/mermaid, paged media engine e auditoria pass/fail de 44 items. use sempre que o usuário mencionar \"pdf\", \"gerar pdf\", \"documento pdf\", \"print\", \"impressão\" de showcase, ou disser \"/pdf\".",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/pdf/SKILL.md"
   },
   {
@@ -693,7 +713,6 @@
       "/prd-builder"
     ],
     "keywords": "prd-builder prd builder — workflow completo para empresas",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/prd-builder/SKILL.md"
   },
   {
@@ -708,7 +727,6 @@
       "/quality-finalizer"
     ],
     "keywords": "quality-finalizer system prompt — quality_finalizer v1.0",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/quality-finalizer/SKILL.md"
   },
   {
@@ -731,7 +749,6 @@
       "/secrets-hygiene"
     ],
     "keywords": "secrets-hygiene skill: secrets hygiene agnostica",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/secrets-hygiene/SKILL.md"
   },
   {
@@ -746,7 +763,6 @@
       "/security"
     ],
     "keywords": "security system prompt — security v1.0",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/security/SKILL.md"
   },
   {
@@ -761,8 +777,26 @@
       "/security-finalizer"
     ],
     "keywords": "security-finalizer system prompt — security_finalizer v1.0",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/security-finalizer/SKILL.md"
+  },
+  {
+    "id": "sessao-sem-cookie",
+    "name": "SKILL — SESSÃO SEM COOKIE (portador trocável, autoridade no banco)",
+    "trigger": "/sessao-sem-cookie",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Sessao gerenciada pelo banco com portador trocavel — porta canonica, flow-contract declarado, superadmin_sessions como autoridade de prazo e revogacao, e a matriz honesta de portadores sem cookie e sem cache. Use quando uma area logada precisar tirar a autoridade da sessao de dentro do token, trocar o portador do browser, ou mover a porta de acesso para /admin ou /superadmin.",
+    "examples": [
+      "Área logada cujo prazo está congelado dentro de um JWT auto-contido.",
+      "Pedido de revogação, \"sair de todos os aparelhos\" ou prazo deslizante.",
+      "Porta de acesso fora de /admin / /superadmin (§−1.6).",
+      "Decisão de trocar o portador do browser."
+    ],
+    "commands": [
+      "/sessao-sem-cookie"
+    ],
+    "keywords": "sessao-sem-cookie sessao gerenciada pelo banco com portador trocavel — porta canonica, flow-contract declarado, superadmin_sessions como autoridade de prazo e revogacao, e a matriz honesta de portadores sem cookie e sem cache. use quando uma area logada precisar tirar a autoridade da sessao de dentro do token, trocar o portador do browser, ou mover a porta de acesso para /admin ou /superadmin.",
+    "sourcePath": "skills/sessao-sem-cookie/SKILL.md"
   },
   {
     "id": "showcase",
@@ -776,7 +810,6 @@
       "/showcase"
     ],
     "keywords": "showcase showcase — padrão canônico de keynote interativo (skill global)",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/showcase/SKILL.md"
   },
   {
@@ -792,48 +825,6 @@
     ],
     "keywords": "simplicidade-primeiro reduz implementacoes e decisoes ao menor conjunto que satisfaz o pedido, preservando comportamento existente. use ao criar, corrigir ou revisar codigo quando houver risco de complexidade acidental ou expansao de escopo.",
     "sourcePath": "skills/simplicidade-primeiro/SKILL.md"
-  },
-  {
-    "id": "skill_auth_fase_1_sem_role",
-    "name": "skill_auth_fase_1_sem_role",
-    "trigger": "/skill_auth_fase_1_sem_role",
-    "version": "1.0.0",
-    "techs": [],
-    "description": "Auth sem role com Twilio e Infobip",
-    "examples": [],
-    "commands": [
-      "/skill_auth_fase_1_sem_role"
-    ],
-    "keywords": "skill_auth_fase_1_sem_role auth sem role com twilio e infobip",
-    "sourcePath": "skills/skill_auth_fase_1_sem_role/skill.md"
-  },
-  {
-    "id": "skill_auth_fase_2_com_role",
-    "name": "skill_auth_fase_2_com_role",
-    "trigger": "/skill_auth_fase_2_com_role",
-    "version": "1.0.0",
-    "techs": [],
-    "description": "Auth com role e Twilio/Infobip",
-    "examples": [],
-    "commands": [
-      "/skill_auth_fase_2_com_role"
-    ],
-    "keywords": "skill_auth_fase_2_com_role auth com role e twilio/infobip",
-    "sourcePath": "skills/skill_auth_fase_2_com_role/skill.md"
-  },
-  {
-    "id": "skill_auth_fase_3_com_role_multi_tenant",
-    "name": "skill_auth_fase_3_com_role_multi_tenant",
-    "trigger": "/skill_auth_fase_3_com_role_multi_tenant",
-    "version": "1.0.0",
-    "techs": [],
-    "description": "Auth com role e multi-tenant",
-    "examples": [],
-    "commands": [
-      "/skill_auth_fase_3_com_role_multi_tenant"
-    ],
-    "keywords": "skill_auth_fase_3_com_role_multi_tenant auth com role e multi-tenant",
-    "sourcePath": "skills/skill_auth_fase_3_com_role_multi_tenant/skill.md"
   },
   {
     "id": "skill_deploy_fase_0_pre_check",
@@ -964,7 +955,6 @@
       "/skill-analise-espaco-temporal-arrecadacao"
     ],
     "keywords": "skill-analise-espaco-temporal-arrecadacao analise espaco-temporal de arrecadacao municipal",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/skill-analise-espaco-temporal-arrecadacao/SKILL.md"
   },
   {
@@ -988,7 +978,6 @@
       "/skill-api-validation-zod"
     ],
     "keywords": "skill-api-validation-zod normalizacao de requests api com node.js e zod node.js typescript zod",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/skill-api-validation-zod/SKILL.md"
   },
   {
@@ -1003,7 +992,6 @@
       "/skill-architecture-mother-normalizer"
     ],
     "keywords": "skill-architecture-mother-normalizer auditoria e normalizacao de arquitetura fullstack",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/skill-architecture-mother-normalizer/SKILL.md"
   },
   {
@@ -1029,7 +1017,6 @@
       "/skill-chat-node"
     ],
     "keywords": "skill-chat-node auditoria de qualidade para features de chat em node.js node.js typescript websocket socket.io sse",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/skill-chat-node/SKILL.md"
   },
   {
@@ -1055,7 +1042,6 @@
       "/skill-chat-python"
     ],
     "keywords": "skill-chat-python auditoria de qualidade para features de chat em python python fastapi websocket asyncio sse",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/skill-chat-python/SKILL.md"
   },
   {
@@ -1070,7 +1056,6 @@
       "/skill-codebase-sanitizer"
     ],
     "keywords": "skill-codebase-sanitizer sanitizacao completa e deterministica de codebase fullstack",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/skill-codebase-sanitizer/SKILL.md"
   },
   {
@@ -1095,7 +1080,6 @@
       "/skill-contract-jsonschema-ajv"
     ],
     "keywords": "skill-contract-jsonschema-ajv validacao de contratos com json schema e ajv json schema ajv openapi",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/skill-contract-jsonschema-ajv/SKILL.md"
   },
   {
@@ -1117,7 +1101,6 @@
       "/skill-dependency-governance"
     ],
     "keywords": "skill-dependency-governance governanca de dependencias next.js, lockfiles e sbom npm pnpm yarn pip poetry next.js",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/skill-dependency-governance/SKILL.md"
   },
   {
@@ -1132,7 +1115,6 @@
       "/skill-design-audit"
     ],
     "keywords": "skill-design-audit skill para auditoria de design e ui/ux do sistema. use para verificar consistencia visual, validar componentes contra as regras de design, identificar desvios de padrao, e garantir que novas paginas sigam o design system.",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/skill-design-audit/SKILL.md"
   },
   {
@@ -1156,7 +1138,6 @@
       "/skill-dto-nest-classvalidator"
     ],
     "keywords": "skill-dto-nest-classvalidator validacao de dtos com nestjs e class-validator nestjs class-validator class-transformer",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/skill-dto-nest-classvalidator/SKILL.md"
   },
   {
@@ -1174,7 +1155,6 @@
       "/skill-frontend-normalization"
     ],
     "keywords": "skill-frontend-normalization normalizacao de frontends para next.js next.js react",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/skill-frontend-normalization/SKILL.md"
   },
   {
@@ -1192,7 +1172,6 @@
       "/skill-fullstack-audit"
     ],
     "keywords": "skill-fullstack-audit auditoria fullstack de compliance next.js next.js monorepo",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/skill-fullstack-audit/SKILL.md"
   },
   {
@@ -1211,7 +1190,6 @@
       "/skill-inferencia-temporal-dados-faltantes"
     ],
     "keywords": "skill-inferencia-temporal-dados-faltantes inferencia temporal para dados faltantes",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/skill-inferencia-temporal-dados-faltantes/SKILL.md"
   },
   {
@@ -1237,7 +1215,6 @@
       "/skill-llm-prompt-safety"
     ],
     "keywords": "skill-llm-prompt-safety versionamento e seguranca de prompts llm python/typescript openai anthropic langchain",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/skill-llm-prompt-safety/SKILL.md"
   },
   {
@@ -1261,7 +1238,6 @@
       "/skill-mcp-guardrails"
     ],
     "keywords": "skill-mcp-guardrails contratos e guardrails para ferramentas mcp mcp sdk typescript/python",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/skill-mcp-guardrails/SKILL.md"
   },
   {
@@ -1287,7 +1263,6 @@
       "/skill-node-quality"
     ],
     "keywords": "skill-node-quality qualidade de codigo node.js com eslint e prettier node.js typescript eslint prettier",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/skill-node-quality/SKILL.md"
   },
   {
@@ -1311,7 +1286,6 @@
       "/skill-normalize-brazilian-codes"
     ],
     "keywords": "skill-normalize-brazilian-codes normalizacao de codigos brasileiros (cpf, cnpj, ibge, cep) agnóstico (node.js python)",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/skill-normalize-brazilian-codes/SKILL.md"
   },
   {
@@ -1335,8 +1309,21 @@
       "/skill-normalize-identifiers"
     ],
     "keywords": "skill-normalize-identifiers normalizacao de identificadores (uuid, slug, codes) agnóstico (node.js python)",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/skill-normalize-identifiers/SKILL.md"
+  },
+  {
+    "id": "skill-nunca-fazer",
+    "name": "NUNCA FAZER",
+    "trigger": "/skill-nunca-fazer",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Consulta e mantém o catálogo global NUNCA FAZER de erros comprovados, consequências medidas e métodos preventivos. Use antes de repetir uma frente com histórico de falhas ou ao registrar um erro real depois de medi-lo.",
+    "examples": [],
+    "commands": [
+      "/skill-nunca-fazer"
+    ],
+    "keywords": "skill-nunca-fazer consulta e mantém o catálogo global nunca fazer de erros comprovados, consequências medidas e métodos preventivos. use antes de repetir uma frente com histórico de falhas ou ao registrar um erro real depois de medi-lo.",
+    "sourcePath": "skills/skill-nunca-fazer/SKILL.md"
   },
   {
     "id": "skill-playwright-massive-tester",
@@ -1360,7 +1347,6 @@
       "/skill-playwright-massive-tester"
     ],
     "keywords": "skill-playwright-massive-tester testes e2e massivos com playwright para auditoria de qualidade playwright typescript node.js",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/skill-playwright-massive-tester/SKILL.md"
   },
   {
@@ -1380,7 +1366,6 @@
       "/skill-projecao-temporal-econometrica-var"
     ],
     "keywords": "skill-projecao-temporal-econometrica-var projecao temporal econometrica com modelo var",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/skill-projecao-temporal-econometrica-var/SKILL.md"
   },
   {
@@ -1404,7 +1389,6 @@
       "/skill-python-marshmallow"
     ],
     "keywords": "skill-python-marshmallow serializacao python com marshmallow python marshmallow",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/skill-python-marshmallow/SKILL.md"
   },
   {
@@ -1428,7 +1412,6 @@
       "/skill-python-pydantic"
     ],
     "keywords": "skill-python-pydantic normalizacao de input python com pydantic python pydantic v2",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/skill-python-pydantic/SKILL.md"
   },
   {
@@ -1454,7 +1437,6 @@
       "/skill-python-quality"
     ],
     "keywords": "skill-python-quality qualidade de codigo python com ruff e black python ruff black mypy",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/skill-python-quality/SKILL.md"
   },
   {
@@ -1480,7 +1462,6 @@
       "/skill-rag-ingestion"
     ],
     "keywords": "skill-rag-ingestion ingestao rag com data lineage e pii python langchain llamaindex supabase pgvector",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/skill-rag-ingestion/SKILL.md"
   },
   {
@@ -1505,7 +1486,6 @@
       "/skill-rag-retrieval"
     ],
     "keywords": "skill-rag-retrieval retrieval rag com controle de acesso e filtragem python/typescript pgvector supabase",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/skill-rag-retrieval/SKILL.md"
   },
   {
@@ -1524,7 +1504,6 @@
       "/skill-roteador-analise-temporal-espacial"
     ],
     "keywords": "skill-roteador-analise-temporal-espacial roteador para analise temporal e espacial",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/skill-roteador-analise-temporal-espacial/SKILL.md"
   },
   {
@@ -1548,7 +1527,6 @@
       "/skill-sanitization-validator"
     ],
     "keywords": "skill-sanitization-validator sanitizacao de strings com validator.js validator.js node.js",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/skill-sanitization-validator/SKILL.md"
   },
   {
@@ -1563,7 +1541,6 @@
       "/skill-standalone"
     ],
     "keywords": "skill-standalone constrói e audita experiências web standalone, propostas interativas e landing pages cinematográficas. use automaticamente quando uma única rota contar uma narrativa por scroll, especialmente com cenas, vídeos, números grandes, chats, dashboards simulados, áudio ou preço; impõe ocupação mínima de palco, contraste calculado, replay por entrada e mobile próprio.",
-    "updatedAt": "2026-08-19",
     "sourcePath": "skills/skill-standalone/SKILL.md"
   },
   {
@@ -1578,7 +1555,6 @@
       "/skill-ui-button"
     ],
     "keywords": "skill-ui-button skill para criar botoes padronizados com altura identica ao textbox, bordas e texto com cor base, background claro derivado, hover com intensificacao tonal, e icone obrigatorio. garante consistencia visual e wcag aa.",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/skill-ui-button/SKILL.md"
   },
   {
@@ -1593,7 +1569,6 @@
       "/SVGBody"
     ],
     "keywords": "svgbody ilustracoes anatomicas svg/png para projetos iconsai — fonte servier medical art (cc by 4.0)",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/SVGBody/SKILL.md"
   },
   {
@@ -1608,7 +1583,6 @@
       "/SVGDiagram"
     ],
     "keywords": "svgdiagram diagramas svg programaticos profissionais — pipelines, comparativos, barras, fluxos, isometricos 3d. auto-sizing, medicao de texto, simetria, gradientes, sombras.",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/SVGDiagram/SKILL.md"
   },
   {
@@ -1623,7 +1597,6 @@
       "/SVGMap"
     ],
     "keywords": "svgmap mapas svg com natural earth 50m (min 300 vertices) e projecao web mercator para geomap.tsx",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/SVGMap/SKILL.md"
   },
   {
@@ -1642,7 +1615,6 @@
       "/temporal"
     ],
     "keywords": "temporal skill: roteador_analise_temporal_espacial",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/temporal/SKILL.md"
   },
   {
@@ -1663,7 +1635,6 @@
       "/typography-ait"
     ],
     "keywords": "typography-ait tipografia \"ai.t\"",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/typography-ait/SKILL.md"
   },
   {
@@ -1678,7 +1649,6 @@
       "/typography-ait-tutor"
     ],
     "keywords": "typography-ait-tutor tipografia \"learn by ai.t tutor\"",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/typography-ait-tutor/SKILL.md"
   },
   {
@@ -1699,7 +1669,6 @@
       "/warroom-design"
     ],
     "keywords": "warroom-design skill: war room design (painel operacional)",
-    "updatedAt": "2026-06-20",
     "sourcePath": "skills/warroom-design/SKILL.md"
   }
 ]

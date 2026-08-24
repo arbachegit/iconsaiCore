@@ -34,7 +34,7 @@ export const INICIAR_SKILL_IDS = [
   'skill-contract-jsonschema-ajv',
   'authz-policy-audit',
   'lgpd-pii-mapper',
-  'auth',
+  'login',
   'skill-llm-prompt-safety',
   'skill-mcp-guardrails',
   'skill-rag-ingestion',
@@ -87,7 +87,7 @@ export const HUB_SKILL_MEMBERS: Record<string, string[]> = {
     'logo',
     'favicon',
     'skill-ui-button',
-    'design-login',
+    'login',
     'header-hero',
     'magazine-design',
     'warroom-design',
@@ -101,12 +101,7 @@ export const HUB_SKILL_MEMBERS: Record<string, string[]> = {
     'estimador-cobertura',
   ],
   'ia-contexto-container': ['ia-contextual', 'ia-simulacao-container'],
-  auth: [
-    'skill_auth_fase_1_sem_role',
-    'skill_auth_fase_2_com_role',
-    'skill_auth_fase_3_com_role_multi_tenant',
-    'authz-policy-audit',
-  ],
+  login: ['authz-policy-audit', 'skill-cpf-validation', 'skill-infobip-sms'],
 }
 
 export const CATALOG_GROUPS: CatalogGroup[] = [
