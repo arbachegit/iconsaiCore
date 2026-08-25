@@ -183,9 +183,9 @@ const LEGACY_SKILLS: Skill[] = [
     trigger: '/skill-standalone',
     phase: '2',
     phaseName: 'Design',
-    version: '1.0',
-    techs: ['Next.js', 'React', 'CSS', 'Web Audio'],
-    description: 'Impõe palco ocupado, contraste calculado, replay por scroll e simulações vivas em experiências standalone.',
+    version: '2.0',
+    techs: ['Next.js', 'React', 'CSS', 'Web Audio', 'Playwright'],
+    description: 'Impõe palco ocupado, replay integral por scroll e modo cívico enriquecido em experiências web standalone.',
     examples: [
       'Construir uma proposta interativa cinematográfica',
       'Auditar landing page narrativa por scroll',
@@ -195,7 +195,7 @@ const LEGACY_SKILLS: Skill[] = [
     isNew: true,
     keywords: 'standalone landing proposta showcase scroll story vídeo typewriter áudio contraste ocupação palco radar simulação contador',
     createdAt: '2026-08-19',
-    updatedAt: '2026-08-19',
+    updatedAt: '2026-08-25',
   },
   {
     id: 'skill-floating-button',
