@@ -1,0 +1,389 @@
+<title>DoD do login</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@600;700&display=swap">
+<style>
+:root{
+  --ground:#f6f8f9; --surface:#ffffff; --surface-2:#eef2f4;
+  --ink:#10222a; --ink-2:#3c565f; --muted:#6b838c; --line:#dae2e6;
+  --accent:#0e7490; --accent-soft:#e0f2f7;
+  --ok:#0f766e; --ok-bg:#dcf3ef;
+  --parcial:#a2620b; --parcial-bg:#fbeecf;
+  --bloq:#a4342c; --bloq-bg:#fbe3e1;
+  --nao:#5a6b73; --nao-bg:#e6ecef;
+  --ok-tint:#f1faf7; --bloq-tint:#fdf4f3;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0b1417; --surface:#111e23; --surface-2:#16272d;
+    --ink:#e6eef1; --ink-2:#b3c6cd; --muted:#84a0a9; --line:#22383f;
+    --accent:#4dd0e8; --accent-soft:#12333c;
+    --ok:#6fdcc4; --ok-bg:#0f3630;
+    --parcial:#f0c069; --parcial-bg:#3a2c10;
+    --bloq:#f2938a; --bloq-bg:#3d1c19;
+    --nao:#93a8b0; --nao-bg:#1d2f35;
+    --ok-tint:#0c2320; --bloq-tint:#2a1613;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0b1417; --surface:#111e23; --surface-2:#16272d;
+  --ink:#e6eef1; --ink-2:#b3c6cd; --muted:#84a0a9; --line:#22383f;
+  --accent:#4dd0e8; --accent-soft:#12333c;
+  --ok:#6fdcc4; --ok-bg:#0f3630;
+  --parcial:#f0c069; --parcial-bg:#3a2c10;
+  --bloq:#f2938a; --bloq-bg:#3d1c19;
+  --nao:#93a8b0; --nao-bg:#1d2f35;
+    --ok-tint:#0c2320; --bloq-tint:#2a1613;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,sans-serif; font-size:15px; line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1120px; margin:0 auto; padding:48px 24px 96px; display:flex; flex-direction:column; gap:40px}
+header{display:flex; flex-direction:column; gap:10px; border-bottom:2px solid var(--line); padding-bottom:24px}
+.eyebrow{
+  font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--accent); font-weight:600;
+}
+h1{
+  font-family:"IBM Plex Serif",Georgia,serif; font-weight:700; font-size:34px;
+  margin:0; letter-spacing:-.015em; text-wrap:balance;
+}
+.lede{margin:0; color:var(--ink-2); max-width:64ch}
+.stamp{
+  font-family:"IBM Plex Mono",monospace; font-size:12.5px; color:var(--muted);
+  display:flex; flex-wrap:wrap; gap:6px 18px; margin-top:4px;
+}
+.stamp b{color:var(--ink-2); font-weight:500}
+
+.placar{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px}
+.tile{
+  background:var(--surface); border:1px solid var(--line); border-radius:3px;
+  padding:14px 16px; display:flex; flex-direction:column; gap:2px;
+}
+.tile .n{
+  font-family:"IBM Plex Mono",monospace; font-size:27px; font-weight:600;
+  font-variant-numeric:tabular-nums; line-height:1.1;
+}
+.tile .r{font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.07em}
+.tile.f .n{color:var(--ok)} .tile.p .n{color:var(--parcial)}
+.tile.b .n{color:var(--bloq)} .tile.n .n{color:var(--nao)}
+
+section{display:flex; flex-direction:column; gap:14px}
+h2{
+  font-family:"IBM Plex Serif",Georgia,serif; font-size:20px; font-weight:600;
+  margin:0; letter-spacing:-.01em;
+}
+h2 .conta{
+  font-family:"IBM Plex Mono",monospace; font-size:12px; font-weight:400;
+  color:var(--muted); margin-left:10px; letter-spacing:0;
+}
+.nota{margin:0; color:var(--ink-2); font-size:14px; max-width:70ch}
+
+.rolar{overflow-x:auto; border:1px solid var(--line); border-radius:3px; background:var(--surface)}
+table{border-collapse:collapse; width:100%; min-width:720px}
+th{
+  text-align:left; font-size:11px; letter-spacing:.09em; text-transform:uppercase;
+  color:var(--muted); font-weight:600; padding:11px 14px;
+  border-bottom:1px solid var(--line); background:var(--surface-2); white-space:nowrap;
+}
+td{padding:13px 14px; border-bottom:1px solid var(--line); vertical-align:top}
+tr:last-child td{border-bottom:none}
+td.num{
+  font-family:"IBM Plex Mono",monospace; color:var(--muted); font-size:12.5px;
+  font-variant-numeric:tabular-nums; white-space:nowrap; width:1%;
+}
+td.pedido{min-width:230px}
+td.prova{
+  font-family:"IBM Plex Mono",monospace; font-size:12.5px; color:var(--ink-2);
+  line-height:1.55; min-width:280px;
+}
+td.prova em{font-style:normal; color:var(--accent); font-weight:500}
+
+.pill{
+  display:inline-block; font-family:"IBM Plex Mono",monospace; font-size:11px;
+  font-weight:600; letter-spacing:.05em; text-transform:uppercase;
+  padding:3px 9px; border-radius:2px; white-space:nowrap;
+}
+.pill.f{color:var(--ok); background:var(--ok-bg)}
+.pill.p{color:var(--parcial); background:var(--parcial-bg)}
+.pill.b{color:var(--bloq); background:var(--bloq-bg)}
+.pill.n{color:var(--nao); background:var(--nao-bg)}
+
+.caixa{
+  border:1px solid var(--line); border-left:3px solid var(--accent);
+  background:var(--surface); border-radius:3px; padding:18px 20px;
+  display:flex; flex-direction:column; gap:10px;
+}
+.caixa h3{
+  font-family:"IBM Plex Sans",sans-serif; font-size:14px; font-weight:600;
+  margin:0; letter-spacing:.01em;
+}
+.caixa p{margin:0; color:var(--ink-2); font-size:14px}
+.caixa ol{margin:0; padding-left:20px; color:var(--ink-2); font-size:14px; display:flex; flex-direction:column; gap:8px}
+.caixa code{font-family:"IBM Plex Mono",monospace; font-size:12.5px; color:var(--ink); background:var(--surface-2); padding:1px 5px; border-radius:2px}
+
+footer{
+  border-top:1px solid var(--line); padding-top:20px; color:var(--muted);
+  font-size:13px; display:flex; flex-direction:column; gap:6px;
+}
+footer code{font-family:"IBM Plex Mono",monospace; font-size:12.5px}
+
+/* Decisão do dono — em toda linha cujo estado é "com você". O clique altera o
+   DOM, e é isso que a capacidade `artifact` grava como versão nova e devolve
+   à sessão. */
+.decisao{display:flex; gap:6px; align-items:center; flex-wrap:wrap}
+.decisao button{
+  font-family:"IBM Plex Mono",monospace; font-size:11px; font-weight:600;
+  letter-spacing:.05em; text-transform:uppercase; cursor:pointer; line-height:1.5;
+  padding:4px 13px; border-radius:2px; border:1px solid var(--line);
+  background:var(--surface-2); color:var(--muted);
+}
+.decisao button:hover{border-color:var(--accent); color:var(--ink-2)}
+.decisao button:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.decisao button[data-v="sim"][aria-pressed="true"]{background:var(--ok-bg); color:var(--ok); border-color:var(--ok)}
+.decisao button[data-v="nao"][aria-pressed="true"]{background:var(--bloq-bg); color:var(--bloq); border-color:var(--bloq)}
+tr[data-decisao="sim"] td{background:var(--ok-tint)}
+tr[data-decisao="nao"] td{background:var(--bloq-tint)}
+td.dec{width:1%; white-space:nowrap}
+@media (prefers-reduced-motion: no-preference){.decisao button{transition:background .12s ease, border-color .12s ease, color .12s ease}}
+
+.aviso-decisao{
+  display:flex; gap:10px; align-items:flex-start; margin:0;
+  border:1px solid var(--bloq); border-left:3px solid var(--bloq);
+  background:var(--bloq-bg); color:var(--bloq);
+  border-radius:3px; padding:12px 14px; font-size:13.5px; line-height:1.5;
+}
+.aviso-decisao b{font-weight:600}
+.aviso-decisao[hidden]{display:none}
+.decisao[data-inerte="1"] button{opacity:.45; cursor:not-allowed}
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">Definition of Done · skill global e catálogo</span>
+    <h1>DoD do login</h1>
+    <p class="lede">
+      Cada item repete o que foi pedido, declara o estado e traz a medição que o sustenta.
+      Item sem prova não é <em>feito</em> — é afirmação.
+    </p>
+    <div class="stamp">
+      <span><b>produção</b> ad65d5ffc84930c796dcdb549c94f112df163eda</span>
+      <span><b>fonte</b> d33c9fd</span>
+      <span><b>deploy</b> Actions 32794964768 verde</span>
+      <span><b>suíte</b> 112 PASS · 2 passagens consecutivas</span>
+      <span><b>medido em</b> 24/08/2026 21:49 BRT</span>
+    </div>
+  </header>
+
+  <!-- PLACAR — obrigatório. As quatro peças aparecem mesmo quando a contagem é 0. -->
+  <div class="placar">
+    <div class="tile f"><span class="n">4</span><span class="r">feito</span></div>
+    <div class="tile p"><span class="n">10</span><span class="r">parcial</span></div>
+    <div class="tile b"><span class="n">0</span><span class="r">com você</span></div>
+    <div class="tile n"><span class="n">0</span><span class="r">não feito</span></div>
+  </div>
+
+  <!-- SEÇÃO DE TABELA — uma por frente do prompt. Numeração contínua entre seções.
+       Se qualquer linha desta tabela tiver estado "com você", acrescente a coluna
+       "aprovado" à tabela inteira; só essa linha recebe os botões, e as demais
+       células da coluna ficam vazias. -->
+  <section>
+    <h2>Contrato login 3.0.1<span class="conta">itens 1–11 do prompt</span></h2>
+    <p class="nota">A skill foi corrigida e publicada; a migração do aplicativo Superadmin foi medida separadamente e continua bloqueada.</p>
+    <div class="rolar">
+      <table>
+        <thead><tr><th>#</th><th>o que foi pedido</th><th>estado</th><th>prova</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="num">1</td>
+            <td class="pedido">“O $login não está gerando resultados. São muitos erros.”</td>
+            <td><span class="pill f">feito</span></td>
+            <td class="prova"><code>quick_validate.py ~/.codex/skills/login</code> → válido; a invocação 3.0.1 agora exige fluxo, `/admins`, gestor, reload, rebind, harness e E2E.</td>
+          </tr>
+          <tr>
+            <td class="num">2</td>
+            <td class="pedido">Corrigir o uso de cookie.</td>
+            <td><span class="pill p">parcial</span></td>
+            <td class="prova">O gate proíbe cookies e o autoteste injeta a violação.<br><strong>Falta:</strong> o Superadmin ainda reprova `Set-Cookie`; o catálogo de skills também mantém cookie de acesso próprio, fora desta migração.</td>
+          </tr>
+          <tr>
+            <td class="num">3</td>
+            <td class="pedido">Corrigir a não resiliência.</td>
+            <td><span class="pill p">parcial</span></td>
+            <td class="prova">Contrato e modelo preservam `session_id`/`expires_at` e giram o Bearer no rebind.<br><strong>Falta:</strong> a aplicação Superadmin ainda reprova o contrato v3.</td>
+          </tr>
+          <tr>
+            <td class="num">4</td>
+            <td class="pedido">Usar o Superadmin como cadastro canônico.</td>
+            <td><span class="pill p">parcial</span></td>
+            <td class="prova">Skill e fixtures exigem `https://superadmin.iconsai.ai/admins`, preservando Identity Hub e break-glass.<br><strong>Falta:</strong> `login-contract.json` do Superadmin ainda não declara a autoridade de gestão.</td>
+          </tr>
+          <tr>
+            <td class="num">5</td>
+            <td class="pedido">Inserir o toggle de manutenção de sessão.</td>
+            <td><span class="pill f">feito</span></td>
+            <td class="prova">Harness exige `toggle=true`, preferência no banco, `role="switch"`, horas e `expires_at`; a inspeção do Superadmin confirmou o componente visual existente.</td>
+          </tr>
+          <tr>
+            <td class="num">6</td>
+            <td class="pedido">Ser resistente ao hard reload com `$accident`.</td>
+            <td><span class="pill p">parcial</span></td>
+            <td class="prova">Skill exige que reload/hard reload não revoguem nem encurtem a linha e registra o acidente.<br><strong>Falta:</strong> o aplicativo ainda usa storage/worker e o E2E de navegador novo não foi liberado.</td>
+          </tr>
+          <tr>
+            <td class="num">7</td>
+            <td class="pedido">Obedecer ao contrato do superusuário canônico em `https://superadmin.iconsai.ai/admins`.</td>
+            <td><span class="pill p">parcial</span></td>
+            <td class="prova">Fixture superadmin prova `SUPERADMIN_SUPABASE_URL`, ref `rzgkw…`, `public.super_admins` e `/admins`.<br><strong>Falta:</strong> o app medido ainda falha em “gestão canônica /admins”.</td>
+          </tr>
+          <tr>
+            <td class="num">8</td>
+            <td class="pedido">Impedir qualquer gestão de cookies.</td>
+            <td><span class="pill p">parcial</span></td>
+            <td class="prova">Gate bloqueia cookie, storage, IndexedDB, Cache API, Service/Shared Worker, `window.name`, URL e credenciais implícitas.<br><strong>Falta:</strong> Superadmin mediu 13 falhas, entre elas `Set-Cookie`, `sessionStorage`, IndexedDB e Service Worker.</td>
+          </tr>
+          <tr>
+            <td class="num">9</td>
+            <td class="pedido">Usar o design já definido em outra sessão, que deve estar em desenvolvimento.</td>
+            <td><span class="pill p">parcial</span></td>
+            <td class="prova">A anatomia da imagem foi incorporada em `design-and-governance.md`; o componente existente foi localizado no Superadmin.<br><strong>Falta:</strong> a implementação ainda carrega a ponte arquitetural proibida.</td>
+          </tr>
+          <tr>
+            <td class="num">10</td>
+            <td class="pedido">Nunca fechar uma sessão dentro do tempo programado e canonizar o padrão mostrado.</td>
+            <td><span class="pill p">parcial</span></td>
+            <td class="prova">Modelo prova validade até 1 ms antes de `expires_at`; logout ou prazo são encerramentos normais.<br><strong>Falta:</strong> auditoria do app ainda detecta fechamento alcançável por evento de unload.</td>
+          </tr>
+          <tr>
+            <td class="num">11</td>
+            <td class="pedido">Tornar o login determinístico e forte, 100% gerenciado por harness, processos e gestão únicos.</td>
+            <td><span class="pill f">feito</span></td>
+            <td class="prova"><code>test_harness.py</code> → <em>112 PASS</em>; três fluxos, modelo de continuidade e <em>7</em> violações injetadas bloqueando o release. `gestor_sessao`, `gestor-sessao` e `session-manager` → ausentes no remoto.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- SEÇÃO "COM VOCÊ" — o que depende de decisão ou credencial do dono.
+       Coluna "aprovado" com os botões sim/não é obrigatória em toda tabela que
+       contenha uma linha "com você". Exige capabilities: {artifact: {}}. -->
+  <section>
+    <h2>Fechamento<span class="conta">$dod · $testes-e2e · $prompt</span></h2>
+    <p class="aviso-decisao" id="aviso-decisao" hidden>
+      <span aria-hidden="true">⚠</span>
+      <span><b>Os botões estão desligados nesta publicação.</b> Ela foi publicada sem
+      <code>capabilities: {artifact: {}}</code>, então um clique mudaria a cor e
+      <b>não gravaria nada</b> — a decisão se perderia no recarregamento e nenhuma sessão
+      seria avisada. Republique com a capability para ligá-los.</span>
+    </p>
+    <div class="rolar">
+      <table>
+        <thead><tr><th>#</th><th>o que foi pedido</th><th>estado</th><th>prova</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="num">12</td>
+            <td class="pedido">Executar `$dod`.</td>
+            <td><span class="pill f">feito</span></td>
+            <td class="prova"><code>validate_dod.py docs/dod/dod-skill-login-2026-08-24.html</code> → formato canônico.</td>
+          </tr>
+          <tr>
+            <td class="num">13</td>
+            <td class="pedido">Executar `$testes-e2e`.</td>
+            <td><span class="pill p">parcial</span></td>
+            <td class="prova">Loop obrigatório → <em>2/2 passagens consecutivas</em>, exit 0.<br><strong>Falta:</strong> matriz Playwright da aplicação não foi liberada porque o gate anterior a ela mede 13 falhas reais.</td>
+          </tr>
+          <tr>
+            <td class="num">14</td>
+            <td class="pedido">Executar `$prompt`.</td>
+            <td><span class="pill p">parcial</span></td>
+            <td class="prova">Coletor oficial → <em>17 sessões, 305 registros, 4 enviados</em>; prompt <code>d8dba27e-9173-4a0b-a329-bbfc21d175b3</code>, DoD <code>a43a9dda-6909-4c77-9d02-37c860204207</code> e erros `40a21859…`/`570c9a68…` persistidos.<br><strong>Falta:</strong> `publish-session.mjs` preservou payload pendente porque as variáveis `SUPERADMIN_CONVERSATION_BRIDGE_*` não existem no ambiente.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Com você<span class="conta">nenhuma decisão pendente</span></h2>
+    <p class="nota">A migração do aplicativo está tecnicamente reprovada, não bloqueada por uma decisão do dono.</p>
+  </section>
+
+  <!-- SEÇÃO OBRIGATÓRIA — nunca omitir, mesmo quando não houve erro grave.
+       Uma .caixa por família de erro. Sem esta seção o DoD não é canônico. -->
+  <section>
+    <h2>O que eu errei<span class="conta">registrado, não omitido</span></h2>
+    <div class="caixa">
+      <h3>Publiquei uma versão que contradizia o hard reload</h3>
+      <ol>
+        <li>A 2.1.1 dizia que reload perdia o portador e exigia novo login, sem distinguir perda do Bearer de revogação da sessão.</li>
+        <li>Consequência medida: o Superadmin criou uma ponte com três persistências proibidas e o contrato 3.0.1 agora mede 13 falhas no aplicativo.</li>
+      </ol>
+      <p><strong>Método adotado:</strong> <code>python3 skills/login/scripts/test_session_model.py</code> prova que reload preserva id/prazo e rebind gira apenas o token.</p>
+    </div>
+    <div class="caixa">
+      <h3>O diagnóstico automático ignorou a própria documentação da skill</h3>
+      <p>O diagnóstico pré-edição retornou zero violações porque exclui Markdown; a leitura direta encontrou a contradição e gerou o registro corrigido <code>40a21859-a638-4c11-85fa-8a73e436a6e0</code>.</p>
+      <p><strong>Método adotado:</strong> validar packages de skill com `quick_validate.py`, harness próprio e leitura das referências, sem reutilizar scanner de runtime como prova documental.</p>
+    </div>
+    <div class="caixa">
+      <h3>Atualizei a skill e deixei a invocação com o contrato antigo</h3>
+      <p>A 3.0.0 foi publicada com `default_prompt` antigo; foram necessários um segundo commit e um segundo deploy para a 3.0.1 nomear gestor, reload, rebind, `/admins`, harness e E2E.</p>
+      <p><strong>Método adotado:</strong> <code>rg -n 'description:|default_prompt:|Versão:|version:' skills/login/{SKILL.md,skill.yaml,agents/openai.yaml}</code>.</p>
+    </div>
+  </section>
+
+  <footer>
+    <span>Publicado em <code>ad65d5ff</code> · produção confirmada por <code>build-info.txt</code> igual ao HEAD.</span>
+    <span>Toda contagem desta página foi medida contra Git, Superadmin e CI em 24/08/2026 21:49 BRT, não recuperada de memória.</span>
+  </footer>
+</div>
+
+<script>
+/* Aprovação do dono na seção "Com você".
+   A capacidade `artifact` grava como versão nova o que um GESTO do visualizador
+   muda no DOM — por isso a decisão é escrita aqui, no handler do clique, e não
+   em carregamento, timer ou fetch. Clicar de novo no mesmo botão desmarca. */
+document.addEventListener("click", function (ev) {
+  var alvo = ev.target instanceof Element ? ev.target.closest(".decisao button") : null;
+  if (!alvo) return;
+  var celula = alvo.closest(".decisao");
+  var linha = alvo.closest("tr");
+  if (!celula || !linha) return;
+  var jaEstava = alvo.getAttribute("aria-pressed") === "true";
+  var irmaos = celula.querySelectorAll("button");
+  for (var i = 0; i < irmaos.length; i++) irmaos[i].setAttribute("aria-pressed", "false");
+  if (jaEstava) {
+    linha.removeAttribute("data-decisao");
+  } else {
+    alvo.setAttribute("aria-pressed", "true");
+    linha.setAttribute("data-decisao", alvo.getAttribute("data-v"));
+  }
+});
+</script>
+
+<script>
+/* O botão NÃO PODE MENTIR.
+   Sem a capability `artifact`, o clique muda o DOM no navegador de quem vê e
+   NADA é salvo nem notificado — a peça fica verde e a decisão se perde no reload.
+   Esta checagem roda no CARREGAMENTO, de propósito: mudança sem gesto não é
+   gravada, então o aviso nunca suja o documento salvo. */
+(async function () {
+  var vivo = false;
+  try { vivo = (await window.claude?.use?.("artifact")) != null; } catch (e) { vivo = false; }
+  if (vivo) return;
+  var aviso = document.getElementById("aviso-decisao");
+  if (aviso) aviso.hidden = false;
+  document.querySelectorAll(".decisao").forEach(function (c) {
+    c.setAttribute("data-inerte", "1");
+    c.querySelectorAll("button").forEach(function (b) {
+      b.disabled = true;
+      b.setAttribute("aria-disabled", "true");
+      b.title = "Gravação desligada nesta publicação";
+    });
+  });
+})();
+</script>
