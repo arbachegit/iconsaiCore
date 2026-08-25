@@ -355,20 +355,6 @@
     "sourcePath": "skills/frontend-design/SKILL.md"
   },
   {
-    "id": "gestor_sessao",
-    "name": "SKILL — GESTOR DE SESSÃO (Skill Global)",
-    "trigger": "/gestor_sessao",
-    "version": "1.0.0",
-    "techs": [],
-    "description": "Gestor de sessão canônico IconsAI — barra com recarregar, Sair, duração em horas, interruptor e contagem regressiva, mais o log de tudo no banco. Obrigatório em TODA área logada.",
-    "examples": [],
-    "commands": [
-      "/gestor_sessao"
-    ],
-    "keywords": "gestor_sessao gestor de sessão canônico iconsai — barra com recarregar, sair, duração em horas, interruptor e contagem regressiva, mais o log de tudo no banco. obrigatório em toda área logada.",
-    "sourcePath": "skills/gestor_sessao/SKILL.md"
-  },
-  {
     "id": "harness-convergencia-de-padroes",
     "name": "Harness de convergência de padrões",
     "trigger": "/harness-convergencia-de-padroes",
@@ -561,14 +547,14 @@
     "id": "login",
     "name": "Login",
     "trigger": "/login",
-    "version": "2.1.1",
+    "version": "3.0.0",
     "techs": [],
     "description": "Implementa, refatora ou audita o único login canônico IconsAI. Use quando o pedido mencionar login, autenticação, CPF, CNPJ, escolha de canal, OTP, superadmin, tela de acesso ou remoção de cadastro local. Governa somente os fluxos CNPJ→CPF→CANAIS→OTP→CONTEÚDO e CPF→CANAIS→OTP→CONTEÚDO, com usuário comum no Identity Hub e superadmin no banco break-glass; Fiscal é a referência correta e Rotas é antipadrão.",
     "examples": [],
     "commands": [
       "/login"
     ],
-    "keywords": "login implementa, refatora ou audita o único login canônico iconsai. use quando o pedido mencionar login, autenticação, cpf, cnpj, escolha de canal, otp, superadmin, tela de acesso ou remoção de cadastro local. governa somente os fluxos cnpj→cpf→canais→otp→conteúdo e cpf→canais→otp→conteúdo, com usuário comum no identity hub e superadmin no banco break-glass; fiscal é a referência correta e rotas é antipadrão.",
+    "keywords": "login implementa, refatora ou audita o único login canônico iconsai. use quando o pedido mencionar login, autenticação, cpf, cnpj, escolha de canal, otp, superadmin, tela de acesso ou remoção de cadastro local. governa somente os fluxos cnpj→cpf→canais→otp→conteúdo e cpf→canais→otp→conteúdo, com usuário comum no identity hub e superadmin no banco break-glass; fiscal é a referência correta e rotas é antipadrão. nextjs supabase zod otp infobip resend",
     "sourcePath": "skills/login/SKILL.md"
   },
   {

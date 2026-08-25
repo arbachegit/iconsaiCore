@@ -11,6 +11,9 @@ const skillIds = new Set(snapshot.map((skill) => skill.id))
 const legacyLoginIds = [
   'auth',
   'design-login',
+  'gestor_sessao',
+  'gestor-sessao',
+  'session-manager',
   'sessao-sem-cookie',
   'skill-design-login-iconsai',
   'skill_auth_fase_1_sem_role',
