@@ -1,9 +1,9 @@
 {
   "version": 3,
-  "identityClass": "user",
-  "steps": ["cnpj", "cpf", "canais", "otp", "conteudo"],
-  "databaseRef": "redivrmeajmktenwshmn",
-  "databaseEnv": "SCRAPING_SUPABASE_URL",
+  "identityClass": "superadmin",
+  "steps": ["cpf", "canais", "otp", "conteudo"],
+  "databaseRef": "rzgkwuqvhpvqmjegckih",
+  "databaseEnv": "SUPERADMIN_SUPABASE_URL",
   "session": "opaque_db_session",
   "transport": "authorization_bearer_memory",
   "localRegistration": "central_only",

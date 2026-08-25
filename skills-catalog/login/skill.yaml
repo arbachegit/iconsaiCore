@@ -3,11 +3,11 @@ name: login
 trigger: /login
 phase: integracao
 phaseName: Integração & Identidade
-version: "2.1.1"
+version: "3.0.1"
 techs: [nextjs, supabase, zod, otp, infobip, resend]
-description: "Único contrato de login IconsAI: CPF/CNPJ, canais, OTP e conteúdo, com Identity Hub comum isolado do superadmin break-glass."
+description: "Único contrato de login e sessão IconsAI: CPF/CNPJ, canais, OTP, conteúdo, rebind resiliente e gestão canônica /admins."
 examples: []
 commands: [/login, $login]
-keywords: [login, cpf, cnpj, otp, canais, superadmin, sessão-opaca, banco, sem-cookie, sem-cache, fiscal]
+keywords: [login, cpf, cnpj, otp, canais, superadmin, sessão-opaca, banco, sem-cookie, sem-cache, fiscal, reload, hard-reload, gestor-de-sessão]
 createdAt: "2026-08-23"
 updatedAt: "2026-08-24"

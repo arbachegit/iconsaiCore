@@ -9,6 +9,26 @@
 - Paleta vem de catálogo aprovado. Seleção automática é determinística por hash do slug; nunca `Math.random()`.
 - Acessibilidade: labels reais, foco visível, mensagens em `role=alert`, navegação por teclado e `cursor:pointer` em todo elemento clicável.
 
+### Gestor de sessão em toda área autenticada
+
+O padrão visual já definido é uma faixa única, na ordem:
+
+`[horas] h -> [toggle] -> Sessão restante + HH:MM:SS -> [recarregar] -> [identidade abreviada] -> [Sair]`
+
+- `horas`: inteiro de 1 a 720, valor e preferência lidos e gravados no banco;
+- toggle: `role="switch"`, `aria-checked`, nunca somente decoração;
+- contagem: `role="timer"`, números tabulares, derivada de `expires_at` retornado pelo servidor;
+- recarregar: hard reload de conteúdo, sem logout e sem estado auxiliar no navegador;
+- identidade: truncamento com ellipsis, mas nome completo acessível;
+- `Sair`: único controle comum que revoga antes do prazo;
+- acima de cinco minutos usa a cor da aplicação; até cinco minutos avisa; até 60 segundos sinaliza expiração;
+- a anatomia e os comportamentos são fixos. Só a paleta determinística da empresa varia.
+
+O componente existente no Superadmin é a referência de desenvolvimento visual; sua
+antiga ponte de `sessionStorage`/Service Worker/IndexedDB é defeito arquitetural e não
+faz parte do padrão. Fiscal continua sendo a referência do fluxo de acesso. Rotas não
+é referência de login nem de sessão.
+
 ## Área Login no Superadmin
 
 O link antes chamado `Superadmin` passa a se chamar `Login` e abre três abas:
@@ -33,7 +53,9 @@ Exceções:
 - centralizar usuários comuns e grants no Identity Hub do Scraping;
 - manter somente o superadmin break-glass no banco rzgkw;
 - manter o portador opaco somente em memória e validar seu hash no banco a cada chamada;
-- exigir novo login após reload ou fechamento da página;
+- preservar a linha e o prazo no reload/hard reload e fazer rebind OTP na mesma sessão;
+- montar o gestor de sessão em toda superfície autenticada;
+- obter cadastro e grants pela gestão canônica em `https://superadmin.iconsai.ai/admins`;
 - responder autenticação com `Cache-Control: no-store`;
 - diagnosticar o login legado e persistir a prova em `/erros` antes da primeira edição;
 - coletar a conversa integral redigida em `/conversas` e provar o id persistido;
@@ -50,7 +72,9 @@ Exceções:
 - não copiar usuário comum para o banco break-glass;
 - não criar outra skill, helper ou ferramenta que governe login;
 - não usar cookie, localStorage, sessionStorage, IndexedDB, Cache API, service worker ou cache de processo em autenticação;
-- não restaurar sessão silenciosamente depois de reload;
+- não revogar, encurtar ou apagar sessão por reload, hard reload, Back, Forward, pagehide ou fechamento de aba;
+- não alegar restauração silenciosa quando o novo documento não possui autenticador;
+- não criar skill separada para gestor de sessão, refresh ou login;
 - não pular a escolha de canal;
 - não emitir sessão no navegador;
 - não guardar CPF, OTP ou token em claro em logs;

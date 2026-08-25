@@ -1,4 +1,4 @@
 interface:
   display_name: "Login"
-  short_description: "Implementa o login canônico determinístico IconsAI"
-  default_prompt: "Use $login para implementar o fluxo canônico de acesso. Pergunte primeiro CPF ou CNPJ e depois qual empresa."
+  short_description: "Implementa login e sessão canônicos sem cookie/cache"
+  default_prompt: "Use $login para implementar o fluxo canônico completo: pergunte CPF ou CNPJ e a empresa; integre /admins; inclua o gestor de sessão, toggle, prazo do banco, reload/hard reload sem revogação e rebind OTP; execute o harness e os E2E."

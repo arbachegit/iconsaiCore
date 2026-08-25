@@ -1,10 +1,19 @@
 {
-  "version": 2,
+  "version": 3,
   "identityClass": "user",
   "steps": ["cpf", "canais", "otp", "conteudo"],
   "databaseRef": "redivrmeajmktenwshmn",
   "databaseEnv": "SCRAPING_SUPABASE_URL",
   "session": "opaque_db_session",
   "transport": "authorization_bearer_memory",
-  "localRegistration": "central_only"
+  "localRegistration": "central_only",
+  "managementAuthority": "https://superadmin.iconsai.ai/admins",
+  "sessionContinuity": {
+    "reload": "preserve_db_session_rebind_otp",
+    "earlyRevocation": "explicit_logout_only",
+    "toggle": true,
+    "preferenceSource": "database",
+    "countdown": "server_expires_at",
+    "mayShortenActiveSession": false
+  }
 }

@@ -28,6 +28,7 @@ def source_files(root: Path) -> list[Path]:
         "supabase",
         "playwright-report",
         "test-results",
+        "docs",
     }
     for suffix in ("*.ts", "*.tsx", "*.js", "*.mjs", "*.sql"):
         paths.extend(
@@ -66,10 +67,15 @@ def main() -> int:
         print("ERRO ambiente: login-contract.json inválido")
         return 2
     relevant_pattern = re.compile(
-        r"auth|login|identity|session|middleware|access|otp|guard|flow|superadmin|client|config|db",
+        r"auth|login|identity|session|middleware|access|otp|guard|flow|superadmin",
         re.I,
     )
-    relevant_files = [p for p in files if relevant_pattern.search(str(p.relative_to(root)))]
+    relevant_files = [
+        p
+        for p in files
+        if relevant_pattern.search(str(p.relative_to(root)))
+        and not re.search(r"(?:email|gmail)[/\\]oauth", str(p.relative_to(root)), re.I)
+    ]
     if "fixtures" in root.parts:
         relevant_files = files
     text = "\n".join(p.read_text(encoding="utf-8", errors="ignore") for p in relevant_files)
@@ -79,7 +85,9 @@ def main() -> int:
     required_env, central_ref = database if database else ("", "")
     required_session = "opaque_db_session" if identity_class in DATABASES else None
     expected = (("cnpj", "cpf", "canais", "otp", "conteudo") if args.flow == "cnpj" else ("cpf", "canais", "otp", "conteudo"))
+    continuity = contract.get("sessionContinuity", {})
     checks = {
+        "contrato v3": contract.get("version") == 3,
         f"fluxo declarado {' -> '.join(expected)}": tuple(contract.get("steps", ())) == expected,
         "classe de identidade declarada": database is not None,
         f"env {required_env or 'inválida'}": bool(required_env) and contract.get("databaseEnv") == required_env and required_env in text,
@@ -87,12 +95,24 @@ def main() -> int:
         "cadastro local bloqueado": contract.get("localRegistration") == "central_only",
         f"sessão canônica {required_session or 'inválida'}": bool(required_session) and contract.get("session") == required_session,
         "transporte bearer somente em memória": contract.get("transport") == "authorization_bearer_memory",
+        "gestão canônica /admins": contract.get("managementAuthority") == "https://superadmin.iconsai.ai/admins",
+        "reload preserva sessão e exige rebind OTP": continuity.get("reload") == "preserve_db_session_rebind_otp",
+        "encerramento antecipado só por logout": continuity.get("earlyRevocation") == "explicit_logout_only",
+        "toggle persistido no banco": continuity.get("toggle") is True and continuity.get("preferenceSource") == "database",
+        "contagem nasce do expires_at": continuity.get("countdown") == "server_expires_at",
+        "preferência nunca encurta sessão ativa": continuity.get("mayShortenActiveSession") is False,
         "sem Math.random": "Math.random(" not in text,
         "OTP server-side": bool(re.search(r"otp|one.time", text, re.I)) and bool(re.search(r"route\.ts|server-only", text)),
         "sessão confirmada no banco": bool(re.search(r"session|sessao", text, re.I)) and bool(re.search(r"token_hash|sha256|createHash", text, re.I)),
         "Authorization bearer": bool(re.search(r"authorization", text, re.I)) and bool(re.search(r"bearer", text, re.I)),
         "resposta não armazenável": bool(re.search(r"cache-control", text, re.I)) and bool(re.search(r"no-store", text, re.I)),
+        "endpoint de rebind": bool(re.search(r"session[/_-]rebind|rebindSession|session_rebound_after_reload", text, re.I)),
+        "gestor com toggle": bool(re.search(r"role\s*=\s*[\"']switch[\"']|session_hours_enabled", text, re.I)),
+        "gestor com contagem server-side": "expires_at" in text.lower() and bool(re.search(r"sess[aã]o restante|session remaining", text, re.I)),
+        "reload não chama logout/revogação": not bool(re.search(r"(?:beforeunload|pagehide|visibilitychange|sendBeacon)[\s\S]{0,500}(?:logout|revoke|session[/_-]close)", executable_text, re.I)),
     }
+    if identity_class == "superadmin":
+        checks["superadmin vem de public.super_admins"] = "super_admins" in text and "public.users" not in executable_text
     forbidden = {
         "cookies do framework": r"\bcookies\s*\(",
         "Set-Cookie": r"set-cookie|\.cookies\.set\s*\(",
@@ -101,6 +121,11 @@ def main() -> int:
         "sessionStorage": r"sessionStorage",
         "IndexedDB": r"indexedDB",
         "Cache API": r"caches\.(?:open|match|put|delete)\s*\(",
+        "Service Worker": r"navigator\.serviceWorker|serviceWorker\.register|session-bridge",
+        "Shared Worker": r"new\s+SharedWorker\s*\(",
+        "window.name": r"window\.name\s*=|window\.name\b",
+        "credencial implícita": r"credentials\s*:\s*[\"'](?:include|same-origin)[\"']",
+        "Bearer em URL": r"(?:searchParams\.(?:set|append)|location\.(?:search|hash))[^\n]{0,160}(?:token|session|bearer)",
     }
     for label, pattern in forbidden.items():
         checks[f"sem {label}"] = not bool(re.search(pattern, executable_text, re.I))

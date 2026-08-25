@@ -1,11 +1,11 @@
 ---
 name: login
-description: Implementa, refatora ou audita o único login canônico IconsAI. Use quando o pedido mencionar login, autenticação, CPF, CNPJ, escolha de canal, OTP, superadmin, tela de acesso ou remoção de cadastro local. Governa somente os fluxos CNPJ→CPF→CANAIS→OTP→CONTEÚDO e CPF→CANAIS→OTP→CONTEÚDO, com usuário comum no Identity Hub e superadmin no banco break-glass; Fiscal é a referência correta e Rotas é antipadrão.
+description: Implementa, refatora ou audita o único login e gestor de sessão canônicos IconsAI. Use quando o pedido mencionar login, autenticação, CPF, CNPJ, canais, OTP, superadmin, reload, hard reload, duração, toggle, sessão restante ou remoção de cadastro local. Governa os dois fluxos imutáveis, o rebind OTP sem cookie/cache e a integração /admins; Fiscal é a referência correta e Rotas é antipadrão.
 ---
 
 # Login
 
-**Versão:** 2.1.1
+**Versão:** 3.0.1
 
 Esta é a única skill que governa login no ecossistema. Skills de CPF, SMS, secrets e autorização são auxiliares; não podem definir fluxo, sessão ou tela de login.
 
@@ -32,20 +32,41 @@ Há duas classes isoladas dentro do mesmo contrato:
 - usuário comum: identidade, OTP, sessão opaca revogável, grants e auditoria no Identity Hub do Scraping (`redivrmeajmktenwshmn`), por `SCRAPING_SUPABASE_*`;
 - superadmin: somente o break-glass de `public.super_admins`, OTP, sessão opaca revogável e auditoria no mini dedicado (`rzgkwuqvhpvqmjegckih`), por `SUPERADMIN_SUPABASE_*`.
 
-## Sessão sem estado persistente no navegador
+## Sessão única, resiliente e sem persistência no navegador
 
 O servidor gera um segredo opaco aleatório, grava somente seu SHA-256 na tabela de
 sessões e devolve o segredo uma única vez. O cliente o mantém exclusivamente em
 memória volátil e o apresenta em `Authorization: Bearer <segredo>` enquanto o
 documento estiver aberto. Cada requisição confirma hash, expiração e revogação no
-banco. Fechar ou recarregar a página perde o portador e exige novo login.
+banco.
+
+Reload, hard reload, Back, Forward, fechamento de aba e falha de rede **nunca revogam
+nem encurtam** a sessão antes de `expires_at`. Como o novo documento não pode recuperar
+um Bearer sem persistência clandestina, ele volta à mesma máquina CPF/CNPJ → CANAIS →
+OTP e faz `rebind` na sessão ainda ativa: o servidor gira o Bearer, preserva
+`session_id` e `expires_at` e registra o acidente. Isto é continuidade da sessão, não
+uma terceira máquina de login. Logout explícito e chegada de `expires_at` são os únicos
+encerramentos normais.
 
 É proibido usar cookie, `localStorage`, `sessionStorage`, IndexedDB, Cache API,
-service worker ou qualquer cache de processo como portador, espelho, fallback,
-marcador ou acelerador de sessão. Respostas de autenticação devem enviar
-`Cache-Control: no-store`. Nenhum aplicativo pode emitir sessão própria.
+service worker, Shared Worker, `window.name`, URL/query/hash ou qualquer cache de
+processo como portador, espelho, fallback, marcador ou acelerador de sessão. Requests
+de autenticação usam `credentials: "omit"`; respostas enviam `Cache-Control: no-store`.
+Nenhum aplicativo pode emitir sessão própria.
 
-Nunca copie usuário comum para o banco break-glass, nunca cadastre superadmin em `public.users` e nunca converta grant comum em claim `is_super_admin`.
+Todo conteúdo autenticado contém o gestor de sessão canônico: horas inteiras, sufixo
+`h`, toggle, rótulo `Sessão restante`, contagem `HH:MM:SS` derivada do `expires_at` do
+banco, recarregar, identidade abreviada e `Sair`. A preferência vive no cadastro
+canônico e nunca reduz uma sessão ativa. Leia
+[session-management.md](references/session-management.md) antes de alterar sessão,
+reload ou esse componente.
+
+O cadastro e a gestão de acesso começam em `https://superadmin.iconsai.ai/admins`.
+Isso não mistura bancos: usuário comum continua no Identity Hub; superadmin
+autenticável continua exclusivamente em `public.super_admins` do projeto
+`rzgkwuqvhpvqmjegckih`. Nunca copie usuário comum para o banco break-glass, nunca
+cadastre superadmin em `public.users` e nunca converta grant comum em
+`is_super_admin`.
 
 Leia [architecture.md](references/architecture.md) antes de alterar back-end, banco ou sessão. Leia [design-and-governance.md](references/design-and-governance.md) antes de alterar interface, marca, cadastro ou área administrativa.
 
@@ -65,9 +86,16 @@ python3 scripts/validate_login.py --root <raiz-do-projeto> --flow cpf
 python3 scripts/validate_login.py --root <raiz-do-projeto> --flow cnpj
 ```
 
-O harness mede contrato, banco, ausência de aleatoriedade, inexistência de cadastro
-local e ausência de estado persistente no navegador. Saídas: `0` aprovado; `1`
-violação; `2` ambiente/entrada inválida. Nunca transforme ausência de evidência em verde.
+O harness mede contrato, banco, `/admins`, toggle, prazo, rebind, ausência de
+encerramento prematuro, inexistência de cadastro local e zero estado persistente no
+navegador. Saídas: `0` aprovado; `1` violação; `2` ambiente/entrada inválida. Nunca
+transforme ausência de evidência em verde.
+
+Depois do gate estático, traduza as transições em Playwright e execute `$testes-e2e`
+até duas matrizes integrais consecutivas em Chromium e Firefox, desktop, tablet e
+mobile. Reload e hard reload precisam provar no banco que `session_id` e `expires_at`
+foram preservados; um teste que injeta header global ou fabrica sessão não prova o
+browser real.
 
 ### Diagnóstico de legado e memória operacional
 
@@ -102,6 +130,9 @@ Entregue:
 - fluxo escolhido e transições medidas;
 - prova de isolamento entre Identity Hub comum e banco break-glass;
 - prova de que o portador existe somente em memória e cada chamada consulta o banco;
+- prova de reload/hard reload: sessão preservada, rebind OTP e Bearer girado;
+- prova de que toggle, horas e contagem vêm do banco e não encurtam prazo ativo;
+- prova de integração com `https://superadmin.iconsai.ai/admins`;
 - inventário de cookies, storages e caches removidos da autenticação;
 - id do diagnóstico persistido em `/erros` antes da edição do legado;
 - id da conversa persistida em `/conversas`, com versão de mascaramento;

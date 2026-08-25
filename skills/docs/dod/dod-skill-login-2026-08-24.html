@@ -170,17 +170,17 @@ td.dec{width:1%; white-space:nowrap}
       Item sem prova não é <em>feito</em> — é afirmação.
     </p>
     <div class="stamp">
-      <span><b>produção</b> ad65d5ffc84930c796dcdb549c94f112df163eda</span>
+      <span><b>produção</b> 37ac030c3f38db046e5828d7aa04825bd76ddfad</span>
       <span><b>fonte</b> d33c9fd</span>
-      <span><b>deploy</b> Actions 32794964768 verde</span>
+      <span><b>deploy</b> Actions 32797255940 verde</span>
       <span><b>suíte</b> 112 PASS · 2 passagens consecutivas</span>
-      <span><b>medido em</b> 24/08/2026 21:49 BRT</span>
+      <span><b>medido em</b> 24/08/2026 22:25 BRT</span>
     </div>
   </header>
 
   <!-- PLACAR — obrigatório. As quatro peças aparecem mesmo quando a contagem é 0. -->
   <div class="placar">
-    <div class="tile f"><span class="n">4</span><span class="r">feito</span></div>
+    <div class="tile f"><span class="n">5</span><span class="r">feito</span></div>
     <div class="tile p"><span class="n">10</span><span class="r">parcial</span></div>
     <div class="tile b"><span class="n">0</span><span class="r">com você</span></div>
     <div class="tile n"><span class="n">0</span><span class="r">não feito</span></div>
@@ -272,7 +272,7 @@ td.dec{width:1%; white-space:nowrap}
        Coluna "aprovado" com os botões sim/não é obrigatória em toda tabela que
        contenha uma linha "com você". Exige capabilities: {artifact: {}}. -->
   <section>
-    <h2>Fechamento<span class="conta">$dod · $testes-e2e · $prompt</span></h2>
+    <h2>Fechamento<span class="conta">$dod · $testes-e2e · $prompt · publicação</span></h2>
     <p class="aviso-decisao" id="aviso-decisao" hidden>
       <span aria-hidden="true">⚠</span>
       <span><b>Os botões estão desligados nesta publicação.</b> Ela foi publicada sem
@@ -301,6 +301,12 @@ td.dec{width:1%; white-space:nowrap}
             <td class="pedido">Executar `$prompt`.</td>
             <td><span class="pill p">parcial</span></td>
             <td class="prova">Coletor oficial → <em>17 sessões, 305 registros, 4 enviados</em>; prompt <code>d8dba27e-9173-4a0b-a329-bbfc21d175b3</code>, DoD <code>a43a9dda-6909-4c77-9d02-37c860204207</code> e erros `40a21859…`/`570c9a68…` persistidos.<br><strong>Falta:</strong> `publish-session.mjs` preservou payload pendente porque as variáveis `SUPERADMIN_CONVERSATION_BRIDGE_*` não existem no ambiente.</td>
+          </tr>
+          <tr>
+            <td class="num">15</td>
+            <td class="pedido">“commit e deploy. Atualizar o https://skill.iconsai.ai”.</td>
+            <td><span class="pill f">feito</span></td>
+            <td class="prova"><code>37ac030c</code> enviado a <code>origin/main</code>; Actions <code>32797255940</code> → build e deploy verdes; <code>curl https://skill.iconsai.ai/build-info.txt</code> → SHA integral igual ao HEAD. A fonte legada do catálogo também foi sincronizada de 2.1.1 para 3.0.1 e repetiu harness, gates e build.</td>
           </tr>
         </tbody>
       </table>
@@ -334,11 +340,16 @@ td.dec{width:1%; white-space:nowrap}
       <p>A 3.0.0 foi publicada com `default_prompt` antigo; foram necessários um segundo commit e um segundo deploy para a 3.0.1 nomear gestor, reload, rebind, `/admins`, harness e E2E.</p>
       <p><strong>Método adotado:</strong> <code>rg -n 'description:|default_prompt:|Versão:|version:' skills/login/{SKILL.md,skill.yaml,agents/openai.yaml}</code>.</p>
     </div>
+    <div class="caixa">
+      <h3>Validei o snapshot publicado antes de conferir a cópia legada do catálogo</h3>
+      <p>O snapshot expunha 3.0.1 e o deploy estava verde, mas <code>skills-catalog/login/SKILL.md</code> ainda declarava 2.1.1. Consequência medida: uma das fontes versionadas do mesmo repositório ficou duas versões atrás.</p>
+      <p><strong>Método adotado:</strong> <code>diff -rq --exclude __pycache__ iconsaiConfig/skills/login Core/skills-catalog/login</code>, sincronização integral e repetição de <code>validate_catalog.py</code>, harness, cinco gates do catálogo e <code>next build</code>.</p>
+    </div>
   </section>
 
   <footer>
-    <span>Publicado em <code>ad65d5ff</code> · produção confirmada por <code>build-info.txt</code> igual ao HEAD.</span>
-    <span>Toda contagem desta página foi medida contra Git, Superadmin e CI em 24/08/2026 21:49 BRT, não recuperada de memória.</span>
+    <span>Publicado inicialmente em <code>37ac030c</code> · produção confirmada por <code>build-info.txt</code> igual ao HEAD.</span>
+    <span>Toda contagem desta página foi medida contra Git, Superadmin e CI em 24/08/2026 22:25 BRT, não recuperada de memória.</span>
   </footer>
 </div>
 
