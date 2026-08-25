@@ -20,4 +20,5 @@
 - Nunca tratar o exit code do Playwright como prova suficiente. Um `exit 0` sem relatório JSON fresco, seis projetos executados e contagem explícita de skips é evidência inválida.
 - Nunca reutilizar relatório E2E de tentativa anterior. O harness apaga o arquivo antes de executar e exige que a tentativa atual o recrie.
 - Nunca sincronizar diretórios runtime (`docs/prompt-session`, artefatos, traces ou vídeos) para a fonte de uma skill. A fonte contém contrato e harness; memória de sessão permanece no portador operacional protegido.
+- Nunca executar o dry-run de `$prompt` a partir do repositório que será commitado. Use um diretório temporário explícito e confirme o caminho relativo retornado antes de qualquer publicação.
 - Nunca combinar `$prompt`, `$testes-e2e` e `$dod` copiando suas regras para uma quarta fonte. `$superadmin` apenas fixa a ordem, verifica versões e transporta provas entre as três fases.
