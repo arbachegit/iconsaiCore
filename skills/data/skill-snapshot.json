@@ -547,14 +547,14 @@
     "id": "login",
     "name": "Login",
     "trigger": "/login",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "techs": [],
-    "description": "Implementa, refatora ou audita o único login canônico IconsAI. Use quando o pedido mencionar login, autenticação, CPF, CNPJ, escolha de canal, OTP, superadmin, tela de acesso ou remoção de cadastro local. Governa somente os fluxos CNPJ→CPF→CANAIS→OTP→CONTEÚDO e CPF→CANAIS→OTP→CONTEÚDO, com usuário comum no Identity Hub e superadmin no banco break-glass; Fiscal é a referência correta e Rotas é antipadrão.",
+    "description": "Implementa, refatora ou audita o único login e gestor de sessão canônicos IconsAI. Use quando o pedido mencionar login, autenticação, CPF, CNPJ, canais, OTP, superadmin, reload, hard reload, duração, toggle, sessão restante ou remoção de cadastro local. Governa os dois fluxos imutáveis, o rebind OTP sem cookie/cache e a integração /admins; Fiscal é a referência correta e Rotas é antipadrão.",
     "examples": [],
     "commands": [
       "/login"
     ],
-    "keywords": "login implementa, refatora ou audita o único login canônico iconsai. use quando o pedido mencionar login, autenticação, cpf, cnpj, escolha de canal, otp, superadmin, tela de acesso ou remoção de cadastro local. governa somente os fluxos cnpj→cpf→canais→otp→conteúdo e cpf→canais→otp→conteúdo, com usuário comum no identity hub e superadmin no banco break-glass; fiscal é a referência correta e rotas é antipadrão. nextjs supabase zod otp infobip resend",
+    "keywords": "login implementa, refatora ou audita o único login e gestor de sessão canônicos iconsai. use quando o pedido mencionar login, autenticação, cpf, cnpj, canais, otp, superadmin, reload, hard reload, duração, toggle, sessão restante ou remoção de cadastro local. governa os dois fluxos imutáveis, o rebind otp sem cookie/cache e a integração /admins; fiscal é a referência correta e rotas é antipadrão. nextjs supabase zod otp infobip resend",
     "sourcePath": "skills/login/SKILL.md"
   },
   {
