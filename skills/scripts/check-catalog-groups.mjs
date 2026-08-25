@@ -44,6 +44,7 @@ const checks = [
   ['Keywords não substituem a explicação', !modal.includes('Keywords')],
   ['Sumário oferece Versão completa', modal.includes('Versão completa')],
   ['Hubs expõem links para skills contidas', modal.includes('Skills contidas neste hub') && modal.includes('onNavigateSkill(member.id)')],
+  ['Superadmin contém somente DoD, Prompt e Testes E2E', groups.includes("superadmin: ['dod', 'prompt', 'testes-e2e']")],
   ['100% das skills possuem documento completo', snapshot.every((skill) => docs.includes(`${JSON.stringify(skill.id)}:`))],
 ]
 

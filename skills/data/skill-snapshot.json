@@ -218,7 +218,7 @@
     "id": "dod",
     "name": "DoD — formato canônico de publicação",
     "trigger": "/dod",
-    "version": "2.0.0",
+    "version": "2.1.0",
     "techs": [],
     "description": "Publica e audita o Definition of Done canônico IconsAI com HTML, prova semântica, quatro estados, erros vinculados ao NUNCA-FAZER e registro verificável no Superadmin. Use ao fechar entregas, conferir DoDs ou responder prompts com múltiplas ações.",
     "examples": [],
@@ -226,8 +226,8 @@
       "/dod"
     ],
     "keywords": "dod publica e audita o definition of done canônico iconsai com html, prova semântica, quatro estados, erros vinculados ao nunca-fazer e registro verificável no superadmin. use ao fechar entregas, conferir dods ou responder prompts com múltiplas ações.",
-    "sourcePath": "skills/dod/SKILL.md",
-    "updatedAt": "2026-08-25"
+    "updatedAt": "2026-08-25",
+    "sourcePath": "skills/dod/SKILL.md"
   },
   {
     "id": "e2e-navegador",
@@ -701,6 +701,21 @@
     ],
     "keywords": "prd-builder prd builder — workflow completo para empresas",
     "sourcePath": "skills/prd-builder/SKILL.md"
+  },
+  {
+    "id": "prompt",
+    "name": "Prompt — memória operacional do ecossistema",
+    "trigger": "/prompt",
+    "version": "2.0.0",
+    "techs": [],
+    "description": "Publica prompts, conversas sanitizadas, erros revisados e DoD no Superadmin com hashes, artefato pendente e prova de ingestão; use ao iniciar ou fechar uma sessão de trabalho.",
+    "examples": [],
+    "commands": [
+      "/prompt"
+    ],
+    "keywords": "prompt publica prompts, conversas sanitizadas, erros revisados e dod no superadmin com hashes, artefato pendente e prova de ingestão; use ao iniciar ou fechar uma sessão de trabalho.",
+    "updatedAt": "2026-08-25",
+    "sourcePath": "skills/prompt/SKILL.md"
   },
   {
     "id": "quality-finalizer",
@@ -1526,6 +1541,21 @@
     "sourcePath": "skills/skill-ui-button/SKILL.md"
   },
   {
+    "id": "superadmin",
+    "name": "Superadmin — hub operacional",
+    "trigger": "/superadmin",
+    "version": "1.0.0",
+    "techs": [],
+    "description": "Orquestra o hub operacional formado exclusivamente por $prompt, $testes-e2e e $dod, preservando memória, prova E2E e fechamento verificável no Superadmin. Use para iniciar, validar, fechar ou auditar uma sessão de entrega IconsAI.",
+    "examples": [],
+    "commands": [
+      "/superadmin"
+    ],
+    "keywords": "superadmin orquestra o hub operacional formado exclusivamente por $prompt, $testes-e2e e $dod, preservando memória, prova e2e e fechamento verificável no superadmin. use para iniciar, validar, fechar ou auditar uma sessão de entrega iconsai.",
+    "updatedAt": "2026-08-25",
+    "sourcePath": "skills/superadmin/SKILL.md"
+  },
+  {
     "id": "SVGBody",
     "name": "SKILL — SVG BODY (Anatomia Humana em SVG/PNG)",
     "trigger": "/SVGBody",
@@ -1584,6 +1614,21 @@
     ],
     "keywords": "temporal skill: roteador_analise_temporal_espacial",
     "sourcePath": "skills/temporal/SKILL.md"
+  },
+  {
+    "id": "testes-e2e",
+    "name": "testes-e2e — matriz determinística",
+    "trigger": "/testes-e2e",
+    "version": "2.0.0",
+    "techs": [],
+    "description": "Executa e audita uma matriz Playwright determinística, exige evidência JSON fresca de seis projetos e só libera após passagens verdes consecutivas sem falhas ou skips. Use ao finalizar mudanças funcionais ou visuais, preparar commit/deploy ou comprovar cobertura E2E.",
+    "examples": [],
+    "commands": [
+      "/testes-e2e"
+    ],
+    "keywords": "testes-e2e executa e audita uma matriz playwright determinística, exige evidência json fresca de seis projetos e só libera após passagens verdes consecutivas sem falhas ou skips. use ao finalizar mudanças funcionais ou visuais, preparar commit/deploy ou comprovar cobertura e2e.",
+    "updatedAt": "2026-08-25",
+    "sourcePath": "skills/testes-e2e/SKILL.md"
   },
   {
     "id": "typography-ait",

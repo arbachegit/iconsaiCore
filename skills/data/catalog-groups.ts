@@ -50,6 +50,7 @@ export const HARNESS_SKILL_IDS = [
 ] as const
 
 export const HUB_SKILL_MEMBERS: Record<string, string[]> = {
+  superadmin: ['dod', 'prompt', 'testes-e2e'],
   iniciar: [...INICIAR_SKILL_IDS.filter((id) => id !== 'iniciar')],
   finalizar: ['quality-finalizer', 'security-finalizer'],
   deploy: [

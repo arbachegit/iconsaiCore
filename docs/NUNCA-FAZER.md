@@ -13,3 +13,11 @@
 - Nunca aceitar presença de tags como prova de conformidade. O gate deve reprovar numeração duplicada, cabeçalho ausente, afirmação sem comando/saída, footer falso e erro sem consequência, método ou referência versionada.
 - Nunca manter a skill global mais nova que a fonte versionada. Comparar hashes e sincronizar `SKILL.md`, template, metadados, referências, scripts e autotestes no mesmo release.
 - Nunca declarar o DoD publicado quando apenas o HTML ou apenas o banco foi concluído. Validar produção, registrar no Superadmin e reler o mesmo `head_sha`.
+
+<!-- superadmin-hub-e2e-v2 -->
+## Hub Superadmin — verde sem matriz e artefato runtime na fonte
+
+- Nunca tratar o exit code do Playwright como prova suficiente. Um `exit 0` sem relatório JSON fresco, seis projetos executados e contagem explícita de skips é evidência inválida.
+- Nunca reutilizar relatório E2E de tentativa anterior. O harness apaga o arquivo antes de executar e exige que a tentativa atual o recrie.
+- Nunca sincronizar diretórios runtime (`docs/prompt-session`, artefatos, traces ou vídeos) para a fonte de uma skill. A fonte contém contrato e harness; memória de sessão permanece no portador operacional protegido.
+- Nunca combinar `$prompt`, `$testes-e2e` e `$dod` copiando suas regras para uma quarta fonte. `$superadmin` apenas fixa a ordem, verifica versões e transporta provas entre as três fases.
