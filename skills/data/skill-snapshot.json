@@ -218,15 +218,16 @@
     "id": "dod",
     "name": "DoD — formato canônico de publicação",
     "trigger": "/dod",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "techs": [],
-    "description": "Formato canônico de publicação do Definition of Done do ecossistema IconsAI — artefato HTML publicado, com placar, tabela de itens (# · o que foi pedido · estado · prova) e a seção obrigatória 'O que eu errei'. Use SEMPRE que for fechar uma entrega, responder um prompt com mais de um pedido, ou quando CLAUDE.md §−1.10 exigir DoD. Vale para Claude Code e para Codex.",
+    "description": "Publica e audita o Definition of Done canônico IconsAI com HTML, prova semântica, quatro estados, erros vinculados ao NUNCA-FAZER e registro verificável no Superadmin. Use ao fechar entregas, conferir DoDs ou responder prompts com múltiplas ações.",
     "examples": [],
     "commands": [
       "/dod"
     ],
-    "keywords": "dod formato canônico de publicação do definition of done do ecossistema iconsai — artefato html publicado, com placar, tabela de itens (# · o que foi pedido · estado · prova) e a seção obrigatória 'o que eu errei'. use sempre que for fechar uma entrega, responder um prompt com mais de um pedido, ou quando claude.md §−1.10 exigir dod. vale para claude code e para codex.",
-    "sourcePath": "skills/dod/SKILL.md"
+    "keywords": "dod publica e audita o definition of done canônico iconsai com html, prova semântica, quatro estados, erros vinculados ao nunca-fazer e registro verificável no superadmin. use ao fechar entregas, conferir dods ou responder prompts com múltiplas ações.",
+    "sourcePath": "skills/dod/SKILL.md",
+    "updatedAt": "2026-08-25"
   },
   {
     "id": "e2e-navegador",
