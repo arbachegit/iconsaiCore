@@ -1,4 +1,7 @@
 skill.iconsai.ai {
+	@skillsRoot path /
+	redir @skillsRoot https://tools.iconsai.ai/admin/skills 307
+
 	reverse_proxy 127.0.0.1:{$SKILLS_PORT}
 	encode gzip zstd
 

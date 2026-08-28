@@ -162,6 +162,8 @@ jobs:
             test "$actual" = "$EXPECTED"
             status=$("${curl_public[@]}" -sS -o /dev/null -w '%{http_code}' https://skill.iconsai.ai/)
             test "$status" = '307'
+            location=$("${curl_public[@]}" -sSI https://skill.iconsai.ai/ | awk -F': ' 'tolower($1) == "location" {print $2}' | tr -d '\r' | tail -1)
+            test "$location" = 'https://tools.iconsai.ai/admin/skills'
             paths=$(find /opt/skills/app/.next/static -type f \( -name '*.js' -o -name '*.css' \) \
               | sed 's#^/opt/skills/app/.next/static#/_next/static#' | sort -u)
             test -n "$paths"
