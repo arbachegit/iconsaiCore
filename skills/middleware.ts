@@ -12,6 +12,7 @@ const VERIFY_TIMEOUT_MS = 5_000
 // - POST /api/skills/sync: service:HMAC; the route validates the GitHub signature.
 // - build metadata and immutable assets do not match this middleware and are public.
 const SERVICE_ROUTES = new Set(['POST /api/skills/sync'])
+const PUBLIC_CATALOG_ROUTE = 'GET /api/skills/catalog'
 
 interface ToolsRuntimeConfig {
   verifyUrl: URL
@@ -135,6 +136,10 @@ function unauthorized(request: NextRequest, config: ToolsRuntimeConfig | null): 
 }
 
 export async function middleware(request: NextRequest) {
+  if (`${request.method} ${request.nextUrl.pathname}` === PUBLIC_CATALOG_ROUTE) {
+    return NextResponse.next()
+  }
+
   if (SERVICE_ROUTES.has(`${request.method} ${request.nextUrl.pathname}`)) {
     return NextResponse.next()
   }
